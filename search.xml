@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>2025日常琐事</title>
+      <link href="/2025/05/21/2025%E6%97%A5%E5%B8%B8%E7%90%90%E4%BA%8B/"/>
+      <url>/2025/05/21/2025%E6%97%A5%E5%B8%B8%E7%90%90%E4%BA%8B/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>好久没更新了，之前一大堆有的没的的事，还是挺烦的。刚好这几天快弄完了，想着回来继续更新完善自己的博客，毕竟也是当年自己弄了好久辛辛苦苦搭建好的。最近自己萌发了一个念想——加入星盟，因为听包学长（就是那大名鼎鼎的baozongwi）说星盟的pwn挺强的，于是我打算先提升自己的实力，然后去投简历试试（想着在我生日前能够完成这项目标，也是作为我给自己的生日礼物吧），如果进了的话就好好磨练自己的pwn技术，不行的话就继续努力。</p><p><img src="/images/daily1.png"></p><p><img src="/images/daily2.png"></p><p>看着好多师傅都有记录日常的习惯，于是我也想着来弄一个，顺便还可以加上自己的一下计划，以此来督促自己吧，我觉得这挺好的。以前的话太懒散了，没有什么目标与规划，就只想着打XCTF（也只是想着），但是自己呢又不知道在干什么，感觉每天都在混，混着混着也快大二了，每次看比赛群里面那些比我小还比我厉害的师傅们，还是感慨万千。想着当年包学长给我说的，不能只是想着，得有行动。再看看我身边的学习氛围（感觉一言难尽，不说应该也能想到），哎，如果再这么混下去，自己和他们也快差不多了。</p><p>于是乎，我决定就趁着这次我想进星盟的念想来改变一下，不能再这么混下去了。就通过写博客并在博客里加上计划来不断督促自己，之前的我就是没有计划、太懒散、太拖延、太急于求成了，才导致如今的结果，是得改变一下自己的学习方式了。</p><p>最后，希望我能在大学期间完成自己当年顶下的目标——站在CTF总决赛的舞台上捧杯。</p><h1 id="五月"><a href="#五月" class="headerlink" title="五月"></a>五月</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> daily </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> daily </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2025SQCTF</title>
       <link href="/2025/04/12/SQCTF/"/>
       <url>/2025/04/12/SQCTF/</url>
@@ -13,7 +38,7 @@
       
       <categories>
           
-          <category> ctf </category>
+          <category> 比赛 </category>
           
       </categories>
       
@@ -21,31 +46,6 @@
         <tags>
             
             <tag> ctf </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>CSAPP</title>
-      <link href="/2025/03/31/CSAPP/"/>
-      <url>/2025/03/31/CSAPP/</url>
-      
-        <content type="html"><![CDATA[<h1 id="计算机系统漫游"><a href="#计算机系统漫游" class="headerlink" title="计算机系统漫游"></a>计算机系统漫游</h1>]]></content>
-      
-      
-      <categories>
-          
-          <category> csapp </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> csapp </tag>
             
         </tags>
       
@@ -63,7 +63,7 @@
       
       <categories>
           
-          <category> CTF比赛复现 </category>
+          <category> 比赛 </category>
           
       </categories>
       
@@ -88,7 +88,7 @@
       
       <categories>
           
-          <category> Polar-pwn </category>
+          <category> pwn </category>
           
       </categories>
       
@@ -96,106 +96,6 @@
         <tags>
             
             <tag> PWN </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>汇编语言</title>
-      <link href="/2025/03/13/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"/>
-      <url>/2025/03/13/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</url>
-      
-        <content type="html"><![CDATA[<p>想要学好pwn，必须要有很好的汇编方面的知识，这里我总结一下我自己对汇编语言的一个理解。</p><h1 id="一、基础知识"><a href="#一、基础知识" class="headerlink" title="一、基础知识"></a>一、基础知识</h1><p>关于</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 汇编 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 汇编 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>其他知识大杂烩（1）</title>
-      <link href="/2025/03/10/%E5%85%B6%E4%BB%96%E7%9F%A5%E8%AF%86%E5%A4%A7%E6%9D%82%E7%83%A9%EF%BC%881%EF%BC%89/"/>
-      <url>/2025/03/10/%E5%85%B6%E4%BB%96%E7%9F%A5%E8%AF%86%E5%A4%A7%E6%9D%82%E7%83%A9%EF%BC%881%EF%BC%89/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> other </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> other </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>CTFSHOW_PWN_入门</title>
-      <link href="/2025/03/10/CTFSHOW-PWN-%E5%85%A5%E9%97%A8/"/>
-      <url>/2025/03/10/CTFSHOW-PWN-%E5%85%A5%E9%97%A8/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Test-your-nc"><a href="#Test-your-nc" class="headerlink" title="Test_your_nc"></a>Test_your_nc</h1><p>简单而言就是进行一个远程连接，区分<strong>ssh</strong>与<strong>nc</strong>连接，注意题目给的文件、提示以及会使用Linux系统就行了。（因为一般来说很多题目需要写脚本，而并非简单的远程连接）</p><p>尽管这部分没有太多东西记录，但有些还是得知道的。</p><ol><li><p>**后门函数&#x2F;程序：**通常是指在软件、程序中故意或有意留下的隐蔽入口或者秘密功能，允许未经授权的用户绕过正常的安全机制去访问、控制以及修改系统，因此我们可以利用它对一个程序进行攻击（<em><strong>得在合法条件下，否则怎么进局子都不知道</strong></em>）。这也是后续我们需要找到或者构造出的一个非常重要的东西。</p></li><li><p>execve函数：执行程序函数</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line">int execve(const char *filename,char *const argv[],char *const envp[])</span><br></pre></td></tr></table></figure><p>该函数需要三个参数：filename（要执行的程序文件名或路劲）、argv（以NULL结尾的字符串数组，表示传递给新程序的命令行参数）、envp（表示新程序的环境变量）。</p></li></ol><h1 id="前置基础："><a href="#前置基础：" class="headerlink" title="前置基础："></a>前置基础：</h1><p>这部分主要简单介绍了pwn的一些东西，主要目的是带领新手对pwn有一个大概的了解，不至于太过迷茫。pwn作为ctf比赛中的重点也是难点，对计算机的底层要求非常高，因此让许多人望而却步，既然选择要学pwn，那么就一定要<strong>坚持下去</strong>，不要三天打鱼两天晒网，那样是没有任何效果的。</p><p>这部分会分为几小节，通过CTFSHOW_PWN_入门的题，来对pwn进行一个简单的描述（<strong>我不会详细讲解题目，因为有官方的WP，肯定比我说的详细</strong>），具体的一些知识以及技巧会在后续的文章中详细解释。</p><h2 id="PWN5-12"><a href="#PWN5-12" class="headerlink" title="PWN5-12"></a>PWN5-12</h2><p>这一部分主要讲的是汇编语言的一些简单知识。</p><p><img src="/images/ctfshow_pwn_%E5%85%A5%E9%97%A8_pwn5-12.png"></p><p>简单的总结一下一些的汇编语言知识（具体的在另一篇文章）：</p><ol><li><p>寄存器：CPU内部用来存放数据的小型存储区域，是CPU的内部构造，不同的CPU的寄存器是不一样的，因此具体问题具体分析。一般分为通用寄存器、控制寄存器以及段寄存器。</p></li><li><p>部分汇编指令：</p><p>**move：**将数据从一个地方转移到另一个地方。</p><p>**add：**将两个值相加。</p><p>**sub：**从第一个值中减去第二个值，并将该值保存到前者。</p><p>**jmp：**无条件跳转到制定的地址。</p><p>**push：**推入堆栈。</p><p>**pop：**弹出堆栈。</p><p>**call：**调用子程序，并将返回地址压入堆栈。</p><p>**ret：**从堆栈中弹出返回地址，并将控制权转移回调用点。</p></li></ol><p>还有一点就是move edx,ebx是将ebx的值赋给edx，而move edx,[ebx]是将ebx指向的地址的值赋给edx，有无[]其表达的含义是不一样的。</p><p>ok，这一部分就先讲到这，因为这部分就是简单的介绍一下汇编语言，带新手感受下氛围，具体的知识还得自己多去了解。</p><h1 id="PWN13-16"><a href="#PWN13-16" class="headerlink" title="PWN13-16"></a>PWN13-16</h1><h2 id="pwn13"><a href="#pwn13" class="headerlink" title="pwn13"></a>pwn13</h2><p>这道题主要考查的是如何使用GCC。那么就在这里简单介绍一下GCC以及如何使用。</p><p>简答来说，GCC就是一个c&#x2F;c++编译器，gcc是GCC中的C语言编译器，其基本语法为：gcc [option] [filename]。其中option表示参数，filename表示相关文件的名字。</p><p>下面简单介绍一下一些参数：</p><ol><li>-o：直接生成可执行文件。</li><li>-E：仅执行预处理。（生成后缀为.i的预编译文件）</li><li>-S：执行预编译过后停止。（生成后缀为.s的预编译文件）</li><li>-c：编译程序但不进行链接成可执行文件。（生成后缀为.o的文件）</li><li>-g：生成调试信息，方便gdb。</li><li>-v：查看版本，显示gcc执行的详细过程。</li></ol><p>gcc的工作过程可以分为预处理、编译、汇编、链接四个步骤。</p><p>接下来就来简单的使用下gcc，用它编写一个简单的程序——hello world（在Linux系统中使用，因此得熟练使用Linux系统才行，后面再写篇文章来介绍一下Linux系统）。</p><ol><li><pre><code>touch hello.c<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   先输入该代码，其中touch表示的是创建新的文件，本句代码含义就是创建一个新文件hello.c。</span><br><span class="line"></span><br><span class="line">2. ```</span><br><span class="line">   vim hello.c</span><br></pre></td></tr></table></figure>再输入该代码，其中vim表示的是进行文件编辑，本句代码含义就是对文件hello.c进行编辑。</code></pre></li><li><pre><code>#include&lt;stdio.h&gt;int main()&#123;    printf(&quot;hello world!!!&quot;);    return 0;&#125;<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   输入一个简单的C语言代码，接着按Esc键，再按:，然后按wq，最后按回车键，这表示的是保存对文件的编辑。</span><br><span class="line"></span><br><span class="line">4. 进行完上述操作，我们就将C语言源代码写好了，但其并不能运行，因为源代码得经过预处理、编译、汇编和链接后才能成为可执行文件。</span><br><span class="line"></span><br></pre></td></tr></table></figure>gcc hello.c</code></pre><p>对其进行处理，可以得到.&#x2F;a.out这个可执行文件，最后运行该文件就可以输出hello world!!!</p></li></ol><p>这里只是简单的介绍与使用gcc，详细一点的知识就自己去摸索。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> CTFSHOW_PWN </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> PWN </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>程序与进程的概述</title>
-      <link href="/2025/03/09/%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%A6%82%E8%BF%B0/"/>
-      <url>/2025/03/09/%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%A6%82%E8%BF%B0/</url>
-      
-        <content type="html"><![CDATA[<p>在阅读文章时，遇到了进程这个专业名词，于是就想着在这里对进程与程序做一个小小的总结，从而加强自己对其的理解。</p><h2 id="1-进程的介绍"><a href="#1-进程的介绍" class="headerlink" title="1.进程的介绍"></a>1.进程的介绍</h2><p>进程是程序在某个数据集合上的一次运行活动，是操作系统进行资源分配的基本单位，也是操作系统结构的基础。简而言之，进程是动态的，既是基本的分配单元，也是基本的执行单元，其不仅包含正在运行的程序实体，也包含该运行程序所占据的所有系统资源。是多道程序系统（<strong>在计算机内存中同时存放几道相互独立的程序，使它们在管理程序控制下，相互穿插运行，两个或两个以上程序在计算机系统中同处于开始到结束之间的状态, 这些程序共享计算机系统资源</strong>）为了刻画系统内部出现的动态情况所引进的一个概念。</p><h2 id="2-程序的介绍"><a href="#2-程序的介绍" class="headerlink" title="2.程序的介绍"></a>2.程序的介绍</h2><p>程序是一组计算机能够识别并执行的指令，运行于计算机上，满足人类某种需求的工具。其以某种程序设计语言编写，运行于某种结构体系上。程序&#x3D;算法+数据结构。</p><h2 id="3-进程的特点"><a href="#3-进程的特点" class="headerlink" title="3.进程的特点"></a>3.进程的特点</h2><ol><li>动态性：进程是动态产生、动态变化、动态消亡的，具有生命周期。</li><li>并发性：多个进程实体同时存于内存中，能够同时运行。</li><li>独立性：进程实体是一个能够独立运行、独立获得资源、独立接受调度的基本单元。</li><li>异步性：进程按各自独立的、不可预知的速度运行。</li><li>结构性：进程由程序段、数据段、进程控制块三部分组成。</li></ol><h2 id="4-进程的结构"><a href="#4-进程的结构" class="headerlink" title="4.进程的结构"></a>4.进程的结构</h2><p>进程由程序段、数据段、进程控制块三部分组成。</p><ol><li>程序段：能被进程调度时程序调度到CPU中执行的程序代码段（指令序列）。</li><li>数据段：进程运行过程中的各种数据。</li><li>进程控制块PCB：一般包含进程描述信息、进程控制和管理信息、资源分配清单、CPU相关信息。</li></ol><h2 id="5-进程与程序的关系与区别"><a href="#5-进程与程序的关系与区别" class="headerlink" title="5.进程与程序的关系与区别"></a>5.进程与程序的关系与区别</h2><h3 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h3><p>进程是程序的一次执行过程，是程序及其数据在计算机上的一次动态体现；程序也需要通过进程来在计算机上运行和实现其功能。</p><h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>程序是一组有序的指令集合，是静态的实体；进程是程序的一次执行过程，是动态的。</p><p>程序可以长时间存在；进程是短暂的存在。</p><p>程序只能作为指令集合存在，不能描述并发情况；进程能够真实的描述并发情况。</p><p>程序本身不能独立运行，它必须被加载到内存中并被操作系统调度才能执行；进程则是一个独立运行、独立分配资源、独立接受调度的基本单位。</p><p>程序仅是指令的有序集合，不包括数据和控制信息；进程则包括数据段、程序段和进程控制块PCB。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>进程是动态的，是程序在某数据集合上的一次运行活动，程序是静态的，是指令的有序集合，二者相辅相成。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 计算机基础 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 进程与程序 </tag>
             
         </tags>
       
