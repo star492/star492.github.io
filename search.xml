@@ -4,6 +4,81 @@
   
     
     <entry>
+      <title>PWN攻击方法</title>
+      <link href="/2025/05/31/PWN%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/"/>
+      <url>/2025/05/31/PWN%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> pwn </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> pwn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>笔记</title>
+      <link href="/2025/05/31/%E7%AC%94%E8%AE%B0/"/>
+      <url>/2025/05/31/%E7%AC%94%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="gdb的使用"><a href="#gdb的使用" class="headerlink" title="gdb的使用"></a>gdb的使用</h1><h1 id="堆栈平衡"><a href="#堆栈平衡" class="headerlink" title="堆栈平衡"></a>堆栈平衡</h1><h1 id="特殊函数"><a href="#特殊函数" class="headerlink" title="特殊函数"></a>特殊函数</h1><h1 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h1><h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> note </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> note </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ctfshow-pwn-入门</title>
+      <link href="/2025/05/28/ctfshow-pwn-%E5%85%A5%E9%97%A8/"/>
+      <url>/2025/05/28/ctfshow-pwn-%E5%85%A5%E9%97%A8/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下ctfshow-pwn的做题过程</p><h1 id="pwn35"><a href="#pwn35" class="headerlink" title="pwn35"></a>pwn35</h1><p>简单的栈溢出，直接输入大量垃圾数据即可。</p><p>在这记录一个笔记：strcpy(&amp;dest, src)，strcpy函数将 src 字符串复制到 dest 字符数组中，并返回指向 dest 的指针。</p><h1 id="pwn36"><a href="#pwn36" class="headerlink" title="pwn36"></a>pwn36</h1><p>也是一道简单的栈溢出，并存在后门函数，且没开任何保护机制，直接打即可。</p><p>在这里记录一下gdb调试，计算距离栈底的距离的命令：cyclic -l address</p><h1 id="pwn37"><a href="#pwn37" class="headerlink" title="pwn37"></a>pwn37</h1><p>也是一道32位的简单的栈溢出，存在后门函数，只开启了NX保护，因此还是直接打。</p><h1 id="pwn38"><a href="#pwn38" class="headerlink" title="pwn38"></a>pwn38</h1><p>是一道简单的64位栈溢出，存在后门函数，唯一的区别就是64位要考虑堆栈平衡，要加上ret。</p><h1 id="pwn39"><a href="#pwn39" class="headerlink" title="pwn39"></a>pwn39</h1><p>一道简单的32位栈溢出，存在system函数与&#x2F;bin&#x2F;sh字符串，只是二者是分开的，那么就需要将&#x2F;bin&#x2F;sh字符串作为参数传入到system函数，这里需要注意的是函数调用栈的一些结构即可。</p><h1 id="pwn40"><a href="#pwn40" class="headerlink" title="pwn40"></a>pwn40</h1><p>一道简单的64位栈溢出，和pwn39一样，但是区别就是传参方式，64位是使用寄存器的方式先传参，因此脚本会有一些的不同，但依旧是直接打。</p><h1 id="pwn41"><a href="#pwn41" class="headerlink" title="pwn41"></a>pwn41</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> pwn </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> pwn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN</title>
       <link href="/2025/05/24/BUUCTF-PWN/"/>
       <url>/2025/05/24/BUUCTF-PWN/</url>
@@ -20,7 +95,7 @@
       
         <tags>
             
-            <tag> PWN </tag>
+            <tag> pwn </tag>
             
         </tags>
       
@@ -120,7 +195,7 @@
       
         <tags>
             
-            <tag> PWN </tag>
+            <tag> pwn </tag>
             
         </tags>
       
