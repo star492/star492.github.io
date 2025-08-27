@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>ISCTF2023</title>
+      <link href="/2025/08/24/ISCTF2023/"/>
+      <url>/2025/08/24/ISCTF2023/</url>
+      
+        <content type="html"><![CDATA[<h1 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h1><p>一道不错的题目，让我对pwndbg的使用进一步的熟练</p><p><img src="/images/ISCTF2023-stack_1.png"></p><p><img src="/images/ISCTF2023-stack_2.png"></p><p>程序代码很简单，自定义输入字符串长度，通过循环不断输入，那么可以造成栈溢出，并且存在后门函数。但是此题的关键在于变量i会被覆盖，那么就会导致程序根据i将我们输入的东西写入到另一个地方。</p><p><img src="/images/ISCTF2023-stack_3.png"></p><p>因此，我们可以找准i的偏移，防止其被覆盖，我们就可以正常栈溢出到返回地址。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 比赛 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>XYNU2024信安杯</title>
       <link href="/2025/08/24/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/"/>
       <url>/2025/08/24/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/</url>
@@ -33,9 +58,21 @@
       <link href="/2025/08/24/ctfshow-pwn%E5%85%A5%E9%97%A8/"/>
       <url>/2025/08/24/ctfshow-pwn%E5%85%A5%E9%97%A8/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h1 id="Test-your-nc"><a href="#Test-your-nc" class="headerlink" title="Test_your_nc"></a>Test_your_nc</h1><h2 id="pwn0"><a href="#pwn0" class="headerlink" title="pwn0"></a>pwn0</h2><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn0.png"></p><h2 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h2><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn1_1.png"></p><p>发现nc连接后可以直接获得flag。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn1_2.png"></p><h2 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h2><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn2_1.png"></p><p>发现直接给了我们shell，只需要nc连接后并执行cat &#x2F;ctfshow_flag命令即可获得flag。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn2_2.png"></p><h2 id="pwn3"><a href="#pwn3" class="headerlink" title="pwn3"></a>pwn3</h2><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_1.png"></p><p>程序本身很简单，就是找到哪个函数能够获得flag。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_2.png"></p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_4.png"></p><p>直接选6即可获得flag。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_3.png"></p><p>但是在这里有一个迷惑选项4，就是echo &#x2F;ctfshow_flag命令。</p><p><strong>echo命令：是Linux系统中的一个基础命令，用于在终端输出文本或变量值，常用于脚本中显示信息、调试或生成文件。常用选项：-n 不换行；-e 启用转义字符解释。高级用法：使用重定向将输出保存到文件，如echo “aaaa” &gt; output.txt；追加内容到文件，如echo “aaaa” &gt;&gt; output.txt。</strong></p><p>因此当选择选项4时，并不会获得flag，而将打印出ctfshow_flag。</p><h2 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h2><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn4_1.png"></p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn4_2.png"></p><p>该程序将用户输入的字符串与原先已设定好的字符串进行比较，若相同，则调用execve函数获得shell。（具体用法在ret2syscall）</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn4_3.png"></p><h1 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h1><h2 id="pwn5-pwn12"><a href="#pwn5-pwn12" class="headerlink" title="pwn5-pwn12"></a>pwn5-pwn12</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section .data</span><br><span class="line">    msg db &quot;Welcome_to_CTFshow_PWN&quot;, 0</span><br><span class="line"></span><br><span class="line">section .text</span><br><span class="line">    global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"></span><br><span class="line">; 立即寻址方式</span><br><span class="line">    mov eax, 11         ; 将11赋值给eax</span><br><span class="line">    add eax, 114504     ; eax加上114504</span><br><span class="line">    sub eax, 1          ; eax减去1</span><br><span class="line"></span><br><span class="line">; 寄存器寻址方式</span><br><span class="line">    mov ebx, 0x36d      ; 将0x36d赋值给ebx</span><br><span class="line">    mov edx, ebx        ; 将ebx的值赋值给edx</span><br><span class="line"></span><br><span class="line">; 直接寻址方式</span><br><span class="line">    mov ecx, msg      ; 将msg的地址赋值给ecx</span><br><span class="line"></span><br><span class="line">; 寄存器间接寻址方式</span><br><span class="line">    mov esi, msg        ; 将msg的地址赋值给esi</span><br><span class="line">    mov eax, [esi]      ; 将esi所指向的地址的值赋值给eax</span><br><span class="line"></span><br><span class="line">; 寄存器相对寻址方式</span><br><span class="line">    mov ecx, msg        ; 将msg的地址赋值给ecx</span><br><span class="line">    add ecx, 4          ; 将ecx加上4</span><br><span class="line">    mov eax, [ecx]      ; 将ecx所指向的地址的值赋值给eax</span><br><span class="line"></span><br><span class="line">; 基址变址寻址方式</span><br><span class="line">    mov ecx, msg        ; 将msg的地址赋值给ecx</span><br><span class="line">    mov edx, 2          ; 将2赋值给edx</span><br><span class="line">    mov eax, [ecx + edx*2]  ; 将ecx+edx*2所指向的地址的值赋值给eax</span><br><span class="line"></span><br><span class="line">; 相对基址变址寻址方式</span><br><span class="line">    mov ecx, msg        ; 将msg的地址赋值给ecx</span><br><span class="line">    mov edx, 1          ; 将1赋值给edx</span><br><span class="line">    add ecx, 8          ; 将ecx加上8</span><br><span class="line">    mov eax, [ecx + edx*2 - 6]  ; 将ecx+edx*2-6所指向的地址的值赋值给eax</span><br><span class="line"></span><br><span class="line">; 输出字符串</span><br><span class="line">    mov eax, 4          ; 系统调用号4代表输出字符串</span><br><span class="line">    mov ebx, 1          ; 文件描述符1代表标准输出</span><br><span class="line">    mov ecx, msg        ; 要输出的字符串的地址</span><br><span class="line">    mov edx, 22         ; 要输出的字符串的长度</span><br><span class="line">    int 0x80            ; 调用系统调用</span><br><span class="line"></span><br><span class="line">; 退出程序</span><br><span class="line">    mov eax, 1          ; 系统调用号1代表退出程序</span><br><span class="line">    xor ebx, ebx        ; 返回值为0</span><br><span class="line">    int 0x80            ; 调用系统调用</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>这部分给了我们一个.asm文件以及一个与其对应的可执行文件，该部分主要让我们了解一些寄存器、寻址方式。</p><p><strong>.asm文件：为汇编语言的源代码文件，常用于描述CPU的低级操作指令，它是机器指令的文本形式，直接与硬件交互。.asm文件通常用NASM汇编器编写，由于NASM汇编器与GCC工具链不是直接集成的，因此处理需要经过以下步骤：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nasm -f elf xxx.asm    #生成一个xxx.o文件</span><br><span class="line">ld -m elf_i386 -s -o xxx xxx.o    #将xxx.o文件链接成可执行文件</span><br></pre></td></tr></table></figure><h2 id="pwn13"><a href="#pwn13" class="headerlink" title="pwn13"></a>pwn13</h2><p>这题主要考察gcc的一个使用</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn13.png"></p><h2 id="pwn14"><a href="#pwn14" class="headerlink" title="pwn14"></a>pwn14</h2><p>这题给了我们一个.c文件，主要是将二进制文件内容转换成二进制字符串形式，并以特点格式输出。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn14.png"></p><p>需要先创建一个以key命名的文本文件，并在其里面写入CTFshow。</p><h2 id="pwn15"><a href="#pwn15" class="headerlink" title="pwn15"></a>pwn15</h2><p>这题主要考察如何将.asm文件变为可执行文件。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn15.png"></p><p>这里需要注意的是操作系统不一样，编译与链接命令也不一样。</p><h2 id="pwn16"><a href="#pwn16" class="headerlink" title="pwn16"></a>pwn16</h2><p>这题主要考察如何将.s文件变为可执行文件。</p><p><img src="/images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn16.png"></p><p>其实.s文件与.asm文件都是</p>]]></content>
       
       
+      <categories>
+          
+          <category> pwn </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf </tag>
+            
+        </tags>
       
     </entry>
     
