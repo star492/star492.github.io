@@ -13,14 +13,14 @@
       
       <categories>
           
-          <category> 题目 </category>
+          <category> pwn题目 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> ctf pwn 题目 </tag>
+            <tag> ctf_pwn </tag>
             
         </tags>
       
@@ -45,7 +45,7 @@
       
         <tags>
             
-            <tag> 小记,pwn </tag>
+            <tag> 小记 </tag>
             
         </tags>
       
