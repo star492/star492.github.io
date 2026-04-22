@@ -1,105 +1,198 @@
-<style>
-/* 终端样式：黑底绿字，Linux 风格 */
-.terminal {
-  background: #000;
-  color: #00FF00;
-  font-family: "Consolas", "Courier New", monospace;
-  padding: 20px;
-  height: 100vh;
-  overflow-y: auto;
-}
-.terminal-line {
-  display: flex;
-  margin: 5px 0;
-}
-.terminal-user {
-  color: #00FF00;
-  font-weight: bold;
-}
-.terminal-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #00FF00;
-  font-family: inherit;
-  font-size: 16px;
-  width: 100%;
-  margin-left: 5px;
-}
-.terminal-output {
-  margin: 5px 0;
-  white-space: pre-wrap;
-}
-</style>
-
-<div class="terminal">
-  <pre>
-0ops... /flag does not exsit. Dropping to a shell!
-0opsBox v1.33.7 built-in shell
-Enter "help" for a list of built-in commands.
-  </pre>
-
-  <div id="output"></div>
-
-  <div class="terminal-line">
-    <span class="terminal-user">guest@0ops:~$</span>
-    <input type="text" id="input" class="terminal-input" autocomplete="off" />
-  </div>
-</div>
-
-<script>
-const input = document.getElementById('input');
-const output = document.getElementById('output');
-
-// ====================== 【你可以自己改命令和跳转链接】 ======================
-const commands = {
-  help: "可用命令：\n about   - 关于我\n intro   - 介绍\n help    - 帮助\n log     - 日志\ngithub   - 我的GitHub\ncontact  - 联系我\nclear    - 清屏",
-  about: "/about",
-  intro: "/intro",
-  log: "/log",
-  github: "https://github.com/star492",  // 这里改你的 GitHub
-  contact: "/contact",
-  clear: () => { output.innerHTML = ''; }
-};
-// =======================================================================
-
-input.focus();
-
-function addLine(text, isCommand = false) {
-  const div = document.createElement('div');
-  div.className = 'terminal-output';
-  if (isCommand) {
-    div.innerHTML = `<span class="terminal-user">guest@0ops:~$</span> ${text}`;
-  } else {
-    div.textContent = text;
-  }
-  output.appendChild(div);
-  input.scrollIntoView();
-}
-
-input.addEventListener('keydown', (e) => {
-  if (e.key !== 'Enter') return;
-  const cmd = input.value.trim().toLowerCase();
-  addLine(cmd, true);
-
-  if (!cmd) {
-    input.value = '';
-    return;
-  }
-
-  if (commands[cmd]) {
-    const res = commands[cmd];
-    if (typeof res === 'function') {
-      res();
-    } else if (res.startsWith('http') || res.startsWith('/')) {
-      window.open(res, '_self');
-    } else {
-      addLine(res);
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hexploit Terminal</title>
+  <style>
+    /* 全局终端样式 */
+    body {
+      background: #0a0a0a;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
     }
-  } else {
-    addLine(`command not found: ${cmd}`);
-  }
 
-  input.value = '';
-});
-</script>
+    /* CRT扫描线效果 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* 终端容器 */
+    .terminal {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 终端标题栏 */
+    .terminal-header {
+      background: #1a1a1a;
+      padding: 8px 12px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .btn-red { background: #ff5f56; }
+    .btn-yellow { background: #ffbd2e; }
+    .btn-green { background: #27ca40; }
+
+    /* 终端内容区 */
+    .terminal-body {
+      background: #000;
+      padding: 20px;
+      min-height: 400px;
+      line-height: 1.6;
+    }
+
+    /* 输入框样式 */
+    .terminal-input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: inherit;
+      outline: none;
+      width: calc(100% - 120px);
+      caret-color: #00ff00;
+    }
+
+    /* 输出文本样式 */
+    #output div {
+      margin: 4px 0;
+    }
+
+    /* 链接颜色 */
+    a {
+      color: #00ffff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* 错误提示颜色 */
+    .error {
+      color: #ff6b6b;
+    }
+
+    /* 成功提示颜色 */
+    .success {
+      color: #2ecc71;
+    }
+  </style>
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/rss.xml" title="haoo's pwn house" type="application/atom+xml">
+</head>
+<body>
+  <div class="terminal">
+    <!-- 终端标题栏 -->
+    <div class="terminal-header">
+      <div class="terminal-btn btn-red"></div>
+      <div class="terminal-btn btn-yellow"></div>
+      <div class="terminal-btn btn-green"></div>
+      <span style="color:#888;margin-left:10px;">hexploit@terminal:~</span>
+    </div>
+
+    <!-- 终端内容区 -->
+    <div class="terminal-body">
+      <pre style="margin:0 0 20px 0;color:#00ff00;">
+  /\  /\  /\  /\ 
+ /  \/  \/  \/  \
+ \  /\  /\  /\  /
+  \/  \/  \/  \/ 
+</pre>
+      <div class="success">[+] HEXPLOIT TERMINAL v1.0 INITIALIZED</div>
+      <div>[*] Type <span class="success">'help'</span> for available commands</div>
+      <div style="height:10px;"></div>
+
+      <div id="output"></div>
+
+      <div style="display:flex;margin:10px 0;">
+        <span style="color:#00ff00;font-weight:bold;">haoo@pwn_home:~# </span>
+        <input id="input" class="terminal-input" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+
+    const cmd = {
+      help: `
+<span class="success">[+] Available Commands:</span>
+  home      -> Go to homepage
+  about     -> About me
+  archives  -> All articles
+  categories-> Post categories
+  tags      -> View tags
+  github    -> My GitHub
+  clear     -> Clear screen
+  exit      -> Exit terminal`,
+
+      home: '/',
+      about: '/about',
+      archives: '/archives',
+      categories: '/categories',
+      tags: '/tags',
+      github: 'https://github.com/star492',
+      clear: () => { output.innerHTML = '' },
+      exit: () => { alert('[!] System disconnected.') }
+    };
+
+    input.focus();
+
+    function line(text, isCmd = false) {
+      let d = document.createElement('div');
+      if (isCmd) {
+        d.innerHTML = `<span style="color:#00ff00">root@hexploit:~#</span> ${text}`;
+      } else {
+        d.innerHTML = text;
+      }
+      output.appendChild(d);
+      input.scrollIntoView();
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      let c = input.value.trim().toLowerCase();
+      line(c, true);
+
+      if (!c) { input.value = ''; return; }
+
+      if (cmd[c]) {
+        let res = cmd[c];
+        if (typeof res === 'function') res();
+        else if (res.startsWith('/') || res.startsWith('http')) location.href = res;
+        else line(res);
+      } else {
+        line(`<span class="error">[-] Command not found: ${c}</span>`);
+      }
+      input.value = '';
+    });
+  </script>
+</body>
+</html>

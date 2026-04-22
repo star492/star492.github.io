@@ -1,31 +1,101 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@font-face {
-    font-family: 'DOSFont'; /* 自定义字体名称 */
-    src: url('../font/Perfect DOS VGA 437.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-/* Cursor styles */
-body{
-  cursor: url('../cursor/cursor.cur'), auto;
-}
-input, textarea {
-  cursor: url('/cursor/text.cur'), text;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  background: #000000;
+  color: #00FF00;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* 链接 */
 a {
-  cursor: url('/cursor/link.cur'), pointer;
+  color: #00FF00;
+  text-decoration: none;
 }
 
-button {
-  cursor: url('/cursor/link.cur'), pointer;
+a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
 }
 
-::selection {
-  background: rgba(228, 25, 25, 0.35); /* 淡红色选中背景 */
-  color: white;
+/* 导航 */
+nav {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #005500;
+}
+
+nav a {
+  margin-right: 15px;
+  text-transform: uppercase;
+}
+
+/* 文章标题 */
+h1, h2, h3, h4 {
+  color: #00FF00;
+  margin: 15px 0;
+  font-weight: normal;
+}
+
+/* 文章内容 */
+p {
+  margin: 10px 0;
+}
+
+/* 代码块 */
+pre, code {
+  background: #001100 !important;
+  color: #00FF00 !important;
+  border: 1px solid #004400 !important;
+  padding: 10px;
+  overflow-x: auto;
+  font-family: Consolas, monospace;
+}
+
+/* 侧边栏 */
+.sidebar {
+  border: 1px dashed #004400;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.widget {
+  margin-bottom: 20px;
+}
+
+.widget h2 {
+  font-size: 16px;
+  border-bottom: 1px dotted #004400;
+  padding-bottom: 5px;
+}
+
+/* 列表 */
+ul, ol {
+  margin-left: 20px;
+}
+
+/* 页脚 */
+footer {
+  margin-top: 40px;
+  padding-top: 10px;
+  border-top: 1px dashed #004400;
+  text-align: center;
+  color: #006600;
+}
+
+/* 终端输入框 */
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #00FF00;
+  font-family: Consolas, monospace;
+  font-size: 15px;
+  width: 100%;
 }
