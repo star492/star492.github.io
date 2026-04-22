@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <author>
+    <name>haoo</name>
+  </author>
+  <generator uri="https://hexo.io/">Hexo</generator>
+  <id>http://example.com/</id>
+  <link href="http://example.com/" rel="alternate"/>
+  <link href="http://example.com/rss.xml" rel="self"/>
+  <rights>All rights reserved 2026, haoo</rights>
+  <title>haoo's pwn house</title>
+  <updated>2026-04-22T11:40:03.019Z</updated>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="pwn" scheme="http://example.com/categories/pwn/"/>
+    <category term="小记" scheme="http://example.com/tags/%E5%B0%8F%E8%AE%B0/"/>
+    <content>
+      <![CDATA[<p>本文章会持续更新，用于记录pwn过程中，本人觉得值得记录的东西0v0</p><h1 id="pwn的exp简化模板"><a href="#pwn的exp简化模板" class="headerlink" title="pwn的exp简化模板"></a>pwn的exp简化模板</h1><p>该部分记录使用lambda表达式与自定义函数简化exp，便于未来exp的编写。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;&#x27;<br>libc_file=&#x27;&#x27;<br>elf=ELF(pwn_file)<br>libc=ELF(libc_file)<br>rop=ROP(libc)<br><br>flag=1<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;&#x27;<br>    port=<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s = lambda data : io.send(data)<br>sa = lambda delim,data : io.sendafter(str(delim), data)<br>sl = lambda data : io.sendline(data)<br>sla = lambda delim,data : io.sendlineafter(str(delim), data)<br>r = lambda num : io.recv(num)<br>rl=lambda : io.recvline()<br>ru = lambda delims, drop = True : io.recvuntil(delims, drop)<br>leak = lambda name,addr : log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 = lambda data: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 = lambda data : u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 = lambda : u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 = lambda : u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32=lambda data: int(io.recv(data), 16)<br>i64=lambda data: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure><p>其中需要注意的是，如果设置terminal为tmux时gdb，需要在tmux下运行exp，且tmux的操作一般先是先输入CTRL+b，再接着输入命令。</p><h1 id="patchelf"><a href="#patchelf" class="headerlink" title="patchelf"></a>patchelf</h1><p>在做pwn题的过程中，有时候本地调试的环境会和远程不一样，从而导致本地通了而远程没通的情况，此时可以使用patchelf或者docker解决相应问题。因为patchelf比较简单，在这里先记录该方法。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">strings ./libc-x.xx | grep ubuntu    //查看版本<br>./download xxxx    //在glibc-all-in-one中下载相应版本<br>patchelf --set-interpreter 文件夹名/ld.so ./pwn    //换掉ld<br>patchelf --set-rpath 文件夹名 ./pwn    //换掉path<br></code></pre></td></tr></table></figure><p>这样一来就patch好了。当然这种方法不是万能的，glibc-all-in-one有些版本没有，有些难题对环境的要求很高，因此后续会记录docker的方法，只要知道了远程的环境，我们就能使用docker部署一个一样的环境在本地调试。</p><h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>在这里只是简单介绍了docker的一些基础命令，便于在做pwn题时，与远程的环境一致，便于调试之类的。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#启动docker服务<br>sudo service docker start<br>#查看docker状态<br>docker ps<br>#拉取基础镜像<br>docker pull ____<br>#构建镜像<br>docker build -t ____ .<br>#运行镜像<br>docker run -d --rm \<br>  -p 8889:8889 \<br>  --name onlyfgets \<br>  onlyfgets<br>#进入docker容器<br>docker exec -it only_fgets /bin/bash<br>#关闭容器<br>docker stop only_fgets<br></code></pre></td></tr></table></figure><h1 id="大端序和小端序"><a href="#大端序和小端序" class="headerlink" title="大端序和小端序"></a>大端序和小端序</h1><p>在大端序中，高位字节存储在低地址，低位字节存储在高地址。这种排列方式与数据用字节表示时的书写顺序一致，符合人类的阅读习惯。例如，32位整数0x12345678在大端序下的存储顺序如下：</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">低地址（低位） → 高地址（高位）<br><br>0x12 → 0x34 → 0x56 → 0x78<br></code></pre></td></tr></table></figure><p>在小端序中，低位字节存储在低地址，高位字节存储在高地址。小端序与人类的阅读习惯相反，但更符合计算机读取内存的方式，因为CPU读取内存中的数据时，是从低地址向高地址方向进行读取的。例如，32位整数0x12345678在小端序下的存储顺序如下：</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">低地址（低位） → 高地址（高位）<br><br>0x78 → 0x56 → 0x34 → 0x12<br></code></pre></td></tr></table></figure><h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">python -m http.server 8000<br></code></pre></td></tr></table></figure>]]>
+    </content>
+    <id>http://example.com/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/</id>
+    <link href="http://example.com/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/"/>
+    <published>2026-04-22T11:40:03.000Z</published>
+    <summary>
+      <![CDATA[<p>本文章会持续更新，用于记录pwn过程中，本人觉得值得记录的东西0v0</p>
+<h1 id="pwn的exp简化模板"><a href="#pwn的exp简化模板" class="headerlink" title="pwn的exp简化模板"></a>pwn的exp简化模板]]>
+    </summary>
+    <title>pwn_小记</title>
+    <updated>2026-04-22T11:40:03.019Z</updated>
+  </entry>
+</feed>
