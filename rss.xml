@@ -8,6 +8,7 @@
   <link href="http://example.com/" rel="alternate"/>
   <link href="http://example.com/rss.xml" rel="self"/>
   <rights>All rights reserved 2026, haoo</rights>
+  <subtitle>Pwn / CTF writeups, binary exploitation notes, and practice logs.</subtitle>
   <title>haoo's pwn house</title>
   <updated>2026-04-23T02:29:03.272Z</updated>
   <entry>

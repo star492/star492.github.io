@@ -1,198 +1,377 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <title>Hexploit Terminal</title>
-  <style>
-    /* 全局终端样式 */
-    body {
-      background: #0a0a0a;
-      color: #00ff00;
-      font-family: 'Courier New', Courier, monospace;
-      margin: 0;
-      padding: 20px;
-      overflow-x: hidden;
-    }
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s pwn house</title>
+<meta
+  name="description"
+  content="Pwn / CTF writeups, binary exploitation notes, and practice logs."
+>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/tailwind.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/toc.css">
+<link rel="alternate" type="application/rss+xml" title="haoo&#39;s pwn house RSS" href="/rss.xml">
 
-    /* CRT扫描线效果 */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 1000;
-    }
 
-    /* 终端容器 */
-    .terminal {
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* 终端标题栏 */
-    .terminal-header {
-      background: #1a1a1a;
-      padding: 8px 12px;
-      border-bottom: 1px solid #333;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .terminal-btn {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-    .btn-red { background: #ff5f56; }
-    .btn-yellow { background: #ffbd2e; }
-    .btn-green { background: #27ca40; }
-
-    /* 终端内容区 */
-    .terminal-body {
-      background: #000;
-      padding: 20px;
-      min-height: 400px;
-      line-height: 1.6;
-    }
-
-    /* 输入框样式 */
-    .terminal-input {
-      background: transparent;
-      border: none;
-      color: #00ff00;
-      font-family: inherit;
-      font-size: inherit;
-      outline: none;
-      width: calc(100% - 120px);
-      caret-color: #00ff00;
-    }
-
-    /* 输出文本样式 */
-    #output div {
-      margin: 4px 0;
-    }
-
-    /* 链接颜色 */
-    a {
-      color: #00ffff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* 错误提示颜色 */
-    .error {
-      color: #ff6b6b;
-    }
-
-    /* 成功提示颜色 */
-    .success {
-      color: #2ecc71;
-    }
-  </style>
-<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/rss.xml" title="haoo's pwn house" type="application/atom+xml">
-</head>
-<body>
-  <div class="terminal">
-    <!-- 终端标题栏 -->
-    <div class="terminal-header">
-      <div class="terminal-btn btn-red"></div>
-      <div class="terminal-btn btn-yellow"></div>
-      <div class="terminal-btn btn-green"></div>
-      <span style="color:#888;margin-left:10px;">hexploit@terminal:~</span>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <div class="site-header__inner">
+    <div class="site-brand-wrap">
+      <a href="/" class="site-brand">
+        <span class="site-brand__title">haoo&#39;s pwn house</span>
+        <span class="site-brand__subtitle">Pwn / CTF writeups, binary exploitation notes, and practice logs.</span>
+      </a>
     </div>
 
-    <!-- 终端内容区 -->
-    <div class="terminal-body">
-      <pre style="margin:0 0 20px 0;color:#00ff00;">
-  /\  /\  /\  /\ 
- /  \/  \/  \/  \
- \  /\  /\  /\  /
-  \/  \/  \/  \/ 
-</pre>
-      <div class="success">[+] HEXPLOIT TERMINAL v1.0 INITIALIZED</div>
-      <div>[*] Type <span class="success">'help'</span> for available commands</div>
-      <div style="height:10px;"></div>
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      menu
+    </button>
 
-      <div id="output"></div>
-
-      <div style="display:flex;margin:10px 0;">
-        <span style="color:#00ff00;font-weight:bold;">haoo@pwn_home:~# </span>
-        <input id="input" class="terminal-input" autocomplete="off">
-      </div>
-    </div>
+    <nav id="site-nav" class="site-nav">
+      
+        <a href="/" class="site-nav__link">Home</a>
+      
+        <a href="/archives" class="site-nav__link">Archives</a>
+      
+        <a href="/categories" class="site-nav__link">Categories</a>
+      
+        <a href="/tags" class="site-nav__link">Tags</a>
+      
+        <a href="/about" class="site-nav__link">About</a>
+      
+        <a href="/rss.xml" class="site-nav__link">RSS</a>
+      
+    </nav>
   </div>
+</header>
 
-  <script>
-    const input = document.getElementById('input');
-    const output = document.getElementById('output');
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("site-nav");
 
-    const cmd = {
-      help: `
-<span class="success">[+] Available Commands:</span>
-  home      -> Go to homepage
-  about     -> About me
-  archives  -> All articles
-  categories-> Post categories
-  tags      -> View tags
-  github    -> My GitHub
-  clear     -> Clear screen
-  exit      -> Exit terminal`,
+    if (!menuToggle || !mobileMenu) return;
 
-      home: '/',
-      about: '/about',
-      archives: '/archives',
-      categories: '/categories',
-      tags: '/tags',
-      github: 'https://github.com/star492',
-      clear: () => { output.innerHTML = '' },
-      exit: () => { alert('[!] System disconnected.') }
-    };
-
-    input.focus();
-
-    function line(text, isCmd = false) {
-      let d = document.createElement('div');
-      if (isCmd) {
-        d.innerHTML = `<span style="color:#00ff00">root@hexploit:~#</span> ${text}`;
-      } else {
-        d.innerHTML = text;
-      }
-      output.appendChild(d);
-      input.scrollIntoView();
-    }
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter') return;
-      let c = input.value.trim().toLowerCase();
-      line(c, true);
-
-      if (!c) { input.value = ''; return; }
-
-      if (cmd[c]) {
-        let res = cmd[c];
-        if (typeof res === 'function') res();
-        else if (res.startsWith('/') || res.startsWith('http')) location.href = res;
-        else line(res);
-      } else {
-        line(`<span class="error">[-] Command not found: ${c}</span>`);
-      }
-      input.value = '';
+    menuToggle.addEventListener("click", () => {
+      const isOpen = mobileMenu.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
-  </script>
+  });
+</script>
+
+
+
+  <main class="page-shell">
+    <section class="home-intro">
+      <p class="home-intro__eyebrow">Writeups / Notes / Practice</p>
+      <h1 class="home-intro__title">haoo&#39;s pwn house</h1>
+      <p class="home-intro__copy">
+        Pwn / CTF writeups, binary exploitation notes, and practice logs.
+      </p>
+      <div class="home-intro__links">
+        <a href="/archives" class="home-link">All Posts</a>
+        <a href="/categories" class="home-link">Categories</a>
+        <a href="/tags" class="home-link">Tags</a>
+        <a href="/about" class="home-link">About</a>
+      </div>
+    </section>
+
+    <div class="page-grid">
+      <section class="page-main">
+        
+          
+          <article class="featured-post">
+            <p class="featured-post__label">Latest Writeup</p>
+            <h2 class="featured-post__title">
+              <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">PolarCTF2026春季赛</a>
+            </h2>
+            <div class="post-meta">
+              <span>2026-04-23</span>
+              <span>ctf</span>
+            </div>
+            <p class="featured-post__excerpt">one_hundred#导入所需库#--------------------------------------------------------------------------------from pwn import*from LibcSearcher import*from ctypes import*from struct import*import time#设置context#--------------------------------------------------------------------------------c...</p>
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/" class="post-readmore">Read Article</a>
+          </article>
+        
+
+        <div class="section-header">
+          <div>
+            <p class="section-header__eyebrow">Recent Posts</p>
+            <h2 class="section-heading">Writeups and Notes</h2>
+          </div>
+          <a href="/archives" class="section-link">Archive</a>
+        </div>
+
+        <div class="post-stream">
+          
+            
+            <article class="post-item">
+              <div class="post-item__date">2026-04-22</div>
+              <div class="post-item__body">
+                <h3 class="post-item__title">
+                  <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">pwn_小记</a>
+                </h3>
+                <div class="post-meta">
+                  <span>pwn</span>
+                  
+                    <span>小记</span>
+                  
+                </div>
+                <p class="post-item__excerpt">本文章会持续更新，用于记录pwn过程中，本人觉得值得记录的东西0v0 pwn的exp简化模板该部分记录使用lambda表达式与自定义函数简化exp，便于未来exp的编写。 #导入所需库#--------------------------------------------------------------------------------from pwn import*from LibcSearcher import*from c...</p>
+              </div>
+            </article>
+          
+        </div>
+
+        
+      </section>
+
+      
+  
+  <aside class="page-sidebar">
+    
+      
+        <section class="widget">
+          <h3 class="widget__title">Search</h3>
+          <div class="search-panel">
+            <input type="text" id="search-input" placeholder="Search writeups, tricks, notes">
+            <div id="search-results"></div>
+          </div>
+        </section>
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+
+      
+    
+      
+
+      
+        <section class="widget">
+          <h3 class="widget__title">About This Blog</h3>
+          <p class="widget__text">Writeups, exploit notes, and practice logs focused on pwn and binary exploitation.</p>
+        </section>
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+
+      
+    
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+        <section class="widget">
+          <h3 class="widget__title">Categories</h3>
+          <div class="widget__list">
+            
+              <a href="/categories/pwn/">
+                <span>pwn</span>
+                <span>1</span>
+              </a>
+            
+              <a href="/categories/ctf/">
+                <span>ctf</span>
+                <span>1</span>
+              </a>
+            
+          </div>
+        </section>
+      
+
+      
+
+      
+    
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+        <section class="widget">
+          <h3 class="widget__title">Tags</h3>
+          <div class="token-list">
+            
+              <a href="/tags/%E5%B0%8F%E8%AE%B0/" class="token">小记 <small>1</small></a>
+            
+              <a href="/tags/ctf/" class="token">ctf <small>1</small></a>
+            
+          </div>
+        </section>
+      
+
+      
+    
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+
+      
+        <section class="widget">
+          <h3 class="widget__title">Links</h3>
+          <div class="widget__list">
+            
+              <a href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
+                <span>Exploit-DB</span>
+                <span>↗</span>
+              </a>
+            
+              <a href="https://pwn.college" target="_blank" rel="noopener noreferrer">
+                <span>pwn.college</span>
+                <span>↗</span>
+              </a>
+            
+              <a href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
+                <span>GitHub</span>
+                <span>↗</span>
+              </a>
+            
+          </div>
+        </section>
+      
+    
+  </aside>
+
+
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__line">
+      haoo&#39;s pwn house · 2 posts · <a href="/rss.xml">RSS</a>
+    </p>
+    <p class="site-footer__line">
+      <span id="current-year"></span> haoo · Powered by
+      <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+      &
+      <a href="https://github.com/m310ct/hexo-theme-hexploit" target="_blank" rel="noopener noreferrer">Hexploit</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("current-year").textContent = new Date().getFullYear();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/search.js"></script>
+<script>
+window.MathJax = {
+tex: {
+  inlineMath: [['$', '$'], ['\\(', '\\)']]
+},
+svg: {
+  fontCache: 'global'
+}
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
 </body>
 </html>
+

@@ -1,324 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>haoo&#39;s pwn house - Archives</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/tailwind.css">
-    
-<header class="bg-black text-hacker-white py-4 font-dos font-extrabold">
-    <div class="container mx-auto flex items-center justify-between space-x-8">
-    
-      <h1 class="text-2xl font-bold ml-[100px] md:ml-0 animate-pulse text-hacker-color1 md:mr-[20%]">
-        <a href="/" class="hover:text-white transition-colors select-none">
-          haoo&#39;s pwn house
-        </a>
-      </h1>
-  
-    <!-- 大屏幕 -->
-      <nav class="hidden md:block">
-        <ul class="flex space-x-6">
-          
-            <li>
-              <a href="/" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                Home
-              </a>
-            </li>
-          
-            <li>
-              <a href="/archives" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                Archives
-              </a>
-            </li>
-          
-            <li>
-              <a href="/categories" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                Categories
-              </a>
-            </li>
-          
-            <li>
-              <a href="/tags" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                Tags
-              </a>
-            </li>
-          
-            <li>
-              <a href="/about" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                About
-              </a>
-            </li>
-          
-            <li>
-              <a href="/system" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                System
-              </a>
-            </li>
-          
-            <li>
-              <a href="/rss.xml" class="select-none text-lg hover:text-hacker-color1 transition-all hover:underline decoration-wavy duration-300 text-hacker-color3">
-                RSS
-              </a>
-            </li>
-          
-        </ul>
-      </nav>
-  
-      <!-- 小屏幕 -->
-      <button id="menu-toggle" class="block md:hidden text-white focus:outline-none">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-    </div>
-  
-    <!-- 折叠菜单 -->
-    <nav id="mobile-menu" class="hidden bg-black">
-      <ul class="space-y-2 py-4 px-6">
-        
-          <li>
-            <a href="/" class="block text-white hover:text-hacker-color1 transition-colors">
-              Home
-            </a>
-          </li>
-        
-          <li>
-            <a href="/archives" class="block text-white hover:text-hacker-color1 transition-colors">
-              Archives
-            </a>
-          </li>
-        
-          <li>
-            <a href="/categories" class="block text-white hover:text-hacker-color1 transition-colors">
-              Categories
-            </a>
-          </li>
-        
-          <li>
-            <a href="/tags" class="block text-white hover:text-hacker-color1 transition-colors">
-              Tags
-            </a>
-          </li>
-        
-          <li>
-            <a href="/about" class="block text-white hover:text-hacker-color1 transition-colors">
-              About
-            </a>
-          </li>
-        
-          <li>
-            <a href="/system" class="block text-white hover:text-hacker-color1 transition-colors">
-              System
-            </a>
-          </li>
-        
-          <li>
-            <a href="/rss.xml" class="block text-white hover:text-hacker-color1 transition-colors">
-              RSS
-            </a>
-          </li>
-        
-      </ul>
-    </nav>
-  
-    <!-- RSS Link -->
-    <link rel="alternate" type="application/rss+xml" title=" RSS" href="/rss.xml" />
-  </header>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/js/search.js"></script>
-  <script>
-        document.addEventListener("DOMContentLoaded", () => {
-    const menuToggle = document.getElementById("menu-toggle");
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    menuToggle.addEventListener("click", () => {
-        if (mobileMenu.classList.contains("hidden")) {
-        mobileMenu.classList.remove("hidden");
-        } else {
-        mobileMenu.classList.add("hidden");
-        }
-    });
-    });
-
-  </script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s pwn house - Archives</title>
+<meta
+  name="description"
+  content="Timeline of pwn writeups and exploit notes."
+>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/tailwind.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/toc.css">
+<link rel="alternate" type="application/rss+xml" title="haoo&#39;s pwn house RSS" href="/rss.xml">
 
 
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="bg-black container mx-auto">
-    <h1 class="text-4xl text-hacker-color1 font-bold font-dos">Archives</h1>
-    <hr class="w-full border-t-2 border-line-color border-dashed">
-    <div class="container mx-auto flex bg-black min-h-screen">
-        <div class="w-full">
-            
+<body class="site-body">
+  <header class="site-header">
+  <div class="site-header__inner">
+    <div class="site-brand-wrap">
+      <a href="/" class="site-brand">
+        <span class="site-brand__title">haoo&#39;s pwn house</span>
+        <span class="site-brand__subtitle">Pwn / CTF writeups, binary exploitation notes, and practice logs.</span>
+      </a>
+    </div>
 
-            <div class="archive-list text-lg mt-8">
-            
-                <section class="mb-6">
-                <h2 class="text-2xl font-bold text-hacker-color1 mb-4">2026</h2>
-                <ul class="ml-4">
-                    
-                    <li class="mb-2">
-                        <span class="text-hacker-color3 ">2026-04-23 >> </span>
-                        <a class="text-hacker-color1 hover:underline" href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">PolarCTF2026春季赛</a>
-                    </li>
-                    
-                </ul>
-                </section>
-            
-            </div>
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      menu
+    </button>
+
+    <nav id="site-nav" class="site-nav">
+      
+        <a href="/" class="site-nav__link">Home</a>
+      
+        <a href="/archives" class="site-nav__link">Archives</a>
+      
+        <a href="/categories" class="site-nav__link">Categories</a>
+      
+        <a href="/tags" class="site-nav__link">Tags</a>
+      
+        <a href="/about" class="site-nav__link">About</a>
+      
+        <a href="/rss.xml" class="site-nav__link">RSS</a>
+      
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("site-nav");
+
+    if (!menuToggle || !mobileMenu) return;
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = mobileMenu.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  });
+</script>
 
 
+  
+  <main class="page-shell">
+    <section class="panel page-hero page-hero--compact">
+      <p class="section-header__eyebrow">timeline</p>
+      <h1 class="section-heading">Archives</h1>
+      <p class="widget__text">All posts sorted by year, so visitors can dump the full history in one place.</p>
+    </section>
+
+    <div class="page-grid">
+      <section class="page-main">
+        <div class="directory-list">
+          
+            <section class="panel directory-group">
+              <h2 class="directory-group__title">2026</h2>
+              <div class="widget__list">
+                
+                  <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+                    <span>PolarCTF2026春季赛</span>
+                    <span>04-23</span>
+                  </a>
+                
+              </div>
+            </section>
+          
         </div>
-        
-    <div class="w-1/3 hidden md:block space-y-4 mt-8">
+      </section>
+
       
-        
-          <!-- 搜索框 -->
-          <input type="text" id="search-input" placeholder="Search..." class="w-full p-2.5 text-lg mb-5 border-2 border-line-color rounded bg-black text-white placeholder-gray-400"/>
-          <div id="search-results"></div>
-        
   
-        
-  
-        
-  
-        
-  
-        
-  
+  <aside class="page-sidebar">
+    
       
-        
-  
-        
-          <!-- 公告栏 -->
-          <div class=" text-white p-4 rounded-md border-2 border-dashed border-line-color mb-4">
-            <h3 class="font-bold text-lg text-hacker-color1">Notice</h3>
-            <p class="mt-4">WARNING: Unauthorized access is prohibited. This is personal security blog.</p>
+        <section class="widget">
+          <h3 class="widget__title">Search</h3>
+          <div class="search-panel">
+            <input type="text" id="search-input" placeholder="Search writeups, tricks, notes">
+            <div id="search-results"></div>
           </div>
-        
-  
-        
-  
-        
-  
-        
-  
+        </section>
       
-        
-  
-        
-  
-        
-          <!-- 分类部分 -->
-          <h3 class="text-hacker-color1 font-bold text-lg">Categories</h3>
-          <div>
-            
-              <a href="http://example.com/categories/ctf/" class="text-hacker-color3 hover:text-white">
-                ctf (1)
-              </a>
-              <br />
-            
-              <a href="http://example.com/categories/pwn/" class="text-hacker-color3 hover:text-white">
-                pwn (1)
-              </a>
-              <br />
-            
-            
-          </div>
-          <hr class="w-full border-t-2 border-line-color border-dashed">
-        
-  
-        
-  
-        
-  
+
       
-        
-  
-        
-  
-        
-  
-        
-          <!-- 标签部分 -->
-          <h3 class="text-hacker-color1 font-bold text-lg">Tags</h3>
-          <div class="flex flex-wrap justify-start items-center">
-            
-              <a href="http://example.com/tags/ctf/" class="text-hacker-color3 hover:bg-hacker-hover-color hover:text-white block border border-hacker-color3 hover:border-dotted rounded-sm py-0.5 px-2 mr-4 mb-2">
-                ctf <sub>1</sub>
-              </a>
-              <br />
-            
-              <a href="http://example.com/tags/小记/" class="text-hacker-color3 hover:bg-hacker-hover-color hover:text-white block border border-hacker-color3 hover:border-dotted rounded-sm py-0.5 px-2 mr-4 mb-2">
-                小记 <sub>1</sub>
-              </a>
-              <br />
-            
-            
-          </div>
-          <hr class="w-full border-t-2 border-line-color border-dashed">
-        
-  
-        
-  
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
       
-        
-  
-        
-  
-        
-  
-        
-  
-        
-          <!-- 链接部分 -->
-          <h3 class="text-hacker-color1 font-bold text-lg">Links</h3>
-          <div>
+
+      
+
+      
+    
+      
+
+      
+        <section class="widget">
+          <h3 class="widget__title">About This Blog</h3>
+          <p class="widget__text">Writeups, exploit notes, and practice logs focused on pwn and binary exploitation.</p>
+        </section>
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+
+      
+    
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+        <section class="widget">
+          <h3 class="widget__title">Categories</h3>
+          <div class="widget__list">
             
-              <a href="https://www.exploit-db.com" target="_blank" class="text-hacker-color3 hover:text-white">
-                Exploit-DB
+              <a href="/categories/pwn/">
+                <span>pwn</span>
+                <span>1</span>
               </a>
-              <br />
             
-              <a href="https://github.com/star492" target="_blank" class="text-hacker-color3 hover:text-white">
-                GitHub
+              <a href="/categories/ctf/">
+                <span>ctf</span>
+                <span>1</span>
               </a>
-              <br />
             
           </div>
-          <hr class="w-full border-t-2 border-line-color border-dashed">
-        
-  
+        </section>
       
+
+      
+
+      
+    
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+        <section class="widget">
+          <h3 class="widget__title">Tags</h3>
+          <div class="token-list">
+            
+              <a href="/tags/%E5%B0%8F%E8%AE%B0/" class="token">小记 <small>1</small></a>
+            
+              <a href="/tags/ctf/" class="token">ctf <small>1</small></a>
+            
+          </div>
+        </section>
+      
+
+      
+    
+      
+
+      
+
+      <section class="widget">
+        <h3 class="widget__title">Recent Posts</h3>
+        <div class="widget__list">
+          
+            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
+              <span>PolarCTF2026春季赛</span>
+              <span>04-23</span>
+            </a>
+          
+            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
+              <span>pwn_小记</span>
+              <span>04-22</span>
+            </a>
+          
+        </div>
+      </section>
+
+      
+
+      
+
+      
+        <section class="widget">
+          <h3 class="widget__title">Links</h3>
+          <div class="widget__list">
+            
+              <a href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
+                <span>Exploit-DB</span>
+                <span>↗</span>
+              </a>
+            
+              <a href="https://pwn.college" target="_blank" rel="noopener noreferrer">
+                <span>pwn.college</span>
+                <span>↗</span>
+              </a>
+            
+              <a href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
+                <span>GitHub</span>
+                <span>↗</span>
+              </a>
+            
+          </div>
+        </section>
+      
+    
+  </aside>
+
+
+
     </div>
-  
-  
-  
-  
-  
-
-
-
-
-
-
-    </div>
-    <footer class="bg-black text-gray-400 py-4">
- <div class="container mx-auto text-center">
-  <p>© <span id="current-year"></span>  haoo 
-    <br> Powered by <a class="hover:text-white duration-150 hover:underline decoration-slice" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a class="hover:text-white duration-150 hover:underline decoration-slice" target="_blank" rel="noopener" href="https://github.com/m310ct/hexo-theme-hexploit">Hexpolit</a></p>
- </div>
+  </main>
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__line">
+      haoo&#39;s pwn house · 2 posts · <a href="/rss.xml">RSS</a>
+    </p>
+    <p class="site-footer__line">
+      <span id="current-year"></span> haoo · Powered by
+      <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+      &
+      <a href="https://github.com/m310ct/hexo-theme-hexploit" target="_blank" rel="noopener noreferrer">Hexploit</a>
+    </p>
+  </div>
 </footer>
 
-<script> 
- document.getElementById("current-year").textContent = new Date().getFullYear();
+<script>
+  document.getElementById("current-year").textContent = new Date().getFullYear();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/search.js"></script>
 <script>
 window.MathJax = {
 tex: {
-  inlineMath: [['$', '$'], ['\\(', '\\)']]  // 启用 $...$ 和 \( ... \)
+  inlineMath: [['$', '$'], ['\\(', '\\)']]
 },
 svg: {
   fontCache: 'global'
@@ -330,3 +333,4 @@ svg: {
 
 </body>
 </html>
+
