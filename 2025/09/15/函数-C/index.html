@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s pwn house - 函数_C</title>
+<meta
+  name="description"
+  content="strtol()格式：*long int strol(const char *str,char endptr,int base)**，把*参数str指向的字符串根据给定的base转换为一个长整数，base必须介于2和36之间或为0。返回值为被转换的长整型整数值**。 strstr()格式：*char *strstr(c"
+>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/tailwind.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/toc.css">
+<link rel="alternate" type="application/rss+xml" title="haoo&#39;s pwn house RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <div class="site-header__inner">
+    <div class="site-brand-wrap">
+      <a href="/" class="site-brand">
+        <span class="site-brand__title">haoo&#39;s pwn house</span>
+        <span class="site-brand__subtitle">Pwn / CTF writeups, binary exploitation notes, and practice logs.</span>
+      </a>
+    </div>
+
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      menu
+    </button>
+
+    <nav id="site-nav" class="site-nav">
+      
+        <a href="/" class="site-nav__link">Home</a>
+      
+        <a href="/archives" class="site-nav__link">Archives</a>
+      
+        <a href="/categories" class="site-nav__link">Categories</a>
+      
+        <a href="/tags" class="site-nav__link">Tags</a>
+      
+        <a href="/about" class="site-nav__link">About</a>
+      
+        <a href="/rss.xml" class="site-nav__link">RSS</a>
+      
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("site-nav");
+
+    if (!menuToggle || !mobileMenu) return;
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = mobileMenu.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  });
+</script>
+
+
+
+  <main class="page-shell article-page">
+    <header class="article-header">
+      <div class="post-meta">
+        <span>2025-09-15</span>
+        <span>~4 min read</span>
+        <span>1681 chars</span>
+      </div>
+      <h1 class="article-title">函数_C</h1>
+
+      
+        <div class="token-list">
+          
+            <a href="/categories/%E5%87%BD%E6%95%B0/" class="token">函数</a>
+          
+          
+            <a href="/tags/%E5%87%BD%E6%95%B0/" class="token">函数</a>
+          
+        </div>
+      
+    </header>
+
+    <div class="article-shell">
+      <article class="article-panel">
+        <div id="article-content" class="article-prose highlight">
+          <h1 id="strtol"><a href="#strtol" class="headerlink" title="strtol()"></a>strtol()</h1><p>格式：<em>*long int strol(const char *str,char endptr,int base)**，把</em>*参数str<strong>指向的字符串根据给定的</strong>base<strong>转换为一个长整数，base必须介于2和36之间或为0。<strong>返回值</strong>为被转换的</strong>长整型整数值**。</p>
+<h1 id="strstr"><a href="#strstr" class="headerlink" title="strstr()"></a>strstr()</h1><p>格式：<em>*char *strstr(const char *haystack,const char *needle)<strong>，在字符串haystack中查找第一次出现字符串needle的位置，不包含终止符\0。<strong>返回值</strong>为指向haystack中</strong>第一次出现</em><em>needle的位置的指针，若没找到则返回*<em>NULL</em></em>。</p>
+<h1 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy()"></a>memcpy()</h1><p>格式：<em>*void *memcpy(void *str1,const void *str2,size_t n)<strong>，从存储区</strong>str2</em><em>复制<strong>n</strong>个字节到存储区*<em>str1</em></em>。<strong>返回</strong>一个指向目标存储区<strong>str1的指针</strong>。</p>
+<h1 id="strcspn"><a href="#strcspn" class="headerlink" title="strcspn()"></a>strcspn()</h1><p>格式：<strong>size_t strcspn(const char *str1,const char *str2)**，检索字符串</strong>str1开头<strong>连续有几个字符都</strong>不含<strong>字符串</strong>str2中的字符**。<strong>返回</strong>str1开头连续都<strong>不含</strong>字符串str2中<strong>字符的字符数</strong>。</p>
+<h1 id="openat"><a href="#openat" class="headerlink" title="openat()"></a>openat()</h1><p>格式：<em>*ssize_t openat(int dfd，const char *filename，int flag，umode_t mode)**，函数第一个参数</em><em>dfd<strong>指的是当</strong>path<strong>为</strong>相对路径<strong>时，该路径在文件系统中的开始地址（即</strong>打开目录获取的文件描述符*</em>）但可以指定为AT_FDCWD(-100)，指定路径为当前路径。其余三个参数与open相同。</p>
+<h1 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile()"></a>sendfile()</h1><p>格式：<em>*ssize_t sendfile(int out_fd，int in_fd，off_t *offset，size_t count)**，允许将</em><em>文件数据<strong>从</strong>一个文件描述符<strong>直接发送到</strong>另一个文件描述符*</em>，而且不需要经过缓冲区拷贝，比read+write还要简单。</p>
+<h1 id="calloc"><a href="#calloc" class="headerlink" title="calloc()"></a>calloc()</h1><p>格式：void *calloc(size_t nitems,size_t size)，分配所需内存空间，并返回一个指向它的指针，与malloc不同的是，calloc会设置分配的内存为零，即calloc函数会将分配的内存全部初始化为零。nitems为要分配元素个数，size为元素大小。</p>
+<h1 id="strcat"><a href="#strcat" class="headerlink" title="strcat()"></a>strcat()</h1><p>格式：char *strcat(char *dest,const char *src)，把src所指向的字符串追加到dest所指向的字符串的结尾，函数返回一个指向最终的目标字符串dest的指针。</p>
+<h1 id="fread"><a href="#fread" class="headerlink" title="fread()"></a>fread()</h1><p>格式：size_t fread(void *ptr,size_t size,size_t nmemb,FILE *stream)，从stream中读取数据到ptr中。ptr为指向带有最小尺寸nmemb字节的内存块指针、size为每个元素的大小、nmemb为元素个数、stream为输入流</p>
+<h1 id="strchr"><a href="#strchr" class="headerlink" title="strchr()"></a>strchr()</h1><p>格式：char *strchr(const char *str,char c)，在参数str所指向的字符串中搜索第一次出现字符c的位置。</p>
+<h1 id="pthread-create"><a href="#pthread-create" class="headerlink" title="pthread_create"></a>pthread_create</h1><p>格式：int pthread_create(pthread_t *thread,const pthread_attr_t *attr,void *( *start_routine)(void *),void <em>arg)，thread为线程标识符，attr为线程属性，</em>( *start_routine)(void *)线程启动函数，arg为传递给启动函数的参数，如果创建成功，则返回0，反之返回错误码如：EAGAIN，EINVAL，EPERM。</p>
+<h1 id="pthread-join"><a href="#pthread-join" class="headerlink" title="pthread_join"></a>pthread_join</h1><p>格式：int pthread_join(pthread_t thread,void **retval)，thread为要等待的线程，retval为接收到的返回值，该函数允许一个线程等待另一个线程的结束。</p>
+
+        </div>
+      </article>
+
+      
+        <aside class="toc-panel">
+          <div class="toc-panel__head">
+            <h2 class="widget__title">Contents</h2>
+            <button class="toc-toggle" type="button">Top</button>
+          </div>
+          <nav class="toc" id="toc"></nav>
+        </aside>
+      
+    </div>
+
+    <section class="article-nav">
+      
+        <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/" class="nav-card">
+          <span class="nav-card__label">Previous</span>
+          <strong class="nav-card__title">pwn_小记</strong>
+        </a>
+      
+      
+        <a href="/2025/08/24/ctfshow-pwn%E5%85%A5%E9%97%A8/" class="nav-card">
+          <span class="nav-card__label">Next</span>
+          <strong class="nav-card__title">ctfshow-pwn入门</strong>
+        </a>
+      
+    </section>
+  </main>
+
+  <script src="/js/toc.js"></script>
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__line">
+      haoo&#39;s pwn house · 6 posts · <a href="/rss.xml">RSS</a>
+    </p>
+    <p class="site-footer__line">
+      <span id="current-year"></span> haoo · Powered by
+      <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+      &
+      <a href="https://github.com/m310ct/hexo-theme-hexploit" target="_blank" rel="noopener noreferrer">Hexploit</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("current-year").textContent = new Date().getFullYear();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/search.js"></script>
+<script>
+window.MathJax = {
+tex: {
+  inlineMath: [['$', '$'], ['\\(', '\\)']]
+},
+svg: {
+  fontCache: 'global'
+}
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+
+</body>
+</html>
+
