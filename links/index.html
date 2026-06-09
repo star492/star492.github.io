@@ -1,542 +1,207 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s pwn house - links</title>
-<meta
-  name="description"
-  content="友情链接 .links-content { margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; } .card { width: calc(50% - 10px); font-size: 1rem; padd"
->
-<link rel="stylesheet" href="/css/styles.css">
-<link rel="stylesheet" href="/css/tailwind.css">
-<link rel="stylesheet" href="/css/highlight.css">
-<link rel="stylesheet" href="/css/toc.css">
+<title>haoo&#39;s pwn house - Links</title>
+<meta name="description" content="Friends, references, and useful places around the security learning path.">
+<meta name="theme-color" content="#171a18">
+<link rel="stylesheet" href="/css/main.css">
 <link rel="alternate" type="application/rss+xml" title="haoo&#39;s pwn house RSS" href="/rss.xml">
-
 
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="site-body">
   <header class="site-header">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="site-header__inner">
-    <div class="site-brand-wrap">
-      <a href="/" class="site-brand">
-        <span class="site-brand__title">haoo&#39;s pwn house</span>
-        <span class="site-brand__subtitle">Pwn / CTF writeups, binary exploitation notes, and practice logs.</span>
-      </a>
-    </div>
+    <a class="site-brand" href="/" aria-label="haoo&#39;s pwn house home">
+      <span class="site-brand__mark">~/</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s pwn house</strong>
+        <small>Pwn / CTF writeups, binary exploitation notes, and practice logs.</small>
+      </span>
+    </a>
 
-    <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-      menu
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
 
-    <nav id="site-nav" class="site-nav">
+    <nav id="site-nav" class="site-nav" aria-label="Primary navigation">
       
-        <a href="/" class="site-nav__link">Home</a>
+        <a class="site-nav__link" href="/">Home</a>
       
-        <a href="/archives" class="site-nav__link">Archives</a>
+        <a class="site-nav__link" href="/archives">Archives</a>
       
-        <a href="/categories" class="site-nav__link">Categories</a>
+        <a class="site-nav__link" href="/categories">Categories</a>
       
-        <a href="/tags" class="site-nav__link">Tags</a>
+        <a class="site-nav__link" href="/tags">Tags</a>
       
-        <a href="/about" class="site-nav__link">About</a>
+        <a class="site-nav__link" href="/about">About</a>
       
-        <a href="/rss.xml" class="site-nav__link">RSS</a>
+        <a class="site-nav__link" href="/links">Links</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
       
     </nav>
   </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
 </header>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const menuToggle = document.getElementById("menu-toggle");
-    const mobileMenu = document.getElementById("site-nav");
 
-    if (!menuToggle || !mobileMenu) return;
-
-    menuToggle.addEventListener("click", () => {
-      const isOpen = mobileMenu.classList.toggle("is-open");
-      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    });
-  });
-</script>
-
-
-  <main class="page-shell">
-    <section class="panel page-hero page-hero--compact">
-      <p class="section-header__eyebrow">page</p>
-      <h1 class="section-heading">links</h1>
+  <main id="main-content" class="site-main">
+    <section class="page-hero">
+      <p class="section-kicker">network</p>
+      <h1>Links</h1>
+      
+        <p>Friends, references, and useful places around the security learning path.</p>
+      
     </section>
 
-    <div class="page-grid">
-      <section class="page-main">
-        <article class="panel article-panel">
-          <div class="article-prose">
-            <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>友情链接</title>
-<style>
-  .links-content {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .card {
-    width: calc(50% - 10px);
-    font-size: 1rem;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition-duration: 0.15s;
-    margin-bottom: 1rem;
-    display: flex;
-  }
-  .card img.ava {
-    width: 3rem!important;
-    height: 3rem!important;
-    margin-right: 1em!important;
-    border-radius: 4px;
-  }
-  .card .card-header {
-    font-style: italic;
-  }
-  .card .card-header a {
-    font-style: normal;
-    color: #2bbc8a;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  .card .card-header a:hover {
-    color: #d480aa;
-    text-decoration: none;
-  }
-  .card .card-header .info {
-    font-style: normal;
-    color: #a3a3a3;
-    font-size: 14px;
-  }
-  .title {
-    text-align: center;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  .section {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-</style>
-</head>
-<body>
-
-<div class="links-content">
-  <h2 class="title">师傅</h2>
+    <div class="layout-grid">
+      <section class="content-column">
+        <article class="content-panel article-prose">
+          <div class="links-content">
+  <h2 class="title">Friends & References</h2>
   <div class="section">
-    <div class="card">
-      <img class="ava" src="https://baozongwi.xyz/images/acvtar.jpg" />
-      <div class="card-header">
-        <a target="_blank" rel="noopener" href="https://baozongwi.xyz/">baozongwi</a>
-        <div class="info">包神</div>
-      </div>
-    </div>
-    <div class="card">
-      <img class="ava" src="https://q1.qlogo.cn/g?b=qq&nk=3023536144&s=640" />
-      <div class="card-header">
-        <a target="_blank" rel="noopener" href="https://yubut.github.io/">yub’s blog</a>
-        <div class="info">学姐</div>
-      </div>
-    </div>
-    <div class="card">
-      <img class="ava" src="https://yxing-1.github.io/img/%E9%BB%91.jpg" />
-      <div class="card-header">
-        <a target="_blank" rel="noopener" href="https://yxing-1.github.io/">喻’s blog</a>
-        <div class="info">web大佬</div>
-      </div>
-    </div>
-    <div class="card">
-      <img class="ava" src="https://wanth3f1ag.top/images/avatar.jpg" />
-      <div class="card-header">
-        <a target="_blank" rel="noopener" href="https://wanth3f1ag.top/">wanth3f1ag</a>
-        <div class="info">蒙</div>
-      </div>
-    </div>
-    <div class="card">
-      <img class="ava" src="https://mint-sec.github.io/images/1.jpg" />
-      <div class="card-header">
-        <a target="_blank" rel="noopener" href="https://mint-sec.github.io/">mint</a>
-        <div class="info">张兄</div>
-      </div>
-    </div>
+    <a class="card" href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
+      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="card-header">
+        <strong>GitHub</strong>
+        <span class="info">代码、脚本和项目记录</span>
+      </span>
+    </a>
+    <a class="card" href="https://pwn.college" target="_blank" rel="noopener noreferrer">
+      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="card-header">
+        <strong>pwn.college</strong>
+        <span class="info">系统化 Pwn 练习平台</span>
+      </span>
+    </a>
+    <a class="card" href="https://ctftime.org" target="_blank" rel="noopener noreferrer">
+      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="card-header">
+        <strong>CTFtime</strong>
+        <span class="info">比赛日程和队伍信息</span>
+      </span>
+    </a>
+    <a class="card" href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
+      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="card-header">
+        <strong>Exploit-DB</strong>
+        <span class="info">公开漏洞利用参考</span>
+      </span>
+    </a>
   </div>
 </div>
-</body>
-</html>
 
-          </div>
         </article>
       </section>
 
       
   
-  <aside class="page-sidebar">
+  <aside class="sidebar">
     
-      
-        <section class="widget">
-          <h3 class="widget__title">Search</h3>
-          <div class="search-panel">
-            <input type="text" id="search-input" placeholder="Search writeups, tricks, notes">
-            <div id="search-results"></div>
-          </div>
-        </section>
-      
+      <section class="side-panel search-panel">
+        <h2 class="side-panel__title">Search</h2>
+        <input id="search-input" class="search-input" type="search" placeholder="Search notes, writeups, tricks" autocomplete="off">
+        <div id="search-results" class="search-results" aria-live="polite"></div>
+      </section>
+    
 
-      
+    <section class="side-panel profile-panel">
+      <h2 class="side-panel__title">Lab Brief</h2>
+      <p>Pwn / CTF writeups, binary exploitation notes, and practice logs.</p>
+      <div class="side-stats">
+        <span><strong>1</strong> posts</span>
+        <span><strong>1</strong> categories</span>
+        <span><strong>4</strong> tags</span>
+      </div>
+    </section>
 
-      <section class="widget">
-        <h3 class="widget__title">Recent Posts</h3>
-        <div class="widget__list">
+    
+      <section class="side-panel">
+        <h2 class="side-panel__title">Recent</h2>
+        <div class="compact-list">
           
-            <a href="/2026/05/05/%E5%87%BD%E6%95%B0-C/">
-              <span>函数_C</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/05/05/ctfshow-pwn%E5%85%A5%E9%97%A8/">
-              <span>ctfshow-pwn入门</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/04/24/ISCTF-2021-pwn/">
-              <span>ISCTF_2021_pwn</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/24/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
-              <span>系统调用号</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
-              <span>PolarCTF2026春季赛</span>
-              <span>04-23</span>
-            </a>
-          
-            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
-              <span>pwn_小记</span>
-              <span>04-22</span>
+            <a href="/2026/06/09/startrace-theme-test/">
+              <span>Startrace 主题效果测试：ret2libc 小记</span>
+              <time datetime="2026-06-09">06-09</time>
             </a>
           
         </div>
       </section>
-
-      
-
-      
-
-      
     
-      
 
-      
-        <section class="widget">
-          <h3 class="widget__title">About This Blog</h3>
-          <p class="widget__text">Writeups, exploit notes, and practice logs focused on pwn and binary exploitation.</p>
-        </section>
-      
-
-      <section class="widget">
-        <h3 class="widget__title">Recent Posts</h3>
-        <div class="widget__list">
+    
+      <section class="side-panel">
+        <h2 class="side-panel__title">Categories</h2>
+        <div class="compact-list compact-list--counts">
           
-            <a href="/2026/05/05/%E5%87%BD%E6%95%B0-C/">
-              <span>函数_C</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/05/05/ctfshow-pwn%E5%85%A5%E9%97%A8/">
-              <span>ctfshow-pwn入门</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/04/24/ISCTF-2021-pwn/">
-              <span>ISCTF_2021_pwn</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/24/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
-              <span>系统调用号</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
-              <span>PolarCTF2026春季赛</span>
-              <span>04-23</span>
-            </a>
-          
-            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
-              <span>pwn_小记</span>
-              <span>04-22</span>
+            <a href="/categories/Pwn/">
+              <span>Pwn</span>
+              <b>1</b>
             </a>
           
         </div>
       </section>
-
-      
-
-      
-
-      
     
-      
 
-      
+    
+      <section class="side-panel">
+        <h2 class="side-panel__title">Tags</h2>
+        <div class="tag-list">
+          
+            <a class="tag-chip" href="/tags/ret2libc/">ret2libc<small>1</small></a>
+          
+            <a class="tag-chip" href="/tags/pwntools/">pwntools<small>1</small></a>
+          
+            <a class="tag-chip" href="/tags/libc/">libc<small>1</small></a>
+          
+            <a class="tag-chip" href="/tags/theme-test/">theme-test<small>1</small></a>
+          
+        </div>
+      </section>
+    
 
-      <section class="widget">
-        <h3 class="widget__title">Recent Posts</h3>
-        <div class="widget__list">
+    
+      <section class="side-panel">
+        <h2 class="side-panel__title">Links</h2>
+        <div class="compact-list">
           
-            <a href="/2026/05/05/%E5%87%BD%E6%95%B0-C/">
-              <span>函数_C</span>
-              <span>05-05</span>
+            <a href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
+              <span>GitHub</span>
+              <b aria-hidden="true">-&gt;</b>
             </a>
           
-            <a href="/2026/05/05/ctfshow-pwn%E5%85%A5%E9%97%A8/">
-              <span>ctfshow-pwn入门</span>
-              <span>05-05</span>
+            <a href="https://pwn.college" target="_blank" rel="noopener noreferrer">
+              <span>pwn.college</span>
+              <b aria-hidden="true">-&gt;</b>
             </a>
           
-            <a href="/2026/04/24/ISCTF-2021-pwn/">
-              <span>ISCTF_2021_pwn</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/24/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
-              <span>系统调用号</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
-              <span>PolarCTF2026春季赛</span>
-              <span>04-23</span>
-            </a>
-          
-            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
-              <span>pwn_小记</span>
-              <span>04-22</span>
+            <a href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
+              <span>Exploit-DB</span>
+              <b aria-hidden="true">-&gt;</b>
             </a>
           
         </div>
       </section>
-
-      
-        <section class="widget">
-          <h3 class="widget__title">Categories</h3>
-          <div class="widget__list">
-            
-              <a href="/categories/pwn/">
-                <span>pwn</span>
-                <span>3</span>
-              </a>
-            
-              <a href="/categories/ctf/">
-                <span>ctf</span>
-                <span>1</span>
-              </a>
-            
-              <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
-                <span>系统调用号</span>
-                <span>1</span>
-              </a>
-            
-              <a href="/categories/%E5%87%BD%E6%95%B0/">
-                <span>函数</span>
-                <span>1</span>
-              </a>
-            
-          </div>
-        </section>
-      
-
-      
-
-      
-    
-      
-
-      
-
-      <section class="widget">
-        <h3 class="widget__title">Recent Posts</h3>
-        <div class="widget__list">
-          
-            <a href="/2026/05/05/%E5%87%BD%E6%95%B0-C/">
-              <span>函数_C</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/05/05/ctfshow-pwn%E5%85%A5%E9%97%A8/">
-              <span>ctfshow-pwn入门</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/04/24/ISCTF-2021-pwn/">
-              <span>ISCTF_2021_pwn</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/24/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
-              <span>系统调用号</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
-              <span>PolarCTF2026春季赛</span>
-              <span>04-23</span>
-            </a>
-          
-            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
-              <span>pwn_小记</span>
-              <span>04-22</span>
-            </a>
-          
-        </div>
-      </section>
-
-      
-
-      
-        <section class="widget">
-          <h3 class="widget__title">Tags</h3>
-          <div class="token-list">
-            
-              <a href="/tags/pwn/" class="token">pwn <small>2</small></a>
-            
-              <a href="/tags/ctf/" class="token">ctf <small>1</small></a>
-            
-              <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/" class="token">系统调用号 <small>1</small></a>
-            
-              <a href="/tags/%E5%B0%8F%E8%AE%B0/" class="token">小记 <small>1</small></a>
-            
-              <a href="/tags/%E5%87%BD%E6%95%B0/" class="token">函数 <small>1</small></a>
-            
-          </div>
-        </section>
-      
-
-      
-    
-      
-
-      
-
-      <section class="widget">
-        <h3 class="widget__title">Recent Posts</h3>
-        <div class="widget__list">
-          
-            <a href="/2026/05/05/%E5%87%BD%E6%95%B0-C/">
-              <span>函数_C</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/05/05/ctfshow-pwn%E5%85%A5%E9%97%A8/">
-              <span>ctfshow-pwn入门</span>
-              <span>05-05</span>
-            </a>
-          
-            <a href="/2026/04/24/ISCTF-2021-pwn/">
-              <span>ISCTF_2021_pwn</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/24/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
-              <span>系统调用号</span>
-              <span>04-24</span>
-            </a>
-          
-            <a href="/2026/04/23/PolarCTF2026%E6%98%A5%E5%AD%A3%E8%B5%9B/">
-              <span>PolarCTF2026春季赛</span>
-              <span>04-23</span>
-            </a>
-          
-            <a href="/2026/04/22/pwn-%E5%B0%8F%E8%AE%B0/">
-              <span>pwn_小记</span>
-              <span>04-22</span>
-            </a>
-          
-        </div>
-      </section>
-
-      
-
-      
-
-      
-        <section class="widget">
-          <h3 class="widget__title">Links</h3>
-          <div class="widget__list">
-            
-              <a href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
-                <span>Exploit-DB</span>
-                <span>↗</span>
-              </a>
-            
-              <a href="https://pwn.college" target="_blank" rel="noopener noreferrer">
-                <span>pwn.college</span>
-                <span>↗</span>
-              </a>
-            
-              <a href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
-                <span>GitHub</span>
-                <span>↗</span>
-              </a>
-            
-          </div>
-        </section>
-      
     
   </aside>
 
 
-
     </div>
   </main>
+
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p class="site-footer__line">
-      haoo&#39;s pwn house · 6 posts · <a href="/rss.xml">RSS</a>
-    </p>
-    <p class="site-footer__line">
-      <span id="current-year"></span> haoo · Powered by
-      <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
-      &
-      <a href="https://github.com/m310ct/hexo-theme-hexploit" target="_blank" rel="noopener noreferrer">Hexploit</a>
-    </p>
+    <p><strong>haoo&#39;s pwn house</strong> | 1 posts | <a href="/rss.xml">RSS</a></p>
+    <p><span id="current-year"></span> haoo. Built with Hexo and the Startrace theme.</p>
   </div>
 </footer>
-
-<script>
-  document.getElementById("current-year").textContent = new Date().getFullYear();
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/search.js"></script>
-<script>
-window.MathJax = {
-tex: {
-  inlineMath: [['$', '$'], ['\\(', '\\)']]
-},
-svg: {
-  fontCache: 'global'
-}
-};
-</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-
+<script src="/js/theme.js" defer></script>
 
 </body>
 </html>
