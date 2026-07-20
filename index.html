@@ -24,12 +24,6 @@
       </span>
     </a>
 
-    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
     <nav id="site-nav" class="site-nav" aria-label="主导航">
       
       
@@ -44,6 +38,18 @@
         <a class="site-nav__link" href="/links">链接</a>
       
     </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
   <div class="reading-progress" aria-hidden="true"><span></span></div>
 </header>
@@ -71,6 +77,7 @@
           <p><b>operator</b> <span>haoo</span></p>
           <p><b>scope</b> <span>pwn · re · iot · kernel</span></p>
           <p><b>index</b> <span>0 notes loaded</span></p>
+          <p><b>console</b> <button class="terminal-command" type="button" data-command-open>Ctrl K / help</button></p>
           
             <p><b>status</b> <span>awaiting publication</span></p>
           
@@ -162,6 +169,40 @@
     <p>&copy; <span id="current-year"></span> haoo · powered by Hexo</p>
   </div>
 </footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-archives-url="/archives"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+  data-has-posts="false"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@pwn-house:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@pwn-house:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · open · search · clear</p>
+</dialog>
+
 <script src="/js/theme.js" defer></script>
 
 </body>

@@ -156,4 +156,241 @@
         results.innerHTML = "";
       });
   }
+
+  const commandConsole = document.getElementById("command-console");
+  const commandForm = document.getElementById("command-form");
+  const commandInput = document.getElementById("command-input");
+  const commandOutput = document.getElementById("command-output");
+  const commandOpeners = document.querySelectorAll("[data-command-open]");
+  const commandCloser = document.querySelector("[data-command-close]");
+
+  if (commandConsole && commandForm && commandInput && commandOutput) {
+    const commandHistory = [];
+    let historyIndex = 0;
+    let searchItemsPromise;
+
+    const paths = {
+      home: commandConsole.dataset.homeUrl,
+      archives: commandConsole.dataset.archivesUrl,
+      archive: commandConsole.dataset.archivesUrl,
+      categories: commandConsole.dataset.categoriesUrl,
+      category: commandConsole.dataset.categoriesUrl,
+      tags: commandConsole.dataset.tagsUrl,
+      tag: commandConsole.dataset.tagsUrl,
+      about: commandConsole.dataset.aboutUrl,
+      links: commandConsole.dataset.linksUrl
+    };
+
+    const aliases = {
+      "首页": "home",
+      "归档": "archives",
+      "分类": "categories",
+      "标签": "tags",
+      "关于": "about",
+      "链接": "links"
+    };
+
+    const appendMessage = function (text, className) {
+      const line = document.createElement("div");
+      line.className = "command-message" + (className ? " " + className : "");
+      line.textContent = text;
+      commandOutput.appendChild(line);
+      commandOutput.scrollTop = commandOutput.scrollHeight;
+      return line;
+    };
+
+    const appendLinks = function (items) {
+      const list = document.createElement("div");
+      list.className = "command-result-list";
+      items.forEach(function (item) {
+        const link = document.createElement("a");
+        try {
+          const parsedUrl = new URL(item.url, window.location.href);
+          link.href = parsedUrl.origin === window.location.origin && ["http:", "https:"].includes(parsedUrl.protocol) ? parsedUrl.href : "#";
+        } catch (error) {
+          link.href = "#";
+        }
+        link.textContent = item.title;
+        list.appendChild(link);
+      });
+      commandOutput.appendChild(list);
+      commandOutput.scrollTop = commandOutput.scrollHeight;
+    };
+
+    const openConsole = function () {
+      if (!commandConsole.open) commandConsole.showModal();
+      window.setTimeout(function () {
+        commandInput.focus();
+      }, 0);
+    };
+
+    const closeConsole = function () {
+      if (commandConsole.open) commandConsole.close();
+    };
+
+    commandOpeners.forEach(function (button) {
+      button.addEventListener("click", openConsole);
+    });
+
+    if (commandCloser) commandCloser.addEventListener("click", closeConsole);
+
+    commandConsole.addEventListener("click", function (event) {
+      if (event.target === commandConsole) closeConsole();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        commandConsole.open ? closeConsole() : openConsole();
+      }
+    });
+
+    commandInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        commandForm.requestSubmit();
+        return;
+      }
+
+      if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+      event.preventDefault();
+      if (!commandHistory.length) return;
+
+      if (event.key === "ArrowUp") {
+        historyIndex = Math.max(0, historyIndex - 1);
+      } else {
+        historyIndex = Math.min(commandHistory.length, historyIndex + 1);
+      }
+
+      commandInput.value = historyIndex === commandHistory.length ? "" : commandHistory[historyIndex];
+    });
+
+    const loadSearchItems = function () {
+      if (!searchItemsPromise) {
+        searchItemsPromise = fetch(commandConsole.dataset.searchUrl)
+          .then(function (response) {
+            if (!response.ok) throw new Error("search index unavailable");
+            return response.json();
+          });
+      }
+      return searchItemsPromise;
+    };
+
+    const runSearch = function (query) {
+      if (!query) {
+        appendMessage("usage: search <关键词>", "command-message--muted");
+        return Promise.resolve();
+      }
+
+      return loadSearchItems().then(function (items) {
+        const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+        const matches = items.filter(function (item) {
+          const text = ((item.title || "") + " " + (item.content || "").replace(/<[^>]+>/g, " ")).toLowerCase();
+          return terms.every(function (term) {
+            return text.includes(term);
+          });
+        }).slice(0, 8).map(function (item) {
+          return {
+            title: item.title || "Untitled",
+            url: item.url || "#"
+          };
+        });
+
+        if (!matches.length) {
+          appendMessage("search: 没有找到匹配的文章。", "command-message--muted");
+          return;
+        }
+
+        appendMessage("found " + matches.length + " result(s):", "command-message--accent");
+        appendLinks(matches);
+      }).catch(function () {
+        appendMessage("search: 无法读取站内索引。", "command-message--error");
+      });
+    };
+
+    const runCommand = function (value) {
+      const parts = value.trim().split(/\s+/);
+      const command = (parts.shift() || "").toLowerCase();
+      const argument = parts.join(" ").trim();
+
+      switch (command) {
+        case "help":
+          appendMessage("可用命令:", "command-message--accent");
+          appendMessage("help                 显示命令帮助");
+          appendMessage("ls                   列出站点目录");
+          appendMessage("open <name>          打开页面，例如 open tags");
+          appendMessage("search <keyword>     搜索文章内容");
+          appendMessage("pwd / whoami / uname 查看当前环境");
+          appendMessage("date / history       时间与命令历史");
+          appendMessage("clear / exit         清屏或退出控制台");
+          return Promise.resolve();
+        case "ls": {
+          const pages = ["home/", "categories/", "tags/", "about/", "links/"];
+          if (commandConsole.dataset.hasPosts === "true") pages.splice(1, 0, "archives/");
+          appendMessage(pages.join("  "), "command-message--accent");
+          return Promise.resolve();
+        }
+        case "open": {
+          const target = aliases[argument] || argument.toLowerCase().replace(/\/$/, "");
+          if (!target || !paths[target]) {
+            appendMessage("open: 未知页面。试试 ls。", "command-message--error");
+            return Promise.resolve();
+          }
+          if (["archive", "archives"].includes(target) && commandConsole.dataset.hasPosts !== "true") {
+            appendMessage("open: 当前还没有可归档的文章。", "command-message--muted");
+            return Promise.resolve();
+          }
+          appendMessage("opening /" + target + " ...", "command-message--accent");
+          window.location.href = paths[target];
+          return Promise.resolve();
+        }
+        case "search":
+        case "grep":
+          return runSearch(argument);
+        case "pwd":
+          appendMessage("/home/haoo/pwn-house" + window.location.pathname, "command-message--accent");
+          return Promise.resolve();
+        case "whoami":
+          appendMessage("visitor (binary security learner)", "command-message--accent");
+          return Promise.resolve();
+        case "uname":
+          appendMessage("Startrace 1.0 x86_64 GNU/Linux", "command-message--accent");
+          return Promise.resolve();
+        case "date":
+          appendMessage(new Date().toLocaleString("zh-CN", { hour12: false }));
+          return Promise.resolve();
+        case "history":
+          commandHistory.forEach(function (item, index) {
+            appendMessage(String(index + 1).padStart(3, " ") + "  " + item);
+          });
+          return Promise.resolve();
+        case "clear":
+          commandOutput.replaceChildren();
+          return Promise.resolve();
+        case "exit":
+        case "quit":
+          closeConsole();
+          return Promise.resolve();
+        case "":
+          return Promise.resolve();
+        default:
+          appendMessage(command + ": command not found. 输入 help 查看帮助。", "command-message--error");
+          return Promise.resolve();
+      }
+    };
+
+    commandForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const value = commandInput.value.trim();
+      if (!value) return;
+
+      appendMessage(value, "command-message--input");
+      commandHistory.push(value);
+      historyIndex = commandHistory.length;
+      commandInput.value = "";
+      runCommand(value).finally(function () {
+        if (commandConsole.open) commandInput.focus();
+      });
+    });
+  }
 })();
