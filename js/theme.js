@@ -308,6 +308,61 @@
       });
     };
 
+    const resolvePageTarget = function (value) {
+      const raw = value.trim();
+      const lower = raw.toLowerCase();
+
+      if (!raw || ["~", "~/", "/", "home", "/home", "/home/"].includes(lower)) return "home";
+      if ([".", "./"].includes(raw)) return "current";
+      if (["..", "../"].includes(raw)) return "home";
+
+      const normalized = raw
+        .replace(/\\/g, "/")
+        .replace(/^~\//, "")
+        .replace(/^\.\//, "")
+        .replace(/^\//, "")
+        .replace(/\/+$/, "")
+        .toLowerCase();
+
+      return aliases[normalized] || normalized;
+    };
+
+    const navigateToPage = function (value, sourceCommand) {
+      const target = resolvePageTarget(value);
+
+      if (target === "current") {
+        appendMessage(window.location.pathname, "command-message--accent");
+        return Promise.resolve();
+      }
+
+      if (!target || !paths[target]) {
+        const displayTarget = value || "~";
+        const message = sourceCommand === "cd"
+          ? "cd: " + displayTarget + ": no such file or directory"
+          : "open: 未知页面。试试 ls。";
+        appendMessage(message, "command-message--error");
+        return Promise.resolve();
+      }
+
+      if (["archive", "archives"].includes(target) && commandConsole.dataset.hasPosts !== "true") {
+        appendMessage(sourceCommand + ": 当前还没有可归档的文章。", "command-message--muted");
+        return Promise.resolve();
+      }
+
+      const destination = new URL(paths[target], window.location.href);
+      const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+      const destinationPath = destination.pathname.replace(/\/+$/, "") || "/";
+
+      if (currentPath === destinationPath) {
+        appendMessage("already in " + destination.pathname, "command-message--muted");
+        return Promise.resolve();
+      }
+
+      appendMessage((sourceCommand === "cd" ? "entering " : "opening ") + destination.pathname + " ...", "command-message--accent");
+      window.location.assign(destination.href);
+      return Promise.resolve();
+    };
+
     const runCommand = function (value) {
       const parts = value.trim().split(/\s+/);
       const command = (parts.shift() || "").toLowerCase();
@@ -318,6 +373,7 @@
           appendMessage("可用命令:", "command-message--accent");
           appendMessage("help                 显示命令帮助");
           appendMessage("ls                   列出站点目录");
+          appendMessage("cd <dir>             进入目录，例如 cd tags");
           appendMessage("open <name>          打开页面，例如 open tags");
           appendMessage("search <keyword>     搜索文章内容");
           appendMessage("pwd / whoami / uname 查看当前环境");
@@ -330,20 +386,10 @@
           appendMessage(pages.join("  "), "command-message--accent");
           return Promise.resolve();
         }
-        case "open": {
-          const target = aliases[argument] || argument.toLowerCase().replace(/\/$/, "");
-          if (!target || !paths[target]) {
-            appendMessage("open: 未知页面。试试 ls。", "command-message--error");
-            return Promise.resolve();
-          }
-          if (["archive", "archives"].includes(target) && commandConsole.dataset.hasPosts !== "true") {
-            appendMessage("open: 当前还没有可归档的文章。", "command-message--muted");
-            return Promise.resolve();
-          }
-          appendMessage("opening /" + target + " ...", "command-message--accent");
-          window.location.href = paths[target];
-          return Promise.resolve();
-        }
+        case "cd":
+          return navigateToPage(argument, "cd");
+        case "open":
+          return navigateToPage(argument, "open");
         case "search":
         case "grep":
           return runSearch(argument);
