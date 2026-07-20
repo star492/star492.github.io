@@ -3,10 +3,30 @@
   const nav = document.getElementById("site-nav");
 
   if (menuButton && nav) {
+    const closeMenu = function () {
+      nav.classList.remove("is-open");
+      menuButton.classList.remove("is-open");
+      menuButton.setAttribute("aria-expanded", "false");
+      menuButton.setAttribute("aria-label", "打开导航");
+    };
+
     menuButton.addEventListener("click", function () {
       const open = nav.classList.toggle("is-open");
       menuButton.classList.toggle("is-open", open);
       menuButton.setAttribute("aria-expanded", open ? "true" : "false");
+      menuButton.setAttribute("aria-label", open ? "关闭导航" : "打开导航");
+    });
+
+    nav.addEventListener("click", function (event) {
+      if (event.target.closest("a")) closeMenu();
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 760) closeMenu();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeMenu();
     });
   }
 
@@ -32,6 +52,7 @@
     const headings = Array.from(content.querySelectorAll("h2, h3, h4"));
     if (headings.length) {
       const list = document.createElement("ol");
+      const links = [];
       headings.forEach(function (heading, index) {
         const id = heading.id || "heading-" + index;
         heading.id = id;
@@ -42,10 +63,26 @@
         const link = document.createElement("a");
         link.href = "#" + id;
         link.textContent = heading.textContent;
+        links.push(link);
         item.appendChild(link);
         list.appendChild(item);
       });
       toc.appendChild(list);
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            links.forEach(function (link) {
+              link.classList.toggle("is-active", link.getAttribute("href") === "#" + entry.target.id);
+            });
+          });
+        }, { rootMargin: "-18% 0px -68% 0px" });
+
+        headings.forEach(function (heading) {
+          observer.observe(heading);
+        });
+      }
     } else {
       const panel = toc.closest(".toc-panel");
       if (panel) panel.style.display = "none";
@@ -74,7 +111,8 @@
   };
 
   if (input && results) {
-    fetch("/search.json")
+    const searchUrl = input.dataset.searchUrl || "/search.json";
+    fetch(searchUrl)
       .then(function (response) {
         return response.ok ? response.json() : [];
       })
@@ -92,15 +130,25 @@
           }).slice(0, 6);
 
           if (!matches.length) {
-            results.innerHTML = "<p>No matching notes.</p>";
+            results.innerHTML = "<p>没有找到匹配内容。</p>";
             return;
           }
 
+          const searchOrigin = new URL(searchUrl, window.location.href).origin;
           results.innerHTML = matches.map(function (item) {
             const title = escapeHtml(item.title || "Untitled");
-            const url = item.url || "#";
+            const rawUrl = item.url || "#";
+            let url = "#";
+            try {
+              const parsedUrl = new URL(rawUrl, window.location.href);
+              if (parsedUrl.origin === searchOrigin && ["http:", "https:"].includes(parsedUrl.protocol)) {
+                url = parsedUrl.href;
+              }
+            } catch (error) {
+              url = "#";
+            }
             const content = escapeHtml((item.content || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 90));
-            return "<a class=\"search-result\" href=\"" + url + "\"><strong>" + title + "</strong><span>" + content + "...</span></a>";
+            return "<a class=\"search-result\" href=\"" + escapeHtml(url) + "\"><strong>" + title + "</strong><span>" + content + (content ? "..." : "") + "</span></a>";
           }).join("");
         });
       })

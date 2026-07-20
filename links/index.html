@@ -5,45 +5,43 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s pwn house - Links</title>
-<meta name="description" content="Friends, references, and useful places around the security learning path.">
-<meta name="theme-color" content="#171a18">
+<meta name="description" content="朋友、参考资料和安全学习途中常用的站点。">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/main.css">
-<link rel="alternate" type="application/rss+xml" title="haoo&#39;s pwn house RSS" href="/rss.xml">
+
 
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="site-body">
   <header class="site-header">
-  <a class="skip-link" href="#main-content">Skip to content</a>
+  <a class="skip-link" href="#main-content">跳到正文</a>
   <div class="site-header__inner">
-    <a class="site-brand" href="/" aria-label="haoo&#39;s pwn house home">
-      <span class="site-brand__mark">~/</span>
+    <a class="site-brand" href="/" aria-label="haoo&#39;s pwn house 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
       <span class="site-brand__text">
         <strong>haoo&#39;s pwn house</strong>
-        <small>Pwn / CTF writeups, binary exploitation notes, and practice logs.</small>
+        <small>binary security notes</small>
       </span>
     </a>
 
-    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
-    <nav id="site-nav" class="site-nav" aria-label="Primary navigation">
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
       
-        <a class="site-nav__link" href="/">Home</a>
       
-        <a class="site-nav__link" href="/archives">Archives</a>
+        <a class="site-nav__link" href="/">首页</a>
       
-        <a class="site-nav__link" href="/categories">Categories</a>
+        <a class="site-nav__link" href="/categories">分类</a>
       
-        <a class="site-nav__link" href="/tags">Tags</a>
+        <a class="site-nav__link" href="/tags">标签</a>
       
-        <a class="site-nav__link" href="/about">About</a>
+        <a class="site-nav__link" href="/about">关于</a>
       
-        <a class="site-nav__link" href="/links">Links</a>
-      
-        <a class="site-nav__link" href="/rss.xml">RSS</a>
+        <a class="site-nav__link is-current" href="/links" aria-current="page">链接</a>
       
     </nav>
   </div>
@@ -53,10 +51,10 @@
 
   <main id="main-content" class="site-main">
     <section class="page-hero">
-      <p class="section-kicker">network</p>
+      <p class="section-kicker">network / references</p>
       <h1>Links</h1>
       
-        <p>Friends, references, and useful places around the security learning path.</p>
+        <p>朋友、参考资料和安全学习途中常用的站点。</p>
       
     </section>
 
@@ -64,31 +62,31 @@
       <section class="content-column">
         <article class="content-panel article-prose">
           <div class="links-content">
-  <h2 class="title">Friends & References</h2>
+  <h2 class="title">Friends &amp; References</h2>
   <div class="section">
     <a class="card" href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
-      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="ava" aria-hidden="true">GH</span>
       <span class="card-header">
         <strong>GitHub</strong>
         <span class="info">代码、脚本和项目记录</span>
       </span>
     </a>
     <a class="card" href="https://pwn.college" target="_blank" rel="noopener noreferrer">
-      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="ava" aria-hidden="true">PW</span>
       <span class="card-header">
         <strong>pwn.college</strong>
         <span class="info">系统化 Pwn 练习平台</span>
       </span>
     </a>
     <a class="card" href="https://ctftime.org" target="_blank" rel="noopener noreferrer">
-      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="ava" aria-hidden="true">CT</span>
       <span class="card-header">
         <strong>CTFtime</strong>
         <span class="info">比赛日程和队伍信息</span>
       </span>
     </a>
     <a class="card" href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
-      <img class="ava" src="/images/lab-bg.png" alt="">
+      <span class="ava" aria-hidden="true">DB</span>
       <span class="card-header">
         <strong>Exploit-DB</strong>
         <span class="info">公开漏洞利用参考</span>
@@ -105,70 +103,32 @@
   <aside class="sidebar">
     
       <section class="side-panel search-panel">
-        <h2 class="side-panel__title">Search</h2>
-        <input id="search-input" class="search-input" type="search" placeholder="Search notes, writeups, tricks" autocomplete="off">
+        <h2 class="side-panel__title">检索</h2>
+        <label class="visually-hidden" for="search-input">搜索站内文章</label>
+        <input id="search-input" class="search-input" type="search" placeholder="搜索文章、题目或技术点" autocomplete="off" data-search-url="/search.json">
         <div id="search-results" class="search-results" aria-live="polite"></div>
       </section>
     
 
     <section class="side-panel profile-panel">
-      <h2 class="side-panel__title">Lab Brief</h2>
-      <p>Pwn / CTF writeups, binary exploitation notes, and practice logs.</p>
+      <h2 class="side-panel__title">研究方向</h2>
+      <p>二进制安全、漏洞利用与 CTF 实战笔记。</p>
       <div class="side-stats">
-        <span><strong>1</strong> posts</span>
-        <span><strong>1</strong> categories</span>
-        <span><strong>4</strong> tags</span>
+        <span><strong>0</strong> 篇文章</span>
+        <span><strong>0</strong> 个分类</span>
+        <span><strong>0</strong> 个标签</span>
       </div>
     </section>
 
     
-      <section class="side-panel">
-        <h2 class="side-panel__title">Recent</h2>
-        <div class="compact-list">
-          
-            <a href="/2026/06/09/startrace-theme-test/">
-              <span>Startrace 主题效果测试：ret2libc 小记</span>
-              <time datetime="2026-06-09">06-09</time>
-            </a>
-          
-        </div>
-      </section>
+
+    
+
     
 
     
       <section class="side-panel">
-        <h2 class="side-panel__title">Categories</h2>
-        <div class="compact-list compact-list--counts">
-          
-            <a href="/categories/Pwn/">
-              <span>Pwn</span>
-              <b>1</b>
-            </a>
-          
-        </div>
-      </section>
-    
-
-    
-      <section class="side-panel">
-        <h2 class="side-panel__title">Tags</h2>
-        <div class="tag-list">
-          
-            <a class="tag-chip" href="/tags/ret2libc/">ret2libc<small>1</small></a>
-          
-            <a class="tag-chip" href="/tags/pwntools/">pwntools<small>1</small></a>
-          
-            <a class="tag-chip" href="/tags/libc/">libc<small>1</small></a>
-          
-            <a class="tag-chip" href="/tags/theme-test/">theme-test<small>1</small></a>
-          
-        </div>
-      </section>
-    
-
-    
-      <section class="side-panel">
-        <h2 class="side-panel__title">Links</h2>
+        <h2 class="side-panel__title">常用链接</h2>
         <div class="compact-list">
           
             <a href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
@@ -197,8 +157,8 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s pwn house</strong> | 1 posts | <a href="/rss.xml">RSS</a></p>
-    <p><span id="current-year"></span> haoo. Built with Hexo and the Startrace theme.</p>
+    <p><strong>haoo&#39;s pwn house</strong><span aria-hidden="true"> / </span>0 篇记录</p>
+    <p>&copy; <span id="current-year"></span> haoo · powered by Hexo</p>
   </div>
 </footer>
 <script src="/js/theme.js" defer></script>
