@@ -433,10 +433,10 @@
         case "grep":
           return runSearch(argument);
         case "pwd":
-          appendMessage("/home/haoo/pwn-house" + window.location.pathname, "command-message--accent");
+          appendMessage("/home/haoo/blog" + window.location.pathname, "command-message--accent");
           return Promise.resolve();
         case "whoami":
-          appendMessage("visitor (binary security learner)", "command-message--accent");
+          appendMessage("visitor", "command-message--accent");
           return Promise.resolve();
         case "uname":
           appendMessage("Startrace 1.0 x86_64 GNU/Linux", "command-message--accent");

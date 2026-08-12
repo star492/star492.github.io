@@ -923,33 +923,6 @@ img {
   color: var(--accent);
 }
 
-.profile-panel p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.86rem;
-}
-
-.side-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 15px;
-  padding-top: 13px;
-  border-top: 1px solid var(--line);
-}
-
-.side-stats span {
-  display: grid;
-  color: var(--muted);
-  font-size: 0.65rem;
-}
-
-.side-stats strong {
-  color: var(--ink);
-  font-family: var(--mono);
-  font-size: 0.86rem;
-}
-
 .compact-list {
   display: grid;
 }
@@ -1742,7 +1715,7 @@ body:has(.command-console[open]) {
 }
 
 .command-message--input::before {
-  content: "visitor@pwn-house:~$ ";
+    content: "visitor@blog:~$ ";
   color: var(--accent);
 }
 
