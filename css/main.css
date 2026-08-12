@@ -406,12 +406,16 @@ img {
 }
 
 .home-main {
-  width: min(980px, calc(100% - 48px));
   padding-top: 72px;
 }
 
 .home-intro {
+  max-width: 900px;
   margin-bottom: 68px;
+}
+
+.home-layout {
+  gap: 52px;
 }
 
 .home-intro h1 {
