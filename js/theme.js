@@ -1,4 +1,43 @@
 (function () {
+  const paletteButton = document.querySelector("[data-palette-toggle]");
+  const paletteLabel = document.querySelector("[data-palette-label]");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  const palettes = [
+    { id: "green", label: "绿色", color: "#090c0b" },
+    { id: "cyan", label: "青蓝", color: "#071014" },
+    { id: "amber", label: "琥珀", color: "#100d08" }
+  ];
+
+  if (paletteButton) {
+    const applyPalette = function (palette, persist) {
+      document.documentElement.dataset.palette = palette.id;
+      if (paletteLabel) paletteLabel.textContent = palette.label;
+      if (themeColor) themeColor.setAttribute("content", palette.color);
+
+      const nextIndex = (palettes.indexOf(palette) + 1) % palettes.length;
+      paletteButton.setAttribute("aria-label", "当前为" + palette.label + "配色，切换为" + palettes[nextIndex].label + "配色");
+      paletteButton.setAttribute("title", "切换为" + palettes[nextIndex].label + "配色");
+
+      if (persist) {
+        try {
+          localStorage.setItem("startrace-palette", palette.id);
+        } catch (error) {}
+      }
+    };
+
+    const initialPalette = palettes.find(function (palette) {
+      return palette.id === document.documentElement.dataset.palette;
+    }) || palettes[0];
+
+    applyPalette(initialPalette, false);
+    paletteButton.addEventListener("click", function () {
+      const currentIndex = palettes.findIndex(function (palette) {
+        return palette.id === document.documentElement.dataset.palette;
+      });
+      applyPalette(palettes[(currentIndex + 1) % palettes.length], true);
+    });
+  }
+
   const menuButton = document.querySelector(".menu-toggle");
   const nav = document.getElementById("site-nav");
 

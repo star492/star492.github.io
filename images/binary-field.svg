@@ -7,22 +7,22 @@
   </style>
   <g class="faint">
     <path class="line" d="M0 70H720M0 140H720M0 210H720M0 280H720M0 350H720M120 0V420M240 0V420M360 0V420M480 0V420M600 0V420"/>
-    <text x="28" y="38">0x00400000  7f 45 4c 46 02 01 01 00</text>
-    <text x="390" y="38">01111111 01000101 01001100 01000110</text>
-    <text x="82" y="108">55 48 89 e5 48 83 ec 20 48 8d 3d</text>
-    <text x="466" y="108">RAX 0000000000000000</text>
+    <text x="28" y="38">SECURITY RESEARCH / TRACE 0001</text>
+    <text x="390" y="38">PWN  RE  IOT  KERNEL  AI  BROWSER</text>
+    <text x="82" y="108">heap  firmware  sandbox  agents</text>
+    <text x="466" y="108">MODEL context / tools / evals</text>
     <text x="12" y="178">0x7ffff7dd0000  libc.so.6</text>
-    <text x="332" y="178">01010000 01010111 01001110</text>
+    <text x="332" y="178">V8  WASM  DOM  IPC  JIT</text>
     <text x="152" y="248">48 31 c0 48 89 c7 48 89 c6 0f 05</text>
-    <text x="524" y="248">RSP 7fffffffe2a0</text>
-    <text x="36" y="318">.text  .rodata  .data  .bss  .got  .plt</text>
-    <text x="408" y="318">00110010 00110100 00110110 00111000</text>
-    <text x="108" y="388">0x0000000000401000  push rbp ; mov rbp, rsp</text>
+    <text x="524" y="248">UART  SPI  I2C</text>
+    <text x="36" y="318">.text  prompt  firmware  renderer  kernel</text>
+    <text x="408" y="318">FUZZ  DEBUG  EXPLOIT  VERIFY</text>
+    <text x="108" y="388">notes://research/knowledge/tracks</text>
   </g>
   <g class="dim">
     <text x="18" y="74">01</text>
     <text x="688" y="144">10</text>
     <text x="238" y="214">0x7f</text>
-    <text x="612" y="354">ELF</text>
+    <text x="612" y="354">SEC</text>
   </g>
 </svg>

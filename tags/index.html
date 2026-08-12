@@ -3,10 +3,18 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s pwn house - Tags</title>
+<title>haoo&#39;s house - Tags</title>
 <meta name="description" content="按技术点与题目标签浏览文章。">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
 <link rel="stylesheet" href="/css/main.css">
 
 
@@ -15,11 +23,11 @@
   <header class="site-header">
   <a class="skip-link" href="#main-content">跳到正文</a>
   <div class="site-header__inner">
-    <a class="site-brand" href="/" aria-label="haoo&#39;s pwn house 首页">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s house 首页">
       <span class="site-brand__mark" aria-hidden="true">0x</span>
       <span class="site-brand__text">
-        <strong>haoo&#39;s pwn house</strong>
-        <small>binary security notes</small>
+        <strong>haoo&#39;s house</strong>
+        <small>security · ai · browser notes</small>
       </span>
     </a>
 
@@ -28,7 +36,7 @@
       
         <a class="site-nav__link" href="/">首页</a>
       
-        <a class="site-nav__link" href="/categories">分类</a>
+        <a class="site-nav__link" href="/categories">知识库</a>
       
         <a class="site-nav__link is-current" href="/tags" aria-current="page">标签</a>
       
@@ -42,6 +50,11 @@
       <span aria-hidden="true">&gt;_</span>
       <span>Console</span>
       <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
     </button>
 
     <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
@@ -85,11 +98,11 @@
     
 
     <section class="side-panel profile-panel">
-      <h2 class="side-panel__title">研究方向</h2>
-      <p>二进制安全、漏洞利用与 CTF 实战笔记。</p>
+      <h2 class="side-panel__title">研究范围</h2>
+      <p>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</p>
       <div class="side-stats">
         <span><strong>0</strong> 篇文章</span>
-        <span><strong>0</strong> 个分类</span>
+        <span><strong>0</strong> 个专题</span>
         <span><strong>0</strong> 个标签</span>
       </div>
     </section>
@@ -131,7 +144,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s pwn house</strong><span aria-hidden="true"> / </span>0 篇记录</p>
+    <p><strong>haoo&#39;s house</strong><span aria-hidden="true"> / </span>0 篇记录</p>
     <p>&copy; <span id="current-year"></span> haoo · powered by Hexo</p>
   </div>
 </footer>

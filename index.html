@@ -3,10 +3,18 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s pwn house</title>
-<meta name="description" content="二进制安全、漏洞利用与 CTF 实战笔记。">
+<title>haoo&#39;s house</title>
+<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
 <link rel="stylesheet" href="/css/main.css">
 
 
@@ -16,11 +24,11 @@
   <header class="site-header">
   <a class="skip-link" href="#main-content">跳到正文</a>
   <div class="site-header__inner">
-    <a class="site-brand" href="/" aria-label="haoo&#39;s pwn house 首页">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s house 首页">
       <span class="site-brand__mark" aria-hidden="true">0x</span>
       <span class="site-brand__text">
-        <strong>haoo&#39;s pwn house</strong>
-        <small>binary security notes</small>
+        <strong>haoo&#39;s house</strong>
+        <small>security · ai · browser notes</small>
       </span>
     </a>
 
@@ -29,7 +37,7 @@
       
         <a class="site-nav__link is-current" href="/" aria-current="page">首页</a>
       
-        <a class="site-nav__link" href="/categories">分类</a>
+        <a class="site-nav__link" href="/categories">知识库</a>
       
         <a class="site-nav__link" href="/tags">标签</a>
       
@@ -45,6 +53,11 @@
       <kbd>Ctrl K</kbd>
     </button>
 
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
     <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
       <span></span>
       <span></span>
@@ -58,9 +71,9 @@
   <main id="main-content" class="site-main">
     <section class="home-hero">
       <div class="home-hero__content">
-        <p class="section-kicker">$ focus / binary security</p>
-        <h1>haoo&#39;s pwn house</h1>
-        <p>二进制安全、漏洞利用与 CTF 实战笔记。</p>
+        <p class="section-kicker">$ security research / knowledge base</p>
+        <h1>haoo&#39;s house</h1>
+        <p>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</p>
         <div class="hero-actions">
           
             <a class="button-primary" href="/about">关于本站</a>
@@ -75,7 +88,7 @@
         </div>
         <div class="terminal-body">
           <p><b>operator</b> <span>haoo</span></p>
-          <p><b>scope</b> <span>pwn · re · iot · kernel</span></p>
+          <p><b>scope</b> <span>pwn · re · iot · kernel · ai · browser</span></p>
           <p><b>index</b> <span>0 notes loaded</span></p>
           <p><b>console</b> <button class="terminal-command" type="button" data-command-open>Ctrl K / help</button></p>
           
@@ -89,11 +102,13 @@
       <span><strong>0</strong> 文章</span>
       <span><strong>0</strong> 分类</span>
       <span><strong>0</strong> 标签</span>
-      <span><strong>ELF</strong> 主攻方向</span>
+      <span><strong>0</strong> 专题</span>
     </section>
 
     <div class="layout-grid">
       <section class="content-column">
+        
+
         
 
         
@@ -119,11 +134,11 @@
     
 
     <section class="side-panel profile-panel">
-      <h2 class="side-panel__title">研究方向</h2>
-      <p>二进制安全、漏洞利用与 CTF 实战笔记。</p>
+      <h2 class="side-panel__title">研究范围</h2>
+      <p>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</p>
       <div class="side-stats">
         <span><strong>0</strong> 篇文章</span>
-        <span><strong>0</strong> 个分类</span>
+        <span><strong>0</strong> 个专题</span>
         <span><strong>0</strong> 个标签</span>
       </div>
     </section>
@@ -165,7 +180,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s pwn house</strong><span aria-hidden="true"> / </span>0 篇记录</p>
+    <p><strong>haoo&#39;s house</strong><span aria-hidden="true"> / </span>0 篇记录</p>
     <p>&copy; <span id="current-year"></span> haoo · powered by Hexo</p>
   </div>
 </footer>
