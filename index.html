@@ -17,6 +17,8 @@
 </script>
 <link rel="stylesheet" href="/css/main.css">
 
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s house RSS" href="/rss.xml">
+
 
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="site-body">
@@ -36,6 +38,8 @@
       
         <a class="site-nav__link is-current" href="/" aria-current="page">首页</a>
       
+        <a class="site-nav__link" href="/archives">归档</a>
+      
         <a class="site-nav__link" href="/categories">知识库</a>
       
         <a class="site-nav__link" href="/tags">标签</a>
@@ -43,6 +47,8 @@
         <a class="site-nav__link" href="/about">关于</a>
       
         <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
       
     </nav>
 
@@ -75,7 +81,7 @@
         <p>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</p>
         <div class="hero-actions">
           
-            <a class="button-primary" href="/about">关于本站</a>
+            <a class="button-primary" href="/archives">阅读归档</a>
           
           <a class="button-secondary" href="/tags">技术索引</a>
         </div>
@@ -87,32 +93,89 @@
         </div>
         <div class="terminal-body">
           <p><b>operator</b> <span>haoo</span></p>
-          <p><b>index</b> <span>0 notes loaded</span></p>
+          <p><b>index</b> <span>2 notes loaded</span></p>
           <p><b>console</b> <button class="terminal-command" type="button" data-command-open>Ctrl K / help</button></p>
           
-            <p><b>status</b> <span>awaiting publication</span></p>
+            <p><b>latest</b> <a href="/2026/08/12/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">CTFshow pwn靶场练习</a></p>
           
         </div>
       </div>
     </section>
 
     <section class="metric-strip" aria-label="博客统计">
-      <span><strong>0</strong> 文章</span>
-      <span><strong>0</strong> 分类</span>
-      <span><strong>0</strong> 标签</span>
-      <span><strong>0</strong> 专题</span>
+      <span><strong>2</strong> 文章</span>
+      <span><strong>1</strong> 分类</span>
+      <span><strong>1</strong> 标签</span>
+      <span><strong>1</strong> 专题</span>
     </section>
 
     <div class="layout-grid">
       <section class="content-column">
         
+          
+<section class="focus-map focus-map--compact" aria-label="文章分类">
+  
+
+  
+    <div class="focus-grid">
+      
+        
+        <article class="focus-card has-posts">
+          <div class="focus-card__top">
+            <span class="focus-card__code" aria-hidden="true">01</span>
+            <span class="focus-card__count">2 notes</span>
+          </div>
+          <h3><a href="/categories/pwn/">pwn</a></h3>
+          
+          
+        </article>
+      
+    </div>
+  
+</section>
 
         
 
         
-          <div class="empty-state">
-            <h3>还没有已发布文章</h3>
-            <p>当前内容仍在草稿箱，发布后会自动出现在这里。</p>
+          <article class="featured-post">
+            <p class="section-kicker">最新记录</p>
+            <h2><a href="/2026/08/12/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">CTFshow pwn靶场练习</a></h2>
+            <div class="post-meta">
+              <time datetime="2026-08-12">2026-08-12</time>
+              
+              
+                <span>pwn</span>
+              
+            </div>
+            <p>栈溢出pwn35首先checksec一下，看一下开启了哪些保护 [*] &amp;#x27;/mnt/d/CTF/ctfshow pwn入门/pwn35&amp;#x27; Arch: i386-32-little RELRO: Partial RELRO Stack: No canary found NX: NX enabled PIE: No PIE (0x8048000) Stripped: No 很常规的一些保护，没什么看的，直接进入ida里面进行分析 int __cdecl main(int argc, const ch...</p>
+            <a class="text-link" href="/2026/08/12/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">阅读全文 <span aria-hidden="true">-&gt;</span></a>
+          </article>
+        
+
+        
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">最近更新</p>
+              <h2>Writeups &amp; Notes</h2>
+            </div>
+            <a class="text-link" href="/archives">全部归档 <span aria-hidden="true">-&gt;</span></a>
+          </div>
+
+          <div class="post-list">
+            
+              
+              <article class="post-card">
+                <time class="post-card__date" datetime="2026-08-12">2026-08-12</time>
+                <div class="post-card__body">
+                  <h3><a href="/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">pwn college_靶场练习</a></h3>
+                  <div class="post-meta">
+                    <span>pwn</span>
+                    <span>pwn</span>
+                  </div>
+                  <p>Open the post to read the full writeup.</p>
+                </div>
+              </article>
+            
           </div>
         
 
@@ -132,9 +195,47 @@
     
 
     
-
+      <section class="side-panel">
+        <h2 class="side-panel__title">最近更新</h2>
+        <div class="compact-list">
+          
+            <a href="/2026/08/12/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+              <span>CTFshow pwn靶场练习</span>
+              <time datetime="2026-08-12">08-12</time>
+            </a>
+          
+            <a href="/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+              <span>pwn college_靶场练习</span>
+              <time datetime="2026-08-12">08-12</time>
+            </a>
+          
+        </div>
+      </section>
     
 
+    
+      <section class="side-panel">
+        <h2 class="side-panel__title">分类</h2>
+        <div class="compact-list compact-list--counts">
+          
+            <a href="/categories/pwn/">
+              <span>pwn</span>
+              <b>2</b>
+            </a>
+          
+        </div>
+      </section>
+    
+
+    
+      <section class="side-panel">
+        <h2 class="side-panel__title">标签</h2>
+        <div class="tag-list">
+          
+            <a class="tag-chip" href="/tags/pwn/">pwn<small>2</small></a>
+          
+        </div>
+      </section>
     
 
     
@@ -168,7 +269,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s house</strong><span aria-hidden="true"> / </span>0 篇记录</p>
+    <p><strong>haoo&#39;s house</strong><span aria-hidden="true"> / </span>2 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; <span id="current-year"></span> haoo · powered by Hexo</p>
   </div>
 </footer>
@@ -183,7 +284,7 @@
   data-tags-url="/tags"
   data-about-url="/about"
   data-links-url="/links"
-  data-has-posts="false"
+  data-has-posts="true"
 >
   <div class="command-console__bar">
     <div>
