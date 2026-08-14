@@ -9,20 +9,8 @@
   <link href="https://star492.github.io/rss.xml" rel="self"/>
   <rights>All rights reserved 2026, haoo</rights>
   <subtitle>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</subtitle>
-  <title>haoo's house</title>
-  <updated>2026-08-12T03:02:49.412Z</updated>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="pwn" scheme="https://star492.github.io/categories/pwn/"/>
-    <category term="pwn" scheme="https://star492.github.io/tags/pwn/"/>
-    <id>https://star492.github.io/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
-    <link href="https://star492.github.io/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
-    <published>2026-08-12T02:59:00.000Z</published>
-    <title>pwn college_靶场练习</title>
-    <updated>2026-08-12T03:02:49.412Z</updated>
-  </entry>
+  <title>haoo's tech blog</title>
+  <updated>2026-08-13T10:09:47.859Z</updated>
   <entry>
     <author>
       <name>haoo</name>
@@ -40,5 +28,17 @@
     </summary>
     <title>CTFshow pwn靶场练习</title>
     <updated>2026-08-13T10:09:47.859Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="pwn" scheme="https://star492.github.io/categories/pwn/"/>
+    <category term="pwn" scheme="https://star492.github.io/tags/pwn/"/>
+    <id>https://star492.github.io/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
+    <link href="https://star492.github.io/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    <published>2026-08-12T02:59:00.000Z</published>
+    <title>pwn college_靶场练习</title>
+    <updated>2026-08-12T03:02:49.412Z</updated>
   </entry>
 </feed>
