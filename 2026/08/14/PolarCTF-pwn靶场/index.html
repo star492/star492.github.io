@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s tech blog - NSSCTF_pwn靶场练习</title>
-<meta name="description" content="[SWPUCTF 2021 新生赛]nc签到haoo@LAPTOP-QH6DKIQF:/mnt/d/ctf/nssctf$ file pwn1pwn1: ASCII text 这道题目的附件不是ELF文件，直接cat获取文件内容 haoo@LAPTOP-QH6DKIQF:/mnt/d/ctf/nssctf$ cat p">
+<title>haoo&#39;s tech blog - PolarCTF_pwn靶场</title>
+<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -78,10 +78,10 @@
       <header class="article-header">
         <div class="post-meta">
           <time datetime="2026-08-14">2026-08-14</time>
-          <span>约 2 分钟</span>
-          <span>952 字</span>
+          <span>约 1 分钟</span>
+          <span>0 字</span>
         </div>
-        <h1>NSSCTF_pwn靶场练习</h1>
+        <h1>PolarCTF_pwn靶场</h1>
         
           <div class="tag-list">
             
@@ -96,13 +96,7 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <h1 id="SWPUCTF-2021-新生赛-nc签到"><a href="#SWPUCTF-2021-新生赛-nc签到" class="headerlink" title="[SWPUCTF 2021 新生赛]nc签到"></a>[SWPUCTF 2021 新生赛]nc签到</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/ctf/nssctf$ file pwn1<br>pwn1: ASCII text<br></code></pre></td></tr></table></figure>
-
-<p>这道题目的附件不是ELF文件，直接cat获取文件内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/ctf/nssctf$ cat pwn1<br>import os<br><br>art = &#x27;&#x27;&#x27;<br><br>   ((  &quot;####@@!!$$    ))<br>       `#####@@!$$`  ))<br>    ((  &#x27;####@!!$:<br>   ((  ,####@!!$:   ))<br>       .###@!!$:<br>       `##@@!$:<br>        `#@!!$<br>  !@#    `#@!$:       @#$<br>   #$     `#@!$:       !@!<br>            &#x27;@!$:<br>        &#x27;`\   &quot;!$: /`&#x27;<br>           &#x27;\  &#x27;!: /&#x27;<br>             &quot;\ : /&quot;<br>  -.&quot;-/\\\-.&quot;//.-&quot;/:`\.&quot;-.JrS&quot;.&quot;-=_\\<br>&quot; -.&quot;-.\\&quot;-.&quot;//.-&quot;.`-.&quot;_\\-.&quot;.-\&quot;.-//&#x27;&#x27;&#x27;<br>print(art)<br>print(&quot;My_shell_ProVersion&quot;)<br><br>blacklist = [&#x27;cat&#x27;,&#x27;ls&#x27;,&#x27; &#x27;,&#x27;cd&#x27;,&#x27;echo&#x27;,&#x27;&lt;&#x27;,&#x27;$&#123;IFS&#125;&#x27;]<br><br>while True:<br>    command = input()<br>    for i in blacklist:<br>        if i in command:<br>            exit(0)<br>    os.system(command)<br></code></pre></td></tr></table></figure>
-
-<p>黑名单里面的东西有点多了，但是并没有su这种可以获取新shell的命令，并且这个子shell直接接管当前连接的标准输入输出而不会经过黑名单，因此在nc连接后输入sh获取新shell，从而绕过黑名单得到flag。</p>
-
+          
         </div>
 
         
@@ -118,15 +112,15 @@
 
       <nav class="article-nav" aria-label="文章导航">
         
-          <a href="/2026/08/14/BUUCTF-pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+          <a href="/2026/08/14/PolarCTF-PIoTS%E9%9D%B6%E5%9C%BA/">
             <span>上一篇</span>
-            <strong>BUUCTF_pwn靶场练习</strong>
+            <strong>PolarCTF_PIoTS靶场</strong>
           </a>
         
         
-          <a href="/2026/07/22/pwn%20college_%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+          <a href="/2026/08/14/ISCTF2024/">
             <span>下一篇</span>
-            <strong>pwn college_靶场练习</strong>
+            <strong>ISCTF2024</strong>
           </a>
         
       </nav>
