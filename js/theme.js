@@ -69,11 +69,6 @@
     });
   }
 
-  const year = document.getElementById("current-year");
-  if (year) {
-    year.textContent = new Date().getFullYear();
-  }
-
   const progress = document.querySelector(".reading-progress span");
   const updateProgress = function () {
     if (!progress) return;
@@ -416,7 +411,7 @@
           appendMessage("open <name>          打开页面，例如 open tags");
           appendMessage("search <keyword>     搜索文章内容");
           appendMessage("pwd / whoami / uname 查看当前环境");
-          appendMessage("date / history       时间与命令历史");
+          appendMessage("history              查看命令历史");
           appendMessage("clear / exit         清屏或退出控制台");
           return Promise.resolve();
         case "ls": {
@@ -440,9 +435,6 @@
           return Promise.resolve();
         case "uname":
           appendMessage("Startrace 1.0 x86_64 GNU/Linux", "command-message--accent");
-          return Promise.resolve();
-        case "date":
-          appendMessage(new Date().toLocaleString("zh-CN", { hour12: false }));
           return Promise.resolve();
         case "history":
           commandHistory.forEach(function (item, index) {

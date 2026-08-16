@@ -748,21 +748,13 @@ img {
 
 .post-card {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
   padding: 24px 4px;
   border-bottom: 1px solid var(--line);
 }
 
 .post-card:hover {
   background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.025), transparent);
-}
-
-.post-card__date {
-  padding-top: 4px;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.75rem;
 }
 
 .post-card h3 {
@@ -845,7 +837,6 @@ img {
   overflow-wrap: anywhere;
 }
 
-.compact-list time,
 .compact-list b {
   flex: none;
   color: var(--muted);

