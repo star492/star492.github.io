@@ -205,8 +205,6 @@
 
     const paths = {
       home: commandConsole.dataset.homeUrl,
-      archives: commandConsole.dataset.archivesUrl,
-      archive: commandConsole.dataset.archivesUrl,
       categories: commandConsole.dataset.categoriesUrl,
       category: commandConsole.dataset.categoriesUrl,
       tags: commandConsole.dataset.tagsUrl,
@@ -217,7 +215,6 @@
 
     const aliases = {
       "首页": "home",
-      "归档": "archives",
       "分类": "categories",
       "标签": "tags",
       "关于": "about",
@@ -378,11 +375,6 @@
         return Promise.resolve();
       }
 
-      if (["archive", "archives"].includes(target) && commandConsole.dataset.hasPosts !== "true") {
-        appendMessage(sourceCommand + ": 当前还没有可归档的文章。", "command-message--muted");
-        return Promise.resolve();
-      }
-
       const destination = new URL(paths[target], window.location.href);
       const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
       const destinationPath = destination.pathname.replace(/\/+$/, "") || "/";
@@ -416,7 +408,6 @@
           return Promise.resolve();
         case "ls": {
           const pages = ["home/", "categories/", "tags/", "about/", "links/"];
-          if (commandConsole.dataset.hasPosts === "true") pages.splice(1, 0, "archives/");
           appendMessage(pages.join("  "), "command-message--accent");
           return Promise.resolve();
         }

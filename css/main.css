@@ -710,7 +710,6 @@ img {
 
 .content-panel,
 .empty-state,
-.archive-year,
 .side-panel,
 .directory-card,
 .article-body,
@@ -722,13 +721,11 @@ img {
 }
 
 .post-card h3 a,
-.archive-year a,
 .directory-card {
   color: var(--ink);
 }
 
-.post-card h3 a:hover,
-.archive-year a:hover {
+.post-card h3 a:hover {
   color: var(--accent);
 }
 
@@ -986,22 +983,6 @@ img {
 .empty-state p {
   margin: 0;
   color: var(--muted);
-}
-
-.archive-list {
-  display: grid;
-  gap: 16px;
-}
-
-.archive-year {
-  padding: 22px;
-}
-
-.archive-year h2 {
-  margin: 0 0 15px;
-  color: var(--accent);
-  font-family: var(--mono);
-  font-size: 1rem;
 }
 
 .directory-grid {
@@ -1846,8 +1827,7 @@ body:has(.command-console[open]) {
   }
 
   .content-panel,
-  .empty-state,
-  .archive-year {
+  .empty-state {
     padding: 22px;
   }
 
