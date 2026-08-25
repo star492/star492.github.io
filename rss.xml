@@ -161,9 +161,16 @@
     </author>
     <category term="算法" scheme="https://star492.github.io/categories/%E7%AE%97%E6%B3%95/"/>
     <category term="算法" scheme="https://star492.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    <content>
+      <![CDATA[<p>这篇文章主要记录在力扣平台上刷的一些算法题目，尽管是研究二进制安全方面的，但是多了解一些算法还是非常重要的。</p><h1 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出 <strong>和为目标值</strong> <em><code>target</code></em> 的那 <strong>两个</strong> 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p><p>你可以按任意顺序返回答案。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [2,7,11,15], target = 9<br>输出：[0,1]<br>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [3,2,4], target = 6<br>输出：[1,2]<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [3,3], target = 6<br>输出：[0,1]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>2 &lt;= nums.length &lt;= 104</code></li><li><code>-109 &lt;= nums[i] &lt;= 109</code></li><li><code>-109 &lt;= target &lt;= 109</code></li><li><strong>只会存在一个有效答案</strong></li></ul><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目描述非常简单，而且想做出这道题目，思路也非常简单，就是暴力枚举，从数组的第一个元素nums[0]开始一个一个试，直到找到符合要求的两个元素并返回其下标。</p><p>这里用3个语言进行编写（C&#x2F;C++&#x2F;Python），毕竟这道题目比较简单。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">C<br>int* twoSum(int* nums, int numsSize, int target, int* returnSize) &#123;<br>    int i,j;    //定义两个变量用于表示两个元素的下标<br>    int* result;    //定义一个指针，用于存放返回数组<br>    for(i = 0;i &lt; numsSize - 1;i++)<br>    &#123;<br>        for(j = i + 1;j &lt; numsSize;j++)<br>        &#123;<br>            if(nums[i] + nums[j] == target)<br>            &#123;<br>                result = (int*)malloc(2 * sizeof(int));    //动态申请可以保存两个整数的内存空间，因为题目要求如果使用C语言编写，就要动态申请<br>                result[0] = i;<br>                result[1] = j;<br>                *returnSize = 2;<br>                return result;    //返回结果数组，因为题目说只有一个答案，所以直接返回就行了<br>            &#125;<br>        &#125;<br>    &#125;<br>    *returnSize = 0;<br>    return NULL;    //如果没有就返回空指针，尽管题目说一定有答案，但是加上这个比较严谨<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">C++<br>class Solution &#123;    //定义一个名为Solution的类<br>public:    //表示成员函数是公开的，平台可以访问并调用<br>    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) &#123;<br>        unordered_map&lt;int, int&gt; hash;    //定义一个哈希表，unordered_map&lt;键类型,值类型&gt;的含义是数字-&gt;该数字的下标<br>        for(int i = 0;i &lt; nums.size();i++)<br>        &#123;<br>            int need = target - nums[i];    //计算还需要的另一个数字<br>            if(hash.find(need) != hash.end())    //前面那部分的作用是查找键为need的元素，后面那部分表示没有找到，如果不相等，说明找到了<br>            &#123;<br>                return &#123;hash[need],i&#125;;    //返回两个下标，&#123;a,b&#125;会自动构造一个包含两个元素的vector&lt;int&gt;<br>            &#125;<br>            hash[nums[i]] = i;    //如果没有找到就把当前数字和它的下标保存到哈希表中。<br>        &#125;<br>        return &#123;&#125;;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Python<br>class Solution:<br>    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:    #self表示当前对象本身，nums: List[int]表示参数nums是一个整数列表，target: int表示参数target是整数，最后那一部分表示函数预计返回一个整数列表<br>        num_dict = &#123;&#125;    #创建一个空字典，字典保存的内容是数字-&gt;对应的下标<br>        for i,num in enumerate(nums):    #在遍历nums列表的同时，获取相应的下标与值存放在i和num中，enumerate(nums)会自动产生下标和值<br>            complement = target - num<br>            if complement in num_dict:<br>                return [num_dict[complement],i]<br>            num_dict[num] = i<br>        return []<br></code></pre></td></tr></table></figure><h1 id="两数相加"><a href="#两数相加" class="headerlink" title="两数相加"></a>两数相加</h1><h2 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个 <strong>非空</strong> 的链表，表示两个非负的整数。它们每位数字都是按照 <strong>逆序</strong> 的方式存储的，并且每个节点只能存储 <strong>一位</strong> 数字。</p><p>请你将两个数相加，并以相同形式返回一个表示和的链表。</p><p>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：l1 = [2,4,3], l2 = [5,6,4]<br>输出：[7,0,8]<br>解释：342 + 465 = 807.<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：l1 = [0], l2 = [0]<br>输出：[0]<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]<br>输出：[8,9,9,9,0,0,0,1]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li>每个链表中的节点数在范围 <code>[1, 100]</code> 内</li><li><code>0 &lt;= Node.val &lt;= 9</code></li><li>题目数据保证列表表示的数字不含前导零</li></ul><h2 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h2>]]>
+    </content>
     <id>https://star492.github.io/LeetCode-%E7%BB%83%E4%B9%A0/</id>
     <link href="https://star492.github.io/LeetCode-%E7%BB%83%E4%B9%A0/"/>
     <published>2026-08-16T07:50:56.677Z</published>
+    <summary>
+      <![CDATA[<p>这篇文章主要记录在力扣平台上刷的一些算法题目，尽管是研究二进制安全方面的，但是多了解一些算法还是非常重要的。</p>
+<h1 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h1><h2]]>
+    </summary>
     <title>LeetCode_练习</title>
     <updated>2026-08-16T07:50:56.677Z</updated>
   </entry>
@@ -198,13 +205,14 @@
     <category term="工具" scheme="https://star492.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     <category term="工具" scheme="https://star492.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
     <content>
-      <![CDATA[<h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p>]]>
+      <![CDATA[<h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p><h1 id="010-Editor"><a href="#010-Editor" class="headerlink" title="010 Editor"></a>010 Editor</h1><p>010Editor是一款功能强大的十六进制编辑器</p>]]>
     </content>
     <id>https://star492.github.io/tools/</id>
     <link href="https://star492.github.io/tools/"/>
     <published>2026-08-15T11:54:24.220Z</published>
     <summary>
-      <![CDATA[<h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p>]]>
+      <![CDATA[<h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p>
+<h1 id="010-Editor"><a href="#01]]>
     </summary>
     <title>tools</title>
     <updated>2026-08-15T11:54:24.220Z</updated>
@@ -246,9 +254,15 @@
     </author>
     <category term="IOT" scheme="https://star492.github.io/categories/IOT/"/>
     <category term="IOT" scheme="https://star492.github.io/tags/IOT/"/>
+    <content>
+      <![CDATA[<h1 id="bluetooth-test"><a href="#bluetooth-test" class="headerlink" title="bluetooth test"></a>bluetooth test</h1><p>这道题目给了两个文件：一个.log文件、一个.txt文件。点开txt文件查看一下内容</p><p><img src="/images/1.png"></p><p>根据这个提示，知道了我们现在有一个关键文件，需使用FrontLine11工具将其打开并找到</p>]]>
+    </content>
     <id>https://star492.github.io/PolarCTF%20PIoTS%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
     <link href="https://star492.github.io/PolarCTF%20PIoTS%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
     <published>2026-08-14T12:43:34.305Z</published>
+    <summary>
+      <![CDATA[<h1 id="bluetooth-test"><a href="#bluetooth-test" class="headerlink" title="bluetooth test"></a>bluetooth test</h1><p>这道题目给了两个文件：一个.log文件、一个]]>
+    </summary>
     <title>PolarCTF PIoTS靶场</title>
     <updated>2026-08-14T12:43:34.305Z</updated>
   </entry>
