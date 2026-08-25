@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - OWASP_IoTGoat_练习</title>
-<meta name="description" content="这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞。具体如下： OWASP IoT Top 10 2018 Description I1 Weak, Guessable, or Hardcoded Passwords Use of easily bruteforced, ">
+<meta name="description" content="这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞，尽管时间比较久了，但是对于新手学习来说，还是十分不错的。具体如下： OWASP IoT Top 10 2018 Description I1 Weak, Guessable, or Hardcoded Passwords">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>2469 字</span>
+          <span>2770 字</span>
         </div>
         <h1>OWASP_IoTGoat_练习</h1>
         
@@ -92,7 +92,7 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <p>这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞。具体如下：</p>
+          <p>这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞，尽管时间比较久了，但是对于新手学习来说，还是十分不错的。具体如下：</p>
 <table>
 <thead>
 <tr>
@@ -141,7 +141,11 @@
 <td>Lack of physical hardening measures, allowing potential attackers to gain sensitive information that can help in a future remote attack or take local control of the device.</td>
 </tr>
 </tbody></table>
-<p>下面的内容就是完成这些挑战。</p>
+<p>下面的内容就是搭建环境以及完成这些挑战。</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>在环境搭建方面，官方给了很多方法，有下载磁盘镜像创建虚拟机的、有模拟固件利用QEMU在本地虚拟化IotGoat的、有Docker设置在容器里面运行的、也有用固件刷入树莓派的。当然对于新手来说，最简单的方法就是创建虚拟机，挑战也会在这个虚拟机上面进行完成。后面有机会的话，会在这里更新其他搭建方法。</p>
+<h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>这里就不再说明VMware的安装那些了，有不会的就自行查找方法。</p>
+<p>VMware准备好后，首先要获取IoTGoat固件<a target="_blank" rel="noopener" href="https://github.com/OWASP/IoTGoat/releases">Releases · OWASP&#x2F;IoTGoat</a>，直接点击下载IoTGoat-x86.vmdk</p>
+<p><img src="/images/2.png"></p>
 
         </div>
 
@@ -175,7 +179,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>32 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>
