@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>haoo&#39;s tech blog - pwn college_靶场练习</title>
-<meta name="description" content="Start[*] &amp;#x27;/mnt/d/ctf/pwnable/start&amp;#x27; Arch: i386-32-little RELRO: No RELRO Stack: No canary found NX: NX disabled PIE: No PIE (0x8048000) Stripped: No 一">
+<title>haoo&#39;s tech blog - Hook与逆向框架_study</title>
+<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,29 +75,15 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>978 字</span>
+          <span>0 字</span>
         </div>
-        <h1>pwn college_靶场练习</h1>
-        
-          <div class="tag-list">
-            
-              <a class="tag-chip tag-chip--solid" href="/categories/pwn/">pwn</a>
-            
-            
-              <a class="tag-chip" href="/tags/pwn/">pwn</a>
-            
-          </div>
+        <h1>Hook与逆向框架_study</h1>
         
       </header>
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <h1 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/ctf/pwnable/start&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      No RELRO<br>    Stack:      No canary found<br>    NX:         NX disabled<br>    PIE:        No PIE (0x8048000)<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
-
-<p>一道32位的题目，什么保护都没有开启，直接放入ida中进行分析</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.text:08048060 ; int start()<br>.text:08048060                 public _start<br>.text:08048060 _start          proc near               ; DATA XREF: LOAD:08048018↑o<br>.text:08048060                 push    esp<br>.text:08048061                 push    offset _exit<br>.text:08048066                 xor     eax, eax<br>.text:08048068                 xor     ebx, ebx<br>.text:0804806A                 xor     ecx, ecx<br>.text:0804806C                 xor     edx, edx<br>.text:0804806E                 push    &#x27;:FTC&#x27;<br>.text:08048073                 push    &#x27; eht&#x27;<br>.text:08048078                 push    &#x27; tra&#x27;<br>.text:0804807D                 push    &#x27;ts s&#x27;<br>.text:08048082                 push    2774654Ch<br>.text:08048087                 mov     ecx, esp        ; addr<br>.text:08048089                 mov     dl, 14h         ; len<br>.text:0804808B                 mov     bl, 1           ; fd<br>.text:0804808D                 mov     al, 4<br>.text:0804808F                 int     80h             ; LINUX - sys_write<br>.text:08048091                 xor     ebx, ebx<br>.text:08048093                 mov     dl, 3Ch ; &#x27;&lt;&#x27;<br>.text:08048095                 mov     al, 3<br>.text:08048097                 int     80h             ; LINUX -<br>.text:08048099                 add     esp, 14h<br>.text:0804809C                 retn<br></code></pre></td></tr></table></figure>
-
-
+          
         </div>
 
         
@@ -113,15 +99,15 @@
 
       <nav class="article-nav" aria-label="文章导航">
         
-          <a href="/NSSCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+          <a href="/%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8-study-1/">
             <span>上一篇</span>
-            <strong>NSSCTF pwn靶场练习</strong>
+            <strong>车联网安全_study_1</strong>
           </a>
         
         
-          <a href="/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+          <a href="/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3-study/">
             <span>下一篇</span>
-            <strong>CTFshow pwn靶场练习</strong>
+            <strong>加壳与脱壳_study</strong>
           </a>
         
       </nav>

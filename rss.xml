@@ -10,7 +10,59 @@
   <rights>All rights reserved 2026, haoo</rights>
   <subtitle>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</subtitle>
   <title>haoo's tech blog</title>
-  <updated>2026-08-20T09:38:58.729Z</updated>
+  <updated>2026-08-25T08:46:48.808Z</updated>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <id>https://star492.github.io/%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8-study-1/</id>
+    <link href="https://star492.github.io/%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8-study-1/"/>
+    <published>2026-08-25T08:46:48.808Z</published>
+    <title>车联网安全_study_1</title>
+    <updated>2026-08-25T08:46:48.808Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <id>https://star492.github.io/Hook%E4%B8%8E%E9%80%86%E5%90%91%E6%A1%86%E6%9E%B6-study/</id>
+    <link href="https://star492.github.io/Hook%E4%B8%8E%E9%80%86%E5%90%91%E6%A1%86%E6%9E%B6-study/"/>
+    <published>2026-08-25T08:25:26.175Z</published>
+    <title>Hook与逆向框架_study</title>
+    <updated>2026-08-25T08:25:26.175Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <id>https://star492.github.io/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3-study/</id>
+    <link href="https://star492.github.io/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3-study/"/>
+    <published>2026-08-25T08:07:33.117Z</published>
+    <title>加壳与脱壳_study</title>
+    <updated>2026-08-25T08:07:33.117Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <id>https://star492.github.io/%E5%B8%B8%E8%A7%81%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/</id>
+    <link href="https://star492.github.io/%E5%B8%B8%E8%A7%81%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/"/>
+    <published>2026-08-25T08:02:02.522Z</published>
+    <title>常见加解密算法原理</title>
+    <updated>2026-08-25T08:02:02.522Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="re" scheme="https://star492.github.io/categories/re/"/>
+    <category term="re" scheme="https://star492.github.io/tags/re/"/>
+    <id>https://star492.github.io/crackmes-one-%E7%BB%83%E4%B9%A0/</id>
+    <link href="https://star492.github.io/crackmes-one-%E7%BB%83%E4%B9%A0/"/>
+    <published>2026-08-25T04:35:23.556Z</published>
+    <title>crackmes_one_练习</title>
+    <updated>2026-08-25T04:35:23.556Z</updated>
+  </entry>
   <entry>
     <author>
       <name>haoo</name>
@@ -125,9 +177,19 @@
     </author>
     <category term="IOT" scheme="https://star492.github.io/categories/IOT/"/>
     <category term="IOT" scheme="https://star492.github.io/tags/IOT/"/>
+    <content>
+      <![CDATA[<p>这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞。具体如下：</p><table><thead><tr><th align="left"><a href="https://www.owasp.org/images/1/1c/OWASP-IoT-Top-10-2018-final.pdf">OWASP IoT Top 10 2018</a></th><th>Description</th></tr></thead><tbody><tr><td align="left">I1 Weak, Guessable, or Hardcoded Passwords</td><td>Use of easily bruteforced, publicly available, or unchangeable credentials, including backdoors in firmware or client software that grants unauthorized access to deployed systems.</td></tr><tr><td align="left">I2 Insecure Network Services</td><td>Unneeded or insecure network services running on the device itself, especially those exposed to the internet, that compromise the confidentiality, integrity&#x2F;authenticity, or availability of information or allow unauthorized remote control.</td></tr><tr><td align="left">I3 Insecure Ecosystem Interfaces</td><td>Insecure web, backend API, cloud, or mobile interfaces in the ecosystem outside of the device that allows compromise of the device or its related components. Common issues include a lack of authentication&#x2F;authorization, lacking or weak encryption, and a lack of input and output filtering.</td></tr><tr><td align="left">I4 Lack of Secure Update Mechanism</td><td>Lack of ability to securely update the device. This includes lack of firmware validation on device, lack of secure delivery (un-encrypted in transit), lack of anti-rollback mechanisms, and lack of notifications of security changes due to updates.</td></tr><tr><td align="left">I5 Use of Insecure or Outdated Components</td><td>Use of deprecated or insecure software components&#x2F;libraries that could allow the device to be compromised. This includes insecure customization of operating system platforms, and the use of third-party software or hardware components from a compromised supply chain</td></tr><tr><td align="left">I6 Insufficient Privacy Protection</td><td>User’s personal information stored on the device or in the ecosystem that is used insecurely, improperly, or without permission.</td></tr><tr><td align="left">I7 Insecure Data Transfer and Storage</td><td>Lack of encryption or access control of sensitive data anywhere within the ecosystem, including at rest, in transit, or during processing</td></tr><tr><td align="left">I8 Lack of Device Management</td><td>Lack of security support on devices deployed in production, including asset management, update management, secure decommissioning, systems monitoring, and response capabilities.</td></tr><tr><td align="left">I9 Insecure Default Settings</td><td>Devices or systems shipped with insecure default settings or lack the ability to make the system more secure by restricting operators from modifying configurations.</td></tr><tr><td align="left">I10 Lack of Physical Hardening</td><td>Lack of physical hardening measures, allowing potential attackers to gain sensitive information that can help in a future remote attack or take local control of the device.</td></tr></tbody></table><p>下面的内容就是完成这些挑战。</p>]]>
+    </content>
     <id>https://star492.github.io/OWASP-IoTGoat-%E7%BB%83%E4%B9%A0/</id>
     <link href="https://star492.github.io/OWASP-IoTGoat-%E7%BB%83%E4%B9%A0/"/>
     <published>2026-08-17T09:14:46.982Z</published>
+    <summary>
+      <![CDATA[<p>这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞。具体如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><a href="https://www.owasp.org/images/1]]>
+    </summary>
     <title>OWASP_IoTGoat_练习</title>
     <updated>2026-08-17T09:14:46.982Z</updated>
   </entry>
@@ -197,85 +259,5 @@
     <published>2026-08-16T07:49:31.680Z</published>
     <title>LilCTF2025</title>
     <updated>2026-08-16T07:49:31.680Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="工具" scheme="https://star492.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
-    <category term="工具" scheme="https://star492.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
-    <content>
-      <![CDATA[<h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p><h1 id="010-Editor"><a href="#010-Editor" class="headerlink" title="010 Editor"></a>010 Editor</h1><p>010Editor是一款功能强大的十六进制编辑器</p>]]>
-    </content>
-    <id>https://star492.github.io/tools/</id>
-    <link href="https://star492.github.io/tools/"/>
-    <published>2026-08-15T11:54:24.220Z</published>
-    <summary>
-      <![CDATA[<h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p>
-<h1 id="010-Editor"><a href="#01]]>
-    </summary>
-    <title>tools</title>
-    <updated>2026-08-15T11:54:24.220Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="agent" scheme="https://star492.github.io/categories/agent/"/>
-    <category term="agent" scheme="https://star492.github.io/tags/agent/"/>
-    <content>
-      <![CDATA[<p>随着ai的快速发展，从LLM到Agent，现在技术的焦点已经转向如何构建更加聪明、高效的智能体应用，毕竟训练一个更大、更强的模型所花费的人力、物力、财力是非常多的，而且如何释放LLM全部潜能、解决真实世界的复杂问题也是一关键点。</p><p>这篇文章主要参考了<a href="https://www.runoob.com/ai-agent/ai-agent-tutorial.html">AI Agent(智能体) 教程 | 菜鸟教程</a>，对Agent有一个大致的了解。后续会深入学习这方面的知识，并能够自己构建一个智能体。</p><h1 id="什么是Agent"><a href="#什么是Agent" class="headerlink" title="什么是Agent"></a>什么是Agent</h1><p>首先区分一下LLM与Agent</p><ul><li>LLM（Large Language Model，大预言模型）是一个通过海量数据训练出来的模型，擅长理解和生成人类语言以及进行逻辑推理。但是其无工具能力，</li></ul>]]>
-    </content>
-    <id>https://star492.github.io/Agent-study-1/</id>
-    <link href="https://star492.github.io/Agent-study-1/"/>
-    <published>2026-08-15T11:34:45.550Z</published>
-    <summary>
-      <![CDATA[<p>随着ai的快速发展，从LLM到Agent，现在技术的焦点已经转向如何构建更加聪明、高效的智能体应用，毕竟训练一个更大、更强的模型所花费的人力、物力、财力是非常多的，而且如何释放LLM全部潜能、解决真实世界的复杂问题也是一关键点。</p>
-<p>这篇文章主要参考了<a hre]]>
-    </summary>
-    <title>Agent_study_1</title>
-    <updated>2026-08-15T11:34:45.550Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="IOT" scheme="https://star492.github.io/categories/IOT/"/>
-    <category term="IOT" scheme="https://star492.github.io/tags/IOT/"/>
-    <id>https://star492.github.io/IOT%E5%AE%89%E5%85%A8-study-1/</id>
-    <link href="https://star492.github.io/IOT%E5%AE%89%E5%85%A8-study-1/"/>
-    <published>2026-08-15T11:34:32.587Z</published>
-    <title>IOT安全_study_1</title>
-    <updated>2026-08-15T11:34:32.587Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="IOT" scheme="https://star492.github.io/categories/IOT/"/>
-    <category term="IOT" scheme="https://star492.github.io/tags/IOT/"/>
-    <content>
-      <![CDATA[<h1 id="bluetooth-test"><a href="#bluetooth-test" class="headerlink" title="bluetooth test"></a>bluetooth test</h1><p>这道题目给了两个文件：一个.log文件、一个.txt文件。点开txt文件查看一下内容</p><p><img src="/images/1.png"></p><p>根据这个提示，知道了我们现在有一个关键文件，需使用FrontLine11工具将其打开并找到</p>]]>
-    </content>
-    <id>https://star492.github.io/PolarCTF%20PIoTS%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
-    <link href="https://star492.github.io/PolarCTF%20PIoTS%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
-    <published>2026-08-14T12:43:34.305Z</published>
-    <summary>
-      <![CDATA[<h1 id="bluetooth-test"><a href="#bluetooth-test" class="headerlink" title="bluetooth test"></a>bluetooth test</h1><p>这道题目给了两个文件：一个.log文件、一个]]>
-    </summary>
-    <title>PolarCTF PIoTS靶场</title>
-    <updated>2026-08-14T12:43:34.305Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="pwn" scheme="https://star492.github.io/categories/pwn/"/>
-    <category term="pwn" scheme="https://star492.github.io/tags/pwn/"/>
-    <id>https://star492.github.io/PolarCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
-    <link href="https://star492.github.io/PolarCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
-    <published>2026-08-14T12:41:27.220Z</published>
-    <title>PolarCTF pwn靶场</title>
-    <updated>2026-08-14T12:41:27.220Z</updated>
   </entry>
 </feed>
