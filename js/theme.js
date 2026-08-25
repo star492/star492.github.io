@@ -83,43 +83,105 @@
   const toc = document.getElementById("toc");
   const content = document.getElementById("article-content");
   if (toc && content) {
-    const headings = Array.from(content.querySelectorAll("h2, h3, h4"));
-    if (headings.length) {
-      const list = document.createElement("ol");
-      const links = [];
-      headings.forEach(function (heading, index) {
-        const id = heading.id || "heading-" + index;
-        heading.id = id;
+    const bodyHeadings = Array.from(content.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+    const headings = bodyHeadings.slice();
+    const articleTitle = document.querySelector(".article-header h1");
 
+    if (!bodyHeadings.some(function (heading) { return heading.tagName === "H1"; }) && articleTitle) {
+      headings.unshift(articleTitle);
+    }
+
+    const ensureHeadingId = function (heading, index) {
+      const currentOwner = heading.id ? document.getElementById(heading.id) : null;
+      if (heading.id && currentOwner === heading) return heading.id;
+
+      const base = heading === articleTitle ? "article-title" : "heading-" + (index + 1);
+      let id = base;
+      let suffix = 2;
+      while (document.getElementById(id)) {
+        id = base + "-" + suffix;
+        suffix += 1;
+      }
+      heading.id = id;
+      return id;
+    };
+
+    const root = { level: 0, children: [] };
+    const branch = [root];
+    const entries = headings.map(function (heading, index) {
+      return {
+        heading: heading,
+        id: ensureHeadingId(heading, index),
+        label: heading.textContent.trim() || "未命名章节",
+        level: Number(heading.tagName.slice(1))
+      };
+    });
+
+    entries.forEach(function (entry) {
+      while (branch.length > 1 && branch[branch.length - 1].level >= entry.level) {
+        branch.pop();
+      }
+
+      const node = {
+        entry: entry,
+        level: entry.level,
+        children: []
+      };
+      branch[branch.length - 1].children.push(node);
+      branch.push(node);
+    });
+
+    const links = [];
+    const renderTree = function (nodes, nested) {
+      const list = document.createElement("ol");
+      list.className = nested ? "toc-list toc-list--nested" : "toc-list";
+
+      nodes.forEach(function (node) {
         const item = document.createElement("li");
-        item.className = "toc-" + heading.tagName.toLowerCase();
+        item.className = "toc-item toc-level-" + node.level;
 
         const link = document.createElement("a");
-        link.href = "#" + id;
-        link.textContent = heading.textContent;
-        links.push(link);
+        link.href = "#" + encodeURIComponent(node.entry.id);
+        link.textContent = node.entry.label;
+        links.push({ heading: node.entry.heading, link: link });
         item.appendChild(link);
+
+        if (node.children.length) item.appendChild(renderTree(node.children, true));
         list.appendChild(item);
       });
-      toc.appendChild(list);
 
-      if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            links.forEach(function (link) {
-              link.classList.toggle("is-active", link.getAttribute("href") === "#" + entry.target.id);
-            });
-          });
-        }, { rootMargin: "-18% 0px -68% 0px" });
+      return list;
+    };
 
-        headings.forEach(function (heading) {
-          observer.observe(heading);
-        });
-      }
+    toc.replaceChildren();
+    if (root.children.length) {
+      toc.appendChild(renderTree(root.children, false));
     } else {
-      const panel = toc.closest(".toc-panel");
-      if (panel) panel.style.display = "none";
+      const empty = document.createElement("p");
+      empty.className = "toc-empty";
+      empty.textContent = "本文暂无章节标题";
+      toc.appendChild(empty);
+    }
+
+    if (links.length && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(function (observedEntries) {
+        observedEntries.forEach(function (observedEntry) {
+          if (!observedEntry.isIntersecting) return;
+          links.forEach(function (item) {
+            const active = item.heading === observedEntry.target;
+            item.link.classList.toggle("is-active", active);
+            if (active) {
+              item.link.setAttribute("aria-current", "location");
+            } else {
+              item.link.removeAttribute("aria-current");
+            }
+          });
+        });
+      }, { rootMargin: "-18% 0px -68% 0px" });
+
+      links.forEach(function (item) {
+        observer.observe(item.heading);
+      });
     }
   }
 
@@ -127,6 +189,111 @@
   if (topButton) {
     topButton.addEventListener("click", function () {
       window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  if (content) {
+    const legacyCopy = function (text) {
+      return new Promise(function (resolve, reject) {
+        const textarea = document.createElement("textarea");
+        const previousFocus = document.activeElement;
+        textarea.value = text;
+        textarea.readOnly = true;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.pointerEvents = "none";
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+
+        let copied = false;
+        try {
+          copied = Boolean(document.execCommand && document.execCommand("copy"));
+        } catch (error) {
+          copied = false;
+        }
+
+        textarea.remove();
+        if (previousFocus && previousFocus.focus) previousFocus.focus({ preventScroll: true });
+        if (copied) {
+          resolve();
+        } else {
+          reject(new Error("Clipboard is unavailable"));
+        }
+      });
+    };
+
+    const copyText = function (text) {
+      if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text).catch(function () {
+          return legacyCopy(text);
+        });
+      }
+      return legacyCopy(text);
+    };
+
+    const extractCode = function (block) {
+      let source;
+      if (block.matches("figure.highlight, div.highlight")) {
+        const codeCell = block.querySelector(".code");
+        source = codeCell && (codeCell.querySelector("code") || codeCell.querySelector("pre"));
+        source = source || block.querySelector("code") || block.querySelector("pre");
+      } else {
+        source = block.querySelector("code") || block;
+      }
+
+      if (!source) return "";
+      const clone = source.cloneNode(true);
+      Array.from(clone.querySelectorAll("br")).forEach(function (lineBreak) {
+        lineBreak.replaceWith(document.createTextNode("\n"));
+      });
+      return clone.textContent;
+    };
+
+    const codeBlocks = Array.from(content.querySelectorAll("figure.highlight, div.highlight, pre")).filter(function (block) {
+      return !block.parentElement || !block.parentElement.closest("figure.highlight, div.highlight");
+    });
+
+    codeBlocks.forEach(function (block) {
+      const shell = document.createElement("div");
+      shell.className = "code-block-shell";
+
+      const toolbar = document.createElement("div");
+      toolbar.className = "code-block-toolbar";
+
+      const button = document.createElement("button");
+      button.className = "code-copy-button";
+      button.type = "button";
+      button.textContent = "复制";
+      button.setAttribute("aria-label", "复制代码");
+      button.setAttribute("aria-live", "polite");
+
+      block.parentNode.insertBefore(shell, block);
+      shell.appendChild(toolbar);
+      shell.appendChild(block);
+      toolbar.appendChild(button);
+
+      let resetTimer;
+      button.addEventListener("click", function () {
+        window.clearTimeout(resetTimer);
+        button.disabled = true;
+        copyText(extractCode(block)).then(function () {
+          button.textContent = "已复制";
+          button.setAttribute("aria-label", "代码已复制");
+          button.classList.add("is-copied");
+        }).catch(function () {
+          button.textContent = "复制失败";
+          button.setAttribute("aria-label", "代码复制失败");
+          button.classList.remove("is-copied");
+        }).finally(function () {
+          button.disabled = false;
+          resetTimer = window.setTimeout(function () {
+            button.textContent = "复制";
+            button.setAttribute("aria-label", "复制代码");
+            button.classList.remove("is-copied");
+          }, 1800);
+        });
+      });
     });
   }
 
