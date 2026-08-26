@@ -10,14 +10,64 @@
   <rights>All rights reserved 2026, haoo</rights>
   <subtitle>haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等</subtitle>
   <title>haoo's tech blog</title>
-  <updated>2026-08-25T09:10:01.809Z</updated>
+  <updated>2026-08-26T10:42:25.028Z</updated>
   <entry>
     <author>
       <name>haoo</name>
     </author>
+    <category term="CNVD" scheme="https://star492.github.io/categories/CNVD/"/>
+    <category term="CNVD" scheme="https://star492.github.io/tags/CNVD/"/>
+    <id>https://star492.github.io/CNVD-2013-11625%E5%A4%8D%E7%8E%B0/</id>
+    <link href="https://star492.github.io/CNVD-2013-11625%E5%A4%8D%E7%8E%B0/"/>
+    <published>2026-08-26T10:42:25.028Z</published>
+    <title>CNVD-2013-11625复现</title>
+    <updated>2026-08-26T10:42:25.028Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="CVE" scheme="https://star492.github.io/categories/CVE/"/>
+    <category term="CVE" scheme="https://star492.github.io/tags/CVE/"/>
+    <id>https://star492.github.io/CVE-2018-5767%E5%A4%8D%E7%8E%B0/</id>
+    <link href="https://star492.github.io/CVE-2018-5767%E5%A4%8D%E7%8E%B0/"/>
+    <published>2026-08-26T10:00:12.724Z</published>
+    <title>CVE-2018-5767复现</title>
+    <updated>2026-08-26T10:00:12.724Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="协议" scheme="https://star492.github.io/categories/%E5%8D%8F%E8%AE%AE/"/>
+    <category term="协议" scheme="https://star492.github.io/tags/%E5%8D%8F%E8%AE%AE/"/>
+    <content>
+      <![CDATA[<h1 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h1><p>UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的</p>]]>
+    </content>
+    <id>https://star492.github.io/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/</id>
+    <link href="https://star492.github.io/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/"/>
+    <published>2026-08-25T12:43:57.291Z</published>
+    <summary>
+      <![CDATA[<h1 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h1><p>UART（Universal Asynchronous Receiver-Transmitter，通用异步收]]>
+    </summary>
+    <title>硬件协议与常见IoT协议</title>
+    <updated>2026-08-25T12:43:57.291Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="qemu" scheme="https://star492.github.io/categories/qemu/"/>
+    <category term="qemu" scheme="https://star492.github.io/tags/qemu/"/>
+    <content>
+      <![CDATA[<p>QEMU是一款开源的机器模拟器和虚拟化软件，支持多种架构模拟</p>]]>
+    </content>
     <id>https://star492.github.io/QEMU-study/</id>
     <link href="https://star492.github.io/QEMU-study/"/>
     <published>2026-08-25T09:10:01.809Z</published>
+    <summary>
+      <![CDATA[<p>QEMU是一款开源的机器模拟器和虚拟化软件，支持多种架构模拟</p>]]>
+    </summary>
     <title>QEMU_study</title>
     <updated>2026-08-25T09:10:01.809Z</updated>
   </entry>
@@ -25,6 +75,8 @@
     <author>
       <name>haoo</name>
     </author>
+    <category term="车联网" scheme="https://star492.github.io/categories/%E8%BD%A6%E8%81%94%E7%BD%91/"/>
+    <category term="车联网" scheme="https://star492.github.io/tags/%E8%BD%A6%E8%81%94%E7%BD%91/"/>
     <id>https://star492.github.io/%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8-study-1/</id>
     <link href="https://star492.github.io/%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8-study-1/"/>
     <published>2026-08-25T08:46:48.808Z</published>
@@ -35,6 +87,8 @@
     <author>
       <name>haoo</name>
     </author>
+    <category term="re" scheme="https://star492.github.io/categories/re/"/>
+    <category term="re" scheme="https://star492.github.io/tags/re/"/>
     <id>https://star492.github.io/Hook%E4%B8%8E%E9%80%86%E5%90%91%E6%A1%86%E6%9E%B6-study/</id>
     <link href="https://star492.github.io/Hook%E4%B8%8E%E9%80%86%E5%90%91%E6%A1%86%E6%9E%B6-study/"/>
     <published>2026-08-25T08:25:26.175Z</published>
@@ -45,6 +99,8 @@
     <author>
       <name>haoo</name>
     </author>
+    <category term="re" scheme="https://star492.github.io/categories/re/"/>
+    <category term="re" scheme="https://star492.github.io/tags/re/"/>
     <id>https://star492.github.io/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3-study/</id>
     <link href="https://star492.github.io/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3-study/"/>
     <published>2026-08-25T08:07:33.117Z</published>
@@ -55,6 +111,8 @@
     <author>
       <name>haoo</name>
     </author>
+    <category term="算法" scheme="https://star492.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="https://star492.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     <id>https://star492.github.io/%E5%B8%B8%E8%A7%81%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/</id>
     <link href="https://star492.github.io/%E5%B8%B8%E8%A7%81%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/"/>
     <published>2026-08-25T08:02:02.522Z</published>
@@ -91,9 +149,15 @@
     </author>
     <category term="re" scheme="https://star492.github.io/categories/re/"/>
     <category term="re" scheme="https://star492.github.io/tags/re/"/>
+    <content>
+      <![CDATA[<h1 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><h2 id="PE结构"><a href="#PE结构" class="headerlink" title="PE结构"></a>PE结构</h2><h2 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h2><h2 id="加加减减"><a href="#加加减减" class="headerlink" title="加加减减"></a>加加减减</h2><h2 id="康师傅"><a href="#康师傅" class="headerlink" title="康师傅"></a>康师傅</h2><h2 id="另辟蹊径"><a href="#另辟蹊径" class="headerlink" title="另辟蹊径"></a>另辟蹊径</h2><h2 id="use-jadx-open-it"><a href="#use-jadx-open-it" class="headerlink" title="use_jadx_open_it"></a>use_jadx_open_it</h2><h2 id="re2"><a href="#re2" class="headerlink" title="re2"></a>re2</h2><h2 id="layout"><a href="#layout" class="headerlink" title="layout"></a>layout</h2><h2 id="Why32"><a href="#Why32" class="headerlink" title="Why32"></a>Why32</h2><h2 id="64"><a href="#64" class="headerlink" title="? 64"></a>? 64</h2><h2 id="Sign-Up"><a href="#Sign-Up" class="headerlink" title="Sign Up"></a>Sign Up</h2><h2 id="easyre1"><a href="#easyre1" class="headerlink" title="easyre1"></a>easyre1</h2><h2 id="babyRE"><a href="#babyRE" class="headerlink" title="babyRE"></a>babyRE</h2><h2 id="C"><a href="#C" class="headerlink" title="C^"></a>C^</h2><h2 id="一个flag劈三瓣儿"><a href="#一个flag劈三瓣儿" class="headerlink" title="一个flag劈三瓣儿"></a>一个flag劈三瓣儿</h2><h2 id="EasyCPP2"><a href="#EasyCPP2" class="headerlink" title="EasyCPP2"></a>EasyCPP2</h2><h2 id="crc"><a href="#crc" class="headerlink" title="crc"></a>crc</h2><h2 id="box"><a href="#box" class="headerlink" title="box"></a>box</h2><h2 id="HowTo-Login"><a href="#HowTo-Login" class="headerlink" title="HowTo_Login"></a>HowTo_Login</h2><h2 id="ezpack"><a href="#ezpack" class="headerlink" title="ezpack"></a>ezpack</h2><h2 id="L00k-at-h3r3"><a href="#L00k-at-h3r3" class="headerlink" title="L00k_at_h3r3"></a>L00k_at_h3r3</h2><h2 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h2><h2 id="reserve-fib"><a href="#reserve-fib" class="headerlink" title="reserve_fib"></a>reserve_fib</h2><h2 id="re数独"><a href="#re数独" class="headerlink" title="re数独"></a>re数独</h2><h2 id="易e"><a href="#易e" class="headerlink" title="易e"></a>易e</h2><h2 id="Polar-tasks"><a href="#Polar-tasks" class="headerlink" title="Polar_tasks"></a>Polar_tasks</h2><h2 id="tanchi"><a href="#tanchi" class="headerlink" title="tanchi"></a>tanchi</h2><h2 id="练习1"><a href="#练习1" class="headerlink" title="练习1"></a>练习1</h2><h2 id="peek-stack"><a href="#peek-stack" class="headerlink" title="peek_stack"></a>peek_stack</h2><h2 id="ez-login"><a href="#ez-login" class="headerlink" title="ez_login"></a>ez_login</h2><h2 id="练习2"><a href="#练习2" class="headerlink" title="练习2"></a>练习2</h2><h2 id="找寻真我"><a href="#找寻真我" class="headerlink" title="找寻真我"></a>找寻真我</h2><h2 id="顺序输入"><a href="#顺序输入" class="headerlink" title="顺序输入"></a>顺序输入</h2>]]>
+    </content>
     <id>https://star492.github.io/PolarCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
     <link href="https://star492.github.io/PolarCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
     <published>2026-08-20T09:35:12.788Z</published>
+    <summary>
+      <![CDATA[<h1 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h1><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shel]]>
+    </summary>
     <title>PolarCTF re靶场练习</title>
     <updated>2026-08-20T09:35:12.788Z</updated>
   </entry>
@@ -115,9 +179,15 @@
     </author>
     <category term="re" scheme="https://star492.github.io/categories/re/"/>
     <category term="re" scheme="https://star492.github.io/tags/re/"/>
+    <content>
+      <![CDATA[<h1 id="逆向签到题"><a href="#逆向签到题" class="headerlink" title="逆向签到题"></a>逆向签到题</h1><h1 id="re2"><a href="#re2" class="headerlink" title="re2"></a>re2</h1><h1 id="re3"><a href="#re3" class="headerlink" title="re3"></a>re3</h1><h1 id="逆向4"><a href="#逆向4" class="headerlink" title="逆向4"></a>逆向4</h1><h1 id="逆向5"><a href="#逆向5" class="headerlink" title="逆向5"></a>逆向5</h1><h1 id="红包题-武穆遗书"><a href="#红包题-武穆遗书" class="headerlink" title="红包题 武穆遗书"></a>红包题 武穆遗书</h1><h1 id="红包六"><a href="#红包六" class="headerlink" title="红包六"></a>红包六</h1><h1 id="萌新赛"><a href="#萌新赛" class="headerlink" title="萌新赛"></a>萌新赛</h1><h2 id="数学不及格"><a href="#数学不及格" class="headerlink" title="数学不及格"></a>数学不及格</h2><h2 id="flag白给"><a href="#flag白给" class="headerlink" title="flag白给"></a>flag白给</h2><h2 id="签退"><a href="#签退" class="headerlink" title="签退"></a>签退</h2>]]>
+    </content>
     <id>https://star492.github.io/CTFshow%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</id>
     <link href="https://star492.github.io/CTFshow%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/"/>
     <published>2026-08-20T09:32:19.654Z</published>
+    <summary>
+      <![CDATA[<h1 id="逆向签到题"><a href="#逆向签到题" class="headerlink" title="逆向签到题"></a>逆向签到题</h1><h1 id="re2"><a href="#re2" class="headerlink" title="re2"></]]>
+    </summary>
     <title>CTFshow re靶场练习</title>
     <updated>2026-08-20T09:32:19.654Z</updated>
   </entry>
@@ -188,7 +258,7 @@
     <category term="IOT" scheme="https://star492.github.io/categories/IOT/"/>
     <category term="IOT" scheme="https://star492.github.io/tags/IOT/"/>
     <content>
-      <![CDATA[<p>这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞，尽管时间比较久了，但是对于新手学习来说，还是十分不错的。具体如下：</p><table><thead><tr><th align="left"><a href="https://www.owasp.org/images/1/1c/OWASP-IoT-Top-10-2018-final.pdf">OWASP IoT Top 10 2018</a></th><th>Description</th></tr></thead><tbody><tr><td align="left">I1 Weak, Guessable, or Hardcoded Passwords</td><td>Use of easily bruteforced, publicly available, or unchangeable credentials, including backdoors in firmware or client software that grants unauthorized access to deployed systems.</td></tr><tr><td align="left">I2 Insecure Network Services</td><td>Unneeded or insecure network services running on the device itself, especially those exposed to the internet, that compromise the confidentiality, integrity&#x2F;authenticity, or availability of information or allow unauthorized remote control.</td></tr><tr><td align="left">I3 Insecure Ecosystem Interfaces</td><td>Insecure web, backend API, cloud, or mobile interfaces in the ecosystem outside of the device that allows compromise of the device or its related components. Common issues include a lack of authentication&#x2F;authorization, lacking or weak encryption, and a lack of input and output filtering.</td></tr><tr><td align="left">I4 Lack of Secure Update Mechanism</td><td>Lack of ability to securely update the device. This includes lack of firmware validation on device, lack of secure delivery (un-encrypted in transit), lack of anti-rollback mechanisms, and lack of notifications of security changes due to updates.</td></tr><tr><td align="left">I5 Use of Insecure or Outdated Components</td><td>Use of deprecated or insecure software components&#x2F;libraries that could allow the device to be compromised. This includes insecure customization of operating system platforms, and the use of third-party software or hardware components from a compromised supply chain</td></tr><tr><td align="left">I6 Insufficient Privacy Protection</td><td>User’s personal information stored on the device or in the ecosystem that is used insecurely, improperly, or without permission.</td></tr><tr><td align="left">I7 Insecure Data Transfer and Storage</td><td>Lack of encryption or access control of sensitive data anywhere within the ecosystem, including at rest, in transit, or during processing</td></tr><tr><td align="left">I8 Lack of Device Management</td><td>Lack of security support on devices deployed in production, including asset management, update management, secure decommissioning, systems monitoring, and response capabilities.</td></tr><tr><td align="left">I9 Insecure Default Settings</td><td>Devices or systems shipped with insecure default settings or lack the ability to make the system more secure by restricting operators from modifying configurations.</td></tr><tr><td align="left">I10 Lack of Physical Hardening</td><td>Lack of physical hardening measures, allowing potential attackers to gain sensitive information that can help in a future remote attack or take local control of the device.</td></tr></tbody></table><p>下面的内容就是搭建环境以及完成这些挑战。</p><h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>在环境搭建方面，官方给了很多方法，有下载磁盘镜像创建虚拟机的、有模拟固件利用QEMU在本地虚拟化IotGoat的、有Docker设置在容器里面运行的、也有用固件刷入树莓派的。当然对于新手来说，最简单的方法就是创建虚拟机，挑战也会在这个虚拟机上面进行完成。后面有机会的话，会在这里更新其他搭建方法。</p><h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>这里就不再说明VMware的安装那些了，有不会的就自行查找方法。</p><p>VMware准备好后，首先要获取IoTGoat固件<a href="https://github.com/OWASP/IoTGoat/releases">Releases · OWASP&#x2F;IoTGoat</a>，直接点击下载IoTGoat-x86.vmdk</p><p><img src="/images/2.png"></p>]]>
+      <![CDATA[<p>这篇文章主要记录练习IoTGoat项目中的漏洞挑战，这些挑战基于2018年OWASP物联网十大漏洞，尽管时间比较久了，但是对于新手学习来说，还是十分不错的。具体如下：</p><table><thead><tr><th align="left"><a href="https://www.owasp.org/images/1/1c/OWASP-IoT-Top-10-2018-final.pdf">OWASP IoT Top 10 2018</a></th><th>Description</th></tr></thead><tbody><tr><td align="left">I1 Weak, Guessable, or Hardcoded Passwords</td><td>Use of easily bruteforced, publicly available, or unchangeable credentials, including backdoors in firmware or client software that grants unauthorized access to deployed systems.</td></tr><tr><td align="left">I2 Insecure Network Services</td><td>Unneeded or insecure network services running on the device itself, especially those exposed to the internet, that compromise the confidentiality, integrity&#x2F;authenticity, or availability of information or allow unauthorized remote control.</td></tr><tr><td align="left">I3 Insecure Ecosystem Interfaces</td><td>Insecure web, backend API, cloud, or mobile interfaces in the ecosystem outside of the device that allows compromise of the device or its related components. Common issues include a lack of authentication&#x2F;authorization, lacking or weak encryption, and a lack of input and output filtering.</td></tr><tr><td align="left">I4 Lack of Secure Update Mechanism</td><td>Lack of ability to securely update the device. This includes lack of firmware validation on device, lack of secure delivery (un-encrypted in transit), lack of anti-rollback mechanisms, and lack of notifications of security changes due to updates.</td></tr><tr><td align="left">I5 Use of Insecure or Outdated Components</td><td>Use of deprecated or insecure software components&#x2F;libraries that could allow the device to be compromised. This includes insecure customization of operating system platforms, and the use of third-party software or hardware components from a compromised supply chain</td></tr><tr><td align="left">I6 Insufficient Privacy Protection</td><td>User’s personal information stored on the device or in the ecosystem that is used insecurely, improperly, or without permission.</td></tr><tr><td align="left">I7 Insecure Data Transfer and Storage</td><td>Lack of encryption or access control of sensitive data anywhere within the ecosystem, including at rest, in transit, or during processing</td></tr><tr><td align="left">I8 Lack of Device Management</td><td>Lack of security support on devices deployed in production, including asset management, update management, secure decommissioning, systems monitoring, and response capabilities.</td></tr><tr><td align="left">I9 Insecure Default Settings</td><td>Devices or systems shipped with insecure default settings or lack the ability to make the system more secure by restricting operators from modifying configurations.</td></tr><tr><td align="left">I10 Lack of Physical Hardening</td><td>Lack of physical hardening measures, allowing potential attackers to gain sensitive information that can help in a future remote attack or take local control of the device.</td></tr></tbody></table><p>下面的内容就是搭建环境以及完成这些挑战。</p><h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>在环境搭建方面，官方给了很多方法，有下载磁盘镜像创建虚拟机的、有模拟固件利用QEMU在本地虚拟化IotGoat的、有Docker设置在容器里面运行的、也有用固件刷入树莓派的。当然对于新手来说，最简单的方法就是创建虚拟机，挑战也会在这个虚拟机上面进行完成。后面有机会的话，会在这里更新其他搭建方法。</p><h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>这里不再说明VMware的安装了，有不会的就自行查找方法。</p><p>VMware准备好后，首先要获取IoTGoat固件<a href="https://github.com/OWASP/IoTGoat/releases">Releases · OWASP&#x2F;IoTGoat</a>，进入页面后，直接点击下载IoTGoat-x86.vmdk，这个文件就是所需虚拟磁盘文件，所谓虚拟磁盘，就是模拟一个真实磁盘中的内容。</p><p><img src="/images/2.png"></p><p>接着就开始在VMware里面开始创建了，和创建Ubuntu的方法是差不多的。不会的可以借鉴<a href="https://blog.csdn.net/oo19982015/article/details/142745073">零基础实践物联网安全——IoTGoat物联网靶场实战(一)-CSDN博客</a>这篇文章，这里就不再多说了。</p><p><img src="/images/3.png"></p><p>跟着那篇文章一步一步做，出现上面这个图片的内容，就说明安装成功了。</p>]]>
     </content>
     <id>https://star492.github.io/OWASP-IoTGoat-%E7%BB%83%E4%B9%A0/</id>
     <link href="https://star492.github.io/OWASP-IoTGoat-%E7%BB%83%E4%B9%A0/"/>
@@ -214,48 +284,5 @@
     <published>2026-08-17T09:09:30.008Z</published>
     <title>how2heap_study</title>
     <updated>2026-08-17T09:09:30.008Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="算法" scheme="https://star492.github.io/categories/%E7%AE%97%E6%B3%95/"/>
-    <category term="算法" scheme="https://star492.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    <id>https://star492.github.io/CodeForces-%E7%BB%83%E4%B9%A0/</id>
-    <link href="https://star492.github.io/CodeForces-%E7%BB%83%E4%B9%A0/"/>
-    <published>2026-08-16T07:51:24.316Z</published>
-    <title>CodeForces_练习</title>
-    <updated>2026-08-16T07:51:24.316Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="算法" scheme="https://star492.github.io/categories/%E7%AE%97%E6%B3%95/"/>
-    <category term="算法" scheme="https://star492.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    <content>
-      <![CDATA[<p>这篇文章主要记录在力扣平台上刷的一些算法题目，尽管是研究二进制安全方面的，但是多了解一些算法还是非常重要的。</p><h1 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出 <strong>和为目标值</strong> <em><code>target</code></em> 的那 <strong>两个</strong> 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p><p>你可以按任意顺序返回答案。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [2,7,11,15], target = 9<br>输出：[0,1]<br>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [3,2,4], target = 6<br>输出：[1,2]<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">输入：nums = [3,3], target = 6<br>输出：[0,1]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>2 &lt;= nums.length &lt;= 104</code></li><li><code>-109 &lt;= nums[i] &lt;= 109</code></li><li><code>-109 &lt;= target &lt;= 109</code></li><li><strong>只会存在一个有效答案</strong></li></ul><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目描述非常简单，而且想做出这道题目，思路也非常简单，就是暴力枚举，从数组的第一个元素nums[0]开始一个一个试，直到找到符合要求的两个元素并返回其下标。</p><p>这里用3个语言进行编写（C&#x2F;C++&#x2F;Python），毕竟这道题目比较简单。</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">C<br>int* twoSum(int* nums, int numsSize, int target, int* returnSize) &#123;<br>    int i,j;    //定义两个变量用于表示两个元素的下标<br>    int* result;    //定义一个指针，用于存放返回数组<br>    for(i = 0;i &lt; numsSize - 1;i++)<br>    &#123;<br>        for(j = i + 1;j &lt; numsSize;j++)<br>        &#123;<br>            if(nums[i] + nums[j] == target)<br>            &#123;<br>                result = (int*)malloc(2 * sizeof(int));    //动态申请可以保存两个整数的内存空间，因为题目要求如果使用C语言编写，就要动态申请<br>                result[0] = i;<br>                result[1] = j;<br>                *returnSize = 2;<br>                return result;    //返回结果数组，因为题目说只有一个答案，所以直接返回就行了<br>            &#125;<br>        &#125;<br>    &#125;<br>    *returnSize = 0;<br>    return NULL;    //如果没有就返回空指针，尽管题目说一定有答案，但是加上这个比较严谨<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">C++<br>class Solution &#123;    //定义一个名为Solution的类<br>public:    //表示成员函数是公开的，平台可以访问并调用<br>    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) &#123;<br>        unordered_map&lt;int, int&gt; hash;    //定义一个哈希表，unordered_map&lt;键类型,值类型&gt;的含义是数字-&gt;该数字的下标<br>        for(int i = 0;i &lt; nums.size();i++)<br>        &#123;<br>            int need = target - nums[i];    //计算还需要的另一个数字<br>            if(hash.find(need) != hash.end())    //前面那部分的作用是查找键为need的元素，后面那部分表示没有找到，如果不相等，说明找到了<br>            &#123;<br>                return &#123;hash[need],i&#125;;    //返回两个下标，&#123;a,b&#125;会自动构造一个包含两个元素的vector&lt;int&gt;<br>            &#125;<br>            hash[nums[i]] = i;    //如果没有找到就把当前数字和它的下标保存到哈希表中。<br>        &#125;<br>        return &#123;&#125;;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Python<br>class Solution:<br>    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:    #self表示当前对象本身，nums: List[int]表示参数nums是一个整数列表，target: int表示参数target是整数，最后那一部分表示函数预计返回一个整数列表<br>        num_dict = &#123;&#125;    #创建一个空字典，字典保存的内容是数字-&gt;对应的下标<br>        for i,num in enumerate(nums):    #在遍历nums列表的同时，获取相应的下标与值存放在i和num中，enumerate(nums)会自动产生下标和值<br>            complement = target - num<br>            if complement in num_dict:<br>                return [num_dict[complement],i]<br>            num_dict[num] = i<br>        return []<br></code></pre></td></tr></table></figure>]]>
-    </content>
-    <id>https://star492.github.io/LeetCode-%E7%BB%83%E4%B9%A0/</id>
-    <link href="https://star492.github.io/LeetCode-%E7%BB%83%E4%B9%A0/"/>
-    <published>2026-08-16T07:50:56.677Z</published>
-    <summary>
-      <![CDATA[<p>这篇文章主要记录在力扣平台上刷的一些算法题目，尽管是研究二进制安全方面的，但是多了解一些算法还是非常重要的。</p>
-<h1 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h1><h2]]>
-    </summary>
-    <title>LeetCode_练习</title>
-    <updated>2026-08-16T07:50:56.677Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
-    <category term="ctf" scheme="https://star492.github.io/categories/ctf/"/>
-    <category term="ctf" scheme="https://star492.github.io/tags/ctf/"/>
-    <id>https://star492.github.io/SekaiCTF2024/</id>
-    <link href="https://star492.github.io/SekaiCTF2024/"/>
-    <published>2026-08-16T07:49:43.868Z</published>
-    <title>SekaiCTF2024</title>
-    <updated>2026-08-16T07:49:43.868Z</updated>
   </entry>
 </feed>

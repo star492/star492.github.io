@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>2770 字</span>
+          <span>2941 字</span>
         </div>
         <h1>OWASP_IoTGoat_练习</h1>
         
@@ -143,9 +143,12 @@
 </tbody></table>
 <p>下面的内容就是搭建环境以及完成这些挑战。</p>
 <h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>在环境搭建方面，官方给了很多方法，有下载磁盘镜像创建虚拟机的、有模拟固件利用QEMU在本地虚拟化IotGoat的、有Docker设置在容器里面运行的、也有用固件刷入树莓派的。当然对于新手来说，最简单的方法就是创建虚拟机，挑战也会在这个虚拟机上面进行完成。后面有机会的话，会在这里更新其他搭建方法。</p>
-<h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>这里就不再说明VMware的安装那些了，有不会的就自行查找方法。</p>
-<p>VMware准备好后，首先要获取IoTGoat固件<a target="_blank" rel="noopener" href="https://github.com/OWASP/IoTGoat/releases">Releases · OWASP&#x2F;IoTGoat</a>，直接点击下载IoTGoat-x86.vmdk</p>
+<h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>这里不再说明VMware的安装了，有不会的就自行查找方法。</p>
+<p>VMware准备好后，首先要获取IoTGoat固件<a target="_blank" rel="noopener" href="https://github.com/OWASP/IoTGoat/releases">Releases · OWASP&#x2F;IoTGoat</a>，进入页面后，直接点击下载IoTGoat-x86.vmdk，这个文件就是所需虚拟磁盘文件，所谓虚拟磁盘，就是模拟一个真实磁盘中的内容。</p>
 <p><img src="/images/2.png"></p>
+<p>接着就开始在VMware里面开始创建了，和创建Ubuntu的方法是差不多的。不会的可以借鉴<a target="_blank" rel="noopener" href="https://blog.csdn.net/oo19982015/article/details/142745073">零基础实践物联网安全——IoTGoat物联网靶场实战(一)-CSDN博客</a>这篇文章，这里就不再多说了。</p>
+<p><img src="/images/3.png"></p>
+<p>跟着那篇文章一步一步做，出现上面这个图片的内容，就说明安装成功了。</p>
 
         </div>
 
@@ -179,7 +182,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>32 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

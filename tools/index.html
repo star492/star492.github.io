@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - tools</title>
-<meta name="description" content="pwntoolspwntools是 010 Editor010Editor是一款功能强大的十六进制编辑器">
+<meta name="description" content="pwntoolspwntools是 #导入所需库#--------------------------------------------------------------------------------from pwn import*from LibcSearcher import*from ctypes im">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>52 字</span>
+          <span>2246 字</span>
         </div>
         <h1>tools</h1>
         
@@ -93,8 +93,11 @@
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
           <h1 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h1><p>pwntools是</p>
-<h1 id="010-Editor"><a href="#010-Editor" class="headerlink" title="010 Editor"></a>010 Editor</h1><p>010Editor是一款功能强大的十六进制编辑器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;&#x27;<br>libc_file=&#x27;&#x27;<br>elf=ELF(pwn_file)<br>libc=ELF(libc_file)<br>rop=ROP(libc)<br><br>flag=1<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;&#x27;<br>    port=<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
 
+<h1 id="010-Editor"><a href="#010-Editor" class="headerlink" title="010 Editor"></a>010 Editor</h1><p>010Editor是一款功能强大的十六进制编辑器</p>
+<h1 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h1><h1 id="Frontline"><a href="#Frontline" class="headerlink" title="Frontline"></a>Frontline</h1><p>Frontline是</p>
+<h1 id="Binwalk"><a href="#Binwalk" class="headerlink" title="Binwalk"></a>Binwalk</h1><h1 id="Ghidra"><a href="#Ghidra" class="headerlink" title="Ghidra"></a>Ghidra</h1>
         </div>
 
         
@@ -127,7 +130,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>32 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>
