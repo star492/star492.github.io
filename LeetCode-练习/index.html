@@ -120,6 +120,7 @@
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">Python<br>class Solution:<br>    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:    #self表示当前对象本身，nums: List[int]表示参数nums是一个整数列表，target: int表示参数target是整数，最后那一部分表示函数预计返回一个整数列表<br>        num_dict = &#123;&#125;    #创建一个空字典，字典保存的内容是数字-&gt;对应的下标<br>        for i,num in enumerate(nums):    #在遍历nums列表的同时，获取相应的下标与值存放在i和num中，enumerate(nums)会自动产生下标和值<br>            complement = target - num<br>            if complement in num_dict:<br>                return [num_dict[complement],i]<br>            num_dict[num] = i<br>        return []<br></code></pre></td></tr></table></figure>
 
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
         </div>
 
         

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - 硬件协议与常见IoT协议</title>
-<meta name="description" content="UART协议UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的">
+<meta name="description" content="UART协议UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的异步串行通信协议，该协议可以实现两种设备之间的通信，一般用两根信号线进行传输数据：发送线与接受线，每个设备都有一个RX引脚和一个TX引脚，前者用于接收，后者用于发送。每个设备的RX引">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>69 字</span>
+          <span>879 字</span>
         </div>
         <h1>硬件协议与常见IoT协议</h1>
         
@@ -92,7 +92,12 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <h1 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h1><p>UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的</p>
+          <h1 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h1><p>UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的异步串行通信协议，该协议可以实现两种设备之间的通信，一般用两根信号线进行传输数据：发送线与接受线，每个设备都有一个RX引脚和一个TX引脚，前者用于接收，后者用于发送。每个设备的RX引脚都连接到另一个设备的TX引脚。</p>
+<p>UART协议是一种异步串行通信协议。<strong>串行通信</strong>是指在一条或少量数据通道上逐位依次传输数据，特点是通信线路简单，成本较低，但是传输速度慢；<strong>异步通信</strong>是以一个字符帧为传输单位（在UART种，字符帧通常是指一个字节，即8个数据位），不同字符帧之间可以有不固定的空闲时间，而一个字符帧内各个位持续时间由波特率确定，一般来说，两个UART设备之间通信不需要时钟线，但是必须使用相同的波特率以及起始位、数据位、奇偶校验和停止位配置。</p>
+<p>波特率是单位时间内传送的码元符号的个数（所谓码元，就是通信线路一次能够表达的一个信号状态），简单来说就是传输通信的速率。一般IoT设备的波特率是9600和115200。UART接口一般有四个：VCC、TX、RX、GND。</p>
+<p>UART的传输原理就是发送端将并行数据转换为串行数据，然后以波特率逐位发送到数据总线，接收端根据波特率接收数据，并对数据进行分析，将串行数据转换为并行数据。UART通信时的bit序列为起始位（1bit）、数据位（一般是8bit）、校验位（1bit，可选）和停止位（1bit）。<strong>起始位</strong>：每次通信开始时，发送方发一个0表示传输字符的开始，由于总线空闲时为高电平，因此先发送一个与空闲状态不同的信号。<strong>数据位</strong>：起始位之后是我们要传输的数据，一般是8位，先发送最低位，再发送最高位。<strong>奇偶校验位</strong>：该位添加到数据位后，1位的个数应为偶数或奇数，以验证数据传输正确性。<strong>停止位</strong>：字符数据的结束标记。</p>
+<p>UART的作用主要是：调式接口、日志输出、通信桥梁。</p>
+<h1 id="SPI协议"><a href="#SPI协议" class="headerlink" title="SPI协议"></a>SPI协议</h1><p>SPI（Serial Peripheral Interface，串行外围设备接口）协议是一种同步串行通信协议，通常用于</p>
 
         </div>
 
