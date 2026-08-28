@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>2246 字</span>
+          <span>2957 字</span>
         </div>
         <h1>tools</h1>
         
@@ -97,7 +97,13 @@
 
 <h1 id="010-Editor"><a href="#010-Editor" class="headerlink" title="010 Editor"></a>010 Editor</h1><p>010Editor是一款功能强大的十六进制编辑器</p>
 <h1 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h1><h1 id="Frontline"><a href="#Frontline" class="headerlink" title="Frontline"></a>Frontline</h1><p>Frontline是</p>
-<h1 id="Binwalk"><a href="#Binwalk" class="headerlink" title="Binwalk"></a>Binwalk</h1><h1 id="Ghidra"><a href="#Ghidra" class="headerlink" title="Ghidra"></a>Ghidra</h1>
+<h1 id="Binwalk"><a href="#Binwalk" class="headerlink" title="Binwalk"></a>Binwalk</h1><h1 id="Ghidra"><a href="#Ghidra" class="headerlink" title="Ghidra"></a>Ghidra</h1><h1 id="Ropper"><a href="#Ropper" class="headerlink" title="Ropper"></a>Ropper</h1><h1 id="Patchelf"><a href="#Patchelf" class="headerlink" title="Patchelf"></a>Patchelf</h1><p>在做pwn题的过程中，有时候本地调试的环境会和远程不一样，从而导致本地通了而远程没通的情况，此时可以使用patchelf或者docker解决相应问题。因为patchelf比较简单，在这里先记录该方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">└─$ cd ~/glibc-all-in-one/debs<br>└─$ wget http://launchpadlibrarian.net/293727477/libc6_2.23-0ubuntu5_i386.deb<br>└─$ mkdir ~/glibc-all-in-one/libs/2.23-0ubuntu5_i386<br>└─$ cd ~/glibc-all-in-one/ <br>└─$ ./extract debs/libc6_2.23-0ubuntu5_i386.deb libs/2.23-0ubuntu5_i386<br>└─$ cd ~/glibc-all-in-one/libs/2.23-0ubuntu5_i386<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">strings ./libc-x.xx | grep ubuntu    //查看版本<br>./download xxxx    //在glibc-all-in-one中下载相应版本<br>patchelf --set-interpreter 文件夹名/ld.so ./pwn    //换掉ld<br>patchelf --set-rpath 文件夹名 ./pwn    //换掉path<br></code></pre></td></tr></table></figure>
+
+<p>这样一来就patch好了。当然这种方法不是万能的，glibc-all-in-one有些版本没有，有些难题对环境的要求很高，因此后续会记录docker的方法，只要知道了远程的环境，我们就能使用docker部署一个一样的环境在本地调试。</p>
+
         </div>
 
         
