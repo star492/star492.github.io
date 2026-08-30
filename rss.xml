@@ -54,7 +54,7 @@
     <category term="协议" scheme="https://star492.github.io/categories/%E5%8D%8F%E8%AE%AE/"/>
     <category term="协议" scheme="https://star492.github.io/tags/%E5%8D%8F%E8%AE%AE/"/>
     <content>
-      <![CDATA[<h1 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h1><p>UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的异步串行通信协议，该协议可以实现两种设备之间的通信，一般用两根信号线进行传输数据：发送线与接受线，每个设备都有一个RX引脚和一个TX引脚，前者用于接收，后者用于发送。每个设备的RX引脚都连接到另一个设备的TX引脚。</p><p>UART协议是一种异步串行通信协议。<strong>串行通信</strong>是指在一条或少量数据通道上逐位依次传输数据，特点是通信线路简单，成本较低，但是传输速度慢；<strong>异步通信</strong>是以一个字符帧为传输单位（在UART种，字符帧通常是指一个字节，即8个数据位），不同字符帧之间可以有不固定的空闲时间，而一个字符帧内各个位持续时间由波特率确定，一般来说，两个UART设备之间通信不需要时钟线，但是必须使用相同的波特率以及起始位、数据位、奇偶校验和停止位配置。</p><p>波特率是单位时间内传送的码元符号的个数（所谓码元，就是通信线路一次能够表达的一个信号状态），简单来说就是传输通信的速率。一般IoT设备的波特率是9600和115200。UART接口一般有四个：VCC、TX、RX、GND。</p><p>UART的传输原理就是发送端将并行数据转换为串行数据，然后以波特率逐位发送到数据总线，接收端根据波特率接收数据，并对数据进行分析，将串行数据转换为并行数据。UART通信时的bit序列为起始位（1bit）、数据位（一般是8bit）、校验位（1bit，可选）和停止位（1bit）。<strong>起始位</strong>：每次通信开始时，发送方发一个0表示传输字符的开始，由于总线空闲时为高电平，因此先发送一个与空闲状态不同的信号。<strong>数据位</strong>：起始位之后是我们要传输的数据，一般是8位，先发送最低位，再发送最高位。<strong>奇偶校验位</strong>：该位添加到数据位后，1位的个数应为偶数或奇数，以验证数据传输正确性。<strong>停止位</strong>：字符数据的结束标记。</p><p>UART的作用主要是：调式接口、日志输出、通信桥梁。</p><h1 id="SPI协议"><a href="#SPI协议" class="headerlink" title="SPI协议"></a>SPI协议</h1><p>SPI（Serial Peripheral Interface，串行外围设备接口）协议是一种同步串行通信协议，通常用于</p>]]>
+      <![CDATA[<h1 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h1><p>UART（Universal Asynchronous Receiver-Transmitter，通用异步收发器）协议是常用的异步串行通信协议，该协议可以实现两种设备之间的通信，一般用两根信号线进行传输数据：发送线与接受线，每个设备都有一个RX引脚和一个TX引脚，前者用于接收，后者用于发送。每个设备的RX引脚都连接到另一个设备的TX引脚。</p><p>UART协议是一种异步串行通信协议。<strong>串行通信</strong>是指在一条或少量数据通道上逐位依次传输数据，特点是通信线路简单，成本较低，但是传输速度慢；<strong>异步通信</strong>是以一个字符帧为传输单位（在UART种，字符帧通常是指一个字节，即8个数据位），不同字符帧之间可以有不固定的空闲时间，而一个字符帧内各个位持续时间由波特率确定，一般来说，两个UART设备之间通信不需要时钟线，但是必须使用相同的波特率以及起始位、数据位、奇偶校验和停止位配置。</p><p>波特率是单位时间内传送的码元符号的个数（所谓码元，就是通信线路一次能够表达的一个信号状态），简单来说就是传输通信的速率。一般IoT设备的波特率是9600和115200。UART接口一般有四个：VCC、TX、RX、GND。</p><p>UART的传输原理就是发送端将并行数据转换为串行数据，然后以波特率逐位发送到数据总线，接收端根据波特率接收数据，并对数据进行分析，将串行数据转换为并行数据。UART通信时的bit序列为起始位（1bit）、数据位（一般是8bit）、校验位（1bit，可选）和停止位（1bit）。<strong>起始位</strong>：每次通信开始时，发送方发一个0表示传输字符的开始，由于总线空闲时为高电平，因此先发送一个与空闲状态不同的信号。<strong>数据位</strong>：起始位之后是我们要传输的数据，一般是8位，先发送最低位，再发送最高位。<strong>奇偶校验位</strong>：该位添加到数据位后，1位的个数应为偶数或奇数，以验证数据传输正确性。<strong>停止位</strong>：字符数据的结束标记。</p><p>UART的作用主要是：调式接口、日志输出、通信桥梁。</p><h1 id="SPI协议"><a href="#SPI协议" class="headerlink" title="SPI协议"></a>SPI协议</h1><p>SPI（Serial Peripheral Interface，串行外围设备接口）协议是一种同步串行通信协议，通常用于通信设备之间进行数据交换</p>]]>
     </content>
     <id>https://star492.github.io/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/</id>
     <link href="https://star492.github.io/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/"/>
@@ -237,18 +237,6 @@
     <author>
       <name>haoo</name>
     </author>
-    <category term="渗透" scheme="https://star492.github.io/categories/%E6%B8%97%E9%80%8F/"/>
-    <category term="渗透" scheme="https://star492.github.io/tags/%E6%B8%97%E9%80%8F/"/>
-    <id>https://star492.github.io/Initial-%E7%BB%83%E4%B9%A0/</id>
-    <link href="https://star492.github.io/Initial-%E7%BB%83%E4%B9%A0/"/>
-    <published>2026-08-17T09:48:02.697Z</published>
-    <title>Initial_练习</title>
-    <updated>2026-08-17T09:48:02.697Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
     <category term="IOT" scheme="https://star492.github.io/categories/IOT/"/>
     <category term="IOT" scheme="https://star492.github.io/tags/IOT/"/>
     <id>https://star492.github.io/DVRF-%E7%BB%83%E4%B9%A0/</id>
@@ -290,5 +278,17 @@
     </summary>
     <title>OWASP_IoTGoat_练习</title>
     <updated>2026-08-17T09:14:46.982Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="pwn" scheme="https://star492.github.io/categories/pwn/"/>
+    <category term="pwn" scheme="https://star492.github.io/tags/pwn/"/>
+    <id>https://star492.github.io/how2heap-study/</id>
+    <link href="https://star492.github.io/how2heap-study/"/>
+    <published>2026-08-17T09:09:30.008Z</published>
+    <title>how2heap_study</title>
+    <updated>2026-08-17T09:09:30.008Z</updated>
   </entry>
 </feed>
