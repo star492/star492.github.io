@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - BUUCTF re靶场练习</title>
-<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
+<meta name="description" content="easyre简单的re，直接放入ida中，找到main函数，就可以发现flag。 reverse1在ida中可以得到一开始的字符串{hello_world}，接着看main函数 for ( i = 0; ; ++i ) &amp;#123; v10 = i; if ( i &amp;gt; j_strlen(Str2) ) // &amp;q">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>0 字</span>
+          <span>5112 字</span>
         </div>
         <h1>BUUCTF re靶场练习</h1>
         
@@ -92,7 +92,37 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          
+          <h1 id="easyre"><a href="#easyre" class="headerlink" title="easyre"></a>easyre</h1><p>简单的re，直接放入ida中，找到main函数，就可以发现flag。</p>
+<h1 id="reverse1"><a href="#reverse1" class="headerlink" title="reverse1"></a>reverse1</h1><p>在ida中可以得到一开始的字符串{hello_world}，接着看main函数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">for ( i = 0; ; ++i )<br>  &#123;<br>    v10 = i;<br>    if ( i &gt; j_strlen(Str2) )                   // &quot;&#123;hello_world&#125;&quot;<br>      break;<br>    if ( Str2[i] == &#x27;o&#x27; )                       // &quot;&#123;hello_world&#125;&quot;<br>      Str2[i] = &#x27;0&#x27;;                            // &quot;&#123;hello_world&#125;&quot;<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p>将o变为0就可以得到最后的flag了</p>
+<h1 id="reverse2"><a href="#reverse2" class="headerlink" title="reverse2"></a>reverse2</h1><p>和reverse1一个道理，在此就不再赘述了。</p>
+<h1 id="内涵的软件"><a href="#内涵的软件" class="headerlink" title="内涵的软件"></a>内涵的软件</h1><p>也是直接ida得flag</p>
+<h1 id="新年快乐"><a href="#新年快乐" class="headerlink" title="新年快乐"></a>新年快乐</h1><p>这道题有UPX，使用工具将其脱壳就行，最后将脱壳后的文件放入ida就可以得到flag了。</p>
+<h1 id="xor"><a href="#xor" class="headerlink" title="xor"></a>xor</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">for ( n33 = 1; n33 &lt; 33; ++n33 )<br>    __b[n33] ^= __b[n33 - 1];<br>  if ( !strncmp(<br>          __b,<br>          global,                               // &quot;f\nk\fw&amp;O.@\x11x\rZ;U\x11p\x19F\x1Fv\&quot;M#D\x0Eg\x06h\x0FG2O&quot;<br>          0x21u) )<br>    printf(&quot;Success&quot;);<br></code></pre></td></tr></table></figure>
+
+<p>对global的值进行异或，一样从第二位开始与前一个值进行异或即可获得flag。python脚本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">list_xor = [102,10,107,12,119,38,79,46,64,17,120,13,90,59,85,17,112,25,70,31,118,34,77,35,68,14,103,6,104,15,71,50,79]<br>flag = &quot;f&quot;<br><br>for i in range(1,len(list_xor)):<br>    flag += chr(list_xor[i] ^ list_xor[i-1])<br>print(flag)<br></code></pre></td></tr></table></figure>
+
+<h1 id="reverse3"><a href="#reverse3" class="headerlink" title="reverse3"></a>reverse3</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">sub_41132F(&quot;please enter the flag:&quot;, v7);<br>  sub_411375(&quot;%20s&quot;, (char)Str);<br>  v3 = j_strlen(Str);<br>  Source = (const char *)sub_4110BE(Str, v3, v14);<br>  strncpy(Destination, Source, 0x28u);<br>  v11 = j_strlen(Destination);<br>  for ( i = 0; i &lt; v11; ++i )<br>    Destination[i] += i;<br>  MaxCount = j_strlen(Destination);<br>  if ( !strncmp(Destination, Str2, MaxCount) )  // &quot;e3nifIH9b_C@n@dH&quot;<br>    sub_41132F(&quot;rigth flag!\n&quot;, v8);<br>  else<br>    sub_41132F(&quot;wrong flag!\n&quot;, v8);<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>该题首先需要我们输入一段字符串，接着进行编码，将编码后的字符串赋值给Destination，再计算其长度，并进行一些修改后与”e3nifIH9b_C@n@dH”字符串进行对比。</p>
+<p>现在就需要知道进行了什么类型的编码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">if ( !p_Str || !a2 )<br>    return 0;<br>  v9 = a2 / 3;<br>  if ( (int)(a2 / 3) % 3 )<br>    ++v9;<br>  v10 = 4 * v9;<br>  *(_DWORD *)a3 = v10;<br>  v12 = malloc(v10 + 1);<br>  if ( !v12 )<br>    return 0;<br>  j_memset(v12, 0, v10 + 1);<br>  p_Str_1 = p_Str;<br>  v11 = a2;<br>  v4 = 0;<br>  while ( v11 &gt; 0 )<br>  &#123;<br>    algn_41A145[1] = 0;<br>    algn_41A145[0] = 0;<br>    byte_41A144[0] = 0;<br>    for ( n3 = 0; n3 &lt; 3 &amp;&amp; v11 &gt;= 1; ++n3 )<br>    &#123;<br>      byte_41A144[n3] = *p_Str_1;<br>      --v11;<br>      ++p_Str_1;<br>    &#125;<br>    if ( !n3 )<br>      break;<br>    switch ( n3 )<br>    &#123;<br>      case 1:<br>        *((_BYTE *)v12 + v4) = aAbcdefghijklmn[(int)(unsigned __int8)byte_41A144[0] &gt;&gt; 2];<br>        v5 = v4 + 1;<br>        *((_BYTE *)v12 + v5) = aAbcdefghijklmn[((algn_41A145[0] &amp; 0xF0) &gt;&gt; 4) | (16 * (byte_41A144[0] &amp; 3))];<br>        *((_BYTE *)v12 + ++v5) = aAbcdefghijklmn[64];<br>        *((_BYTE *)v12 + ++v5) = aAbcdefghijklmn[64];<br>        v4 = v5 + 1;<br>        break;<br>      case 2:<br>        *((_BYTE *)v12 + v4) = aAbcdefghijklmn[(int)(unsigned __int8)byte_41A144[0] &gt;&gt; 2];<br>        v6 = v4 + 1;<br>        *((_BYTE *)v12 + v6) = aAbcdefghijklmn[((algn_41A145[0] &amp; 0xF0) &gt;&gt; 4) | (16 * (byte_41A144[0] &amp; 3))];<br>        *((_BYTE *)v12 + ++v6) = aAbcdefghijklmn[((algn_41A145[1] &amp; 0xC0) &gt;&gt; 6) | (4 * (algn_41A145[0] &amp; 0xF))];<br>        *((_BYTE *)v12 + ++v6) = aAbcdefghijklmn[64];<br>        v4 = v6 + 1;<br>        break;<br>      case 3:<br>        *((_BYTE *)v12 + v4) = aAbcdefghijklmn[(int)(unsigned __int8)byte_41A144[0] &gt;&gt; 2];<br>        v7 = v4 + 1;<br>        *((_BYTE *)v12 + v7) = aAbcdefghijklmn[((algn_41A145[0] &amp; 0xF0) &gt;&gt; 4) | (16 * (byte_41A144[0] &amp; 3))];<br>        *((_BYTE *)v12 + ++v7) = aAbcdefghijklmn[((algn_41A145[1] &amp; 0xC0) &gt;&gt; 6) | (4 * (algn_41A145[0] &amp; 0xF))];<br>        *((_BYTE *)v12 + ++v7) = aAbcdefghijklmn[algn_41A145[1] &amp; 0x3F];<br>        v4 = v7 + 1;<br>        break;<br>    &#125;<br>  &#125;<br>  *((_BYTE *)v12 + v4) = 0;<br>  return v12;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>大致就是base64的编码。过程知道了，那么我们只需要将”e3nifIH9b_C@n@dH”这段字符串逆向还原再base64解码就能获得flag了，python脚本如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import base64<br>string = &quot;e3nifIH9b_C@n@dH&quot;<br>flag = &quot;&quot;<br>for i in range(0,len(string)):<br>    flag += chr(ord(string[i]) - i)<br>print(base64.b64decode(flag).decode())<br></code></pre></td></tr></table></figure>
+
+<h1 id="helloword"><a href="#helloword" class="headerlink" title="helloword"></a>helloword</h1><p>一道安卓逆向，使用ApkIDE进行逆向，找到main函数，再搜索flag字符串就可以获得本题的flag了。</p>
+<h1 id="不一样的flag"><a href="#不一样的flag" class="headerlink" title="不一样的flag"></a>不一样的flag</h1><p>没有壳，直接丢进ida中进行分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __cdecl __noreturn main(int argc, const char **argv, const char **envp)<br>&#123;<br>  char _11110100001010000101111__[29]; // [esp+17h] [ebp-35h] BYREF<br>  int v4; // [esp+34h] [ebp-18h]<br>  int n4; // [esp+38h] [ebp-14h] BYREF<br>  int i; // [esp+3Ch] [ebp-10h]<br>  _BYTE v7[12]; // [esp+40h] [ebp-Ch] BYREF<br><br>  __main();<br>  _11110100001010000101111__[26] = 0;<br>  *(_WORD *)&amp;_11110100001010000101111__[27] = 0;<br>  v4 = 0;<br>  strcpy(_11110100001010000101111__, &quot;*11110100001010000101111#&quot;);<br>  while ( 1 )<br>  &#123;<br>    puts(&quot;you can choose one action to execute&quot;);<br>    puts(&quot;1 up&quot;);<br>    puts(&quot;2 down&quot;);<br>    puts(&quot;3 left&quot;);<br>    printf(&quot;4 right\n:&quot;);<br>    scanf(&quot;%d&quot;, &amp;n4);<br>    if ( n4 == 2 )<br>    &#123;<br>      ++*(_DWORD *)&amp;_11110100001010000101111__[25];<br>    &#125;<br>    else if ( n4 &gt; 2 )<br>    &#123;<br>      if ( n4 == 3 )<br>      &#123;<br>        --v4;<br>      &#125;<br>      else<br>      &#123;<br>        if ( n4 != 4 )<br>LABEL_13:<br>          exit(1);<br>        ++v4;<br>      &#125;<br>    &#125;<br>    else<br>    &#123;<br>      if ( n4 != 1 )<br>        goto LABEL_13;<br>      --*(_DWORD *)&amp;_11110100001010000101111__[25];<br>    &#125;<br>    for ( i = 0; i &lt;= 1; ++i )<br>    &#123;<br>      if ( *(_DWORD *)&amp;_11110100001010000101111__[4 * i + 25] &gt; 4u )<br>        exit(1);<br>    &#125;<br>    if ( v7[5 * *(_DWORD *)&amp;_11110100001010000101111__[25] - 41 + v4] == &#x27;1&#x27; )<br>      exit(1);<br>    if ( v7[5 * *(_DWORD *)&amp;_11110100001010000101111__[25] - 41 + v4] == &#x27;#&#x27; )<br>    &#123;<br>      puts(&quot;\nok, the order you enter is the flag!&quot;);<br>      exit(0);<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>大致可以知道这是一个走迷宫的题目，如果走到了#，这个走到#的路线的选择就是flag，这里猜测的迷宫地图如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">*1111<br>01000<br>01010<br>00010<br>1111#<br></code></pre></td></tr></table></figure>
+
+<p>由此就可以知道flag就是flag{222441144222}</p>
+
         </div>
 
         
@@ -125,7 +155,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

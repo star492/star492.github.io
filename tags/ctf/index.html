@@ -75,12 +75,19 @@
     <section class="page-hero">
       <p class="section-kicker">tag</p>
       <h1>ctf</h1>
-      <p>该标签下共 4 篇文章。</p>
+      <p>该标签下共 10 篇文章。</p>
     </section>
 
     <div class="layout-grid">
       <section class="content-column">
         <div class="post-list">
+          
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/">第八届玄武杯pwn方向_are_you_lucky_wp</a></h3>
+                <p>Open the post to read the full writeup.</p>
+              </div>
+            </article>
           
             <article class="post-card">
               <div class="post-card__body">
@@ -110,6 +117,41 @@
               </div>
             </article>
           
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/MoeCTF-2025/">MoeCTF_2025</a></h3>
+                <p>PWN前面的几道题是基础的题目，就不再赘述了 boom&amp;#x2F;boom_revengefrom pwn import*io=remote(&amp;#x27;61.139.2.1&amp;#x27;,56079)#io=process(&amp;#x27;./boom&amp;#x27;)recv_data=os.popen(&amp;#x27;./random&amp;#x27;).read()list=recv_da...</p>
+              </div>
+            </article>
+          
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/XYCTF2024/">XYCTF2024</a></h3>
+                <p>hello_world(签到) 开启了pie保护，但是可以泄漏地址，而且存在栈溢出，因此可以先泄漏libc，再打ret2libc。 from pwn import*libc=ELF(&amp;#x27;./hello_worldlibc.so.6&amp;#x27;)elf=ELF(&amp;#x27;./hello_world&amp;#x27;)io=remote(&amp;#x27;challenge.imxb...</p>
+              </div>
+            </article>
+          
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/nss_pwn%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">nss刷题记录</a></h3>
+                <p>singout一道nc连接的题目，主要是禁用了一些获取flag的指令。借鉴了一些wp，有以下方法： tac$&amp;#123;IFS&amp;#125;f*tac$IFS$9f*nl$&amp;#123;IFS&amp;#125;f*nl$IFS$9f*tail ./*tail$IFS$9./f* 感觉挺奇特的 [NISACTF 2022]ezheap 这里申请了两个堆块s与command，存在gets函数...</p>
+              </div>
+            </article>
+          
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/GeekChallenge2024/">GeekChallenge2024</a></h3>
+                <p>ez_shellcode简单的shellcode from pwn import*context.arch=&amp;#x27;amd64&amp;#x27;io=remote(&amp;#x27;nc1.ctfplus.cn&amp;#x27;,39373)shellcode_addr=0x0401256shellcode=asm(shellcraft.sh())io.send(shellcode)payl...</p>
+              </div>
+            </article>
+          
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/">XYNU2024信安杯</a></h3>
+                <p>全是简单题目，直接上exp NC直接nc连接，然后ls+cat flag即可。 shellcodefrom pwn import*context.arch=&amp;#x27;amd64&amp;#x27;io=remote(&amp;#x27;gz.imxbt.cn&amp;#x27;,20029)shellcode=asm(shellcraft.sh())io.sendline(shellcode)io....</p>
+              </div>
+            </article>
+          
         </div>
       </section>
 
@@ -130,16 +172,8 @@
         <h2 class="side-panel__title">最近更新</h2>
         <div class="compact-list">
           
-            <a href="/Fuzz-study/">
-              <span>Fuzz_study</span>
-            </a>
-          
-            <a href="/CNVD-2013-11625%E5%A4%8D%E7%8E%B0/">
-              <span>CNVD-2013-11625复现</span>
-            </a>
-          
-            <a href="/CVE-2018-5767%E5%A4%8D%E7%8E%B0/">
-              <span>CVE-2018-5767复现</span>
+            <a href="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/">
+              <span>第八届玄武杯pwn方向_are_you_lucky_wp</span>
             </a>
           
             <a href="/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/">
@@ -148,6 +182,14 @@
           
             <a href="/QEMU-study/">
               <span>QEMU_study</span>
+            </a>
+          
+            <a href="/crackmes-one-%E7%BB%83%E4%B9%A0/">
+              <span>crackmes_one_练习</span>
+            </a>
+          
+            <a href="/BUUCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+              <span>BUUCTF re靶场练习</span>
             </a>
           
         </div>
@@ -159,34 +201,34 @@
         <h2 class="side-panel__title">分类</h2>
         <div class="compact-list compact-list--counts">
           
-            <a href="/categories/re/">
-              <span>re</span>
+            <a href="/categories/pwn/">
+              <span>pwn</span>
               <b>7</b>
             </a>
           
-            <a href="/categories/pwn/">
-              <span>pwn</span>
+            <a href="/categories/%E6%AF%94%E8%B5%9B/">
+              <span>比赛</span>
               <b>6</b>
             </a>
           
-            <a href="/categories/IOT/">
-              <span>IOT</span>
+            <a href="/categories/re/">
+              <span>re</span>
               <b>5</b>
             </a>
           
             <a href="/categories/ctf/">
               <span>ctf</span>
-              <b>4</b>
+              <b>5</b>
             </a>
           
-            <a href="/categories/%E7%AE%97%E6%B3%95/">
-              <span>算法</span>
-              <b>3</b>
+            <a href="/categories/docker/">
+              <span>docker</span>
+              <b>1</b>
             </a>
           
-            <a href="/categories/agent/">
-              <span>agent</span>
-              <b>2</b>
+            <a href="/categories/IoT/">
+              <span>IoT</span>
+              <b>1</b>
             </a>
           
         </div>
@@ -198,33 +240,27 @@
         <h2 class="side-panel__title">标签</h2>
         <div class="tag-list">
           
-            <a class="tag-chip" href="/tags/re/">re<small>7</small></a>
+            <a class="tag-chip" href="/tags/ctf/">ctf<small>12</small></a>
           
             <a class="tag-chip" href="/tags/pwn/">pwn<small>6</small></a>
           
-            <a class="tag-chip" href="/tags/IOT/">IOT<small>5</small></a>
-          
-            <a class="tag-chip" href="/tags/ctf/">ctf<small>4</small></a>
-          
-            <a class="tag-chip" href="/tags/%E7%AE%97%E6%B3%95/">算法<small>3</small></a>
-          
-            <a class="tag-chip" href="/tags/agent/">agent<small>2</small></a>
-          
-            <a class="tag-chip" href="/tags/CNVD/">CNVD<small>1</small></a>
-          
-            <a class="tag-chip" href="/tags/CVE/">CVE<small>1</small></a>
+            <a class="tag-chip" href="/tags/re/">re<small>5</small></a>
           
             <a class="tag-chip" href="/tags/docker/">docker<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/fuzz/">fuzz<small>1</small></a>
+            <a class="tag-chip" href="/tags/IoT/">IoT<small>1</small></a>
+          
+            <a class="tag-chip" href="/tags/IOT/">IOT<small>1</small></a>
           
             <a class="tag-chip" href="/tags/qemu/">qemu<small>1</small></a>
           
+            <a class="tag-chip" href="/tags/%E5%87%BD%E6%95%B0/">函数<small>1</small></a>
+          
             <a class="tag-chip" href="/tags/%E5%B7%A5%E5%85%B7/">工具<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/%E5%8D%8F%E8%AE%AE/">协议<small>1</small></a>
+            <a class="tag-chip" href="/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">系统调用号<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/%E8%BD%A6%E8%81%94%E7%BD%91/">车联网<small>1</small></a>
+            <a class="tag-chip" href="/tags/%E5%8D%8F%E8%AE%AE/">协议<small>1</small></a>
           
         </div>
       </section>
@@ -261,7 +297,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

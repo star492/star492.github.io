@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>2957 字</span>
+          <span>3354 字</span>
         </div>
         <h1>tools</h1>
         
@@ -103,6 +103,17 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">strings ./libc-x.xx | grep ubuntu    //查看版本<br>./download xxxx    //在glibc-all-in-one中下载相应版本<br>patchelf --set-interpreter 文件夹名/ld.so ./pwn    //换掉ld<br>patchelf --set-rpath 文件夹名 ./pwn    //换掉path<br></code></pre></td></tr></table></figure>
 
 <p>这样一来就patch好了。当然这种方法不是万能的，glibc-all-in-one有些版本没有，有些难题对环境的要求很高，因此后续会记录docker的方法，只要知道了远程的环境，我们就能使用docker部署一个一样的环境在本地调试。</p>
+<h1 id="objdump"><a href="#objdump" class="headerlink" title="objdump"></a>objdump</h1><p>一个常用的反汇编工具，使用objdump -d就可以反汇编可执行部分，加上-M intel可以变为Intel语法。</p>
+<h1 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h1><p>系统调用追踪器</p>
+<h1 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h1><p>一个调试器</p>
+<p>starti名从程序的第一条指令开始运行</p>
+<p>disassemble命令帮助进行反汇编</p>
+<p>stepi命令，也可以缩写成si，执行单挑指令</p>
+<p>print命令用于显示一个表达式的值，在gdb中寄存器名前会加$</p>
+<p>set命令用于给寄存器赋新值</p>
+<p>x（examine）命令可以查看内存内容，默认以十六进制显示数值，可以通过加&#x2F;来改变显示格式，&#x2F;a告诉x将值显示为内存地址，&#x2F;s告诉x以字符串形式显示值</p>
+<p>使用int3指令（一条汇编指令）表示程序希望被调用，如果如果执行int3时有调试器附加，它会停止程序，这叫程序断点。</p>
+<p>run命令（缩写r）会启动程序并让它自由执行，可以在run后面输入任何内容都会当作参数</p>
 
         </div>
 
@@ -125,9 +136,9 @@
           </a>
         
         
-          <a href="/Agent-study-1/">
+          <a href="/PolarCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
             <span>下一篇</span>
-            <strong>Agent_study_1</strong>
+            <strong>PolarCTF pwn靶场</strong>
           </a>
         
       </nav>
@@ -136,7 +147,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - Docker_study</title>
-<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
+<meta name="description" content="这篇文章主要参考了Docker 教程 | 菜鸟教程。因为在漏洞复现或者ctf比赛的动态靶机或赛题复现中，环境是非常重要的，而docker可以很好的实现这些需求。 介绍一些核心概念： 容器（container）：轻量化的运行实例，包含应用代码、运行时环境和依赖库。基于镜像创建，与其他容器隔离，共享主机操作系统内核，比虚拟">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>0 字</span>
+          <span>737 字</span>
         </div>
         <h1>Docker_study</h1>
         
@@ -92,7 +92,23 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          
+          <p>这篇文章主要参考了<a target="_blank" rel="noopener" href="https://www.runoob.com/docker/docker-tutorial.html">Docker 教程 | 菜鸟教程</a>。因为在漏洞复现或者ctf比赛的动态靶机或赛题复现中，环境是非常重要的，而docker可以很好的实现这些需求。</p>
+<p>介绍一些核心概念：</p>
+<ul>
+<li>容器（container）：轻量化的运行实例，包含应用代码、运行时环境和依赖库。基于镜像创建，与其他容器隔离，共享主机操作系统内核，比虚拟机更高效。</li>
+<li>镜像（image）：只读模板，定义了容器的运行环境（如操作系统、软件配置等）。通过分层存储优化空间和构建速度。</li>
+<li>Dockerfile：文本文件，描述如何自动构建镜像（例如指定基础镜像、安装软件、复制文件等）。</li>
+<li>仓库（Registry）：存储和分发镜像的平台。</li>
+</ul>
+<p>再介绍一些基础命令</p>
+<ul>
+<li>docker pull 镜像名：拉取镜像。</li>
+<li>docker run -d -p 宿主机端口:容器端口 使用的镜像名：docker run表示的是创建并启动一个程序；-d表示的是让容器在后台运行，命令执行不会占着终端；-p端口映射。</li>
+<li>docker ps：查看运行中容器</li>
+<li>docker build -t my-app：docker build表示的是构建Docker镜像，；t是–tag的简写，表示给构建出的镜像打标签，名字叫做my-app，没写标签时，默认是latest，完整是my-app:latest；.指定构建上下文为当前目录。</li>
+<li>docker exec -it &lt;容器id&gt; &#x2F;bin&#x2F;sh：表示的是进入一个正在运行的容器内部，并打开一个交互式Bash终端；docker exec表示的是在一个正在运行的容器里执行命令；-i保持标准输入打开，能输入内容，-t分配一个伪终端，让界面像正常终端一样，二者通常一起使用表示交互式终端。</li>
+</ul>
+
         </div>
 
         
@@ -108,9 +124,9 @@
 
       <nav class="article-nav" aria-label="文章导航">
         
-          <a href="/DVRF-%E7%BB%83%E4%B9%A0/">
+          <a href="/CTFshow%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
             <span>上一篇</span>
-            <strong>DVRF_练习</strong>
+            <strong>CTFshow re靶场练习</strong>
           </a>
         
         
@@ -125,7 +141,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>35 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - 函数_C</title>
+<meta name="description" content="strtol()格式：*long int strol(const char *str,char endptr,int base)**，把*参数str指向的字符串根据给定的base转换为一个长整数，base必须介于2和36之间或为0。返回值为被转换的长整型整数值**。 strstr()格式：*char *strstr(c">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>1681 字</span>
+        </div>
+        <h1>函数_C</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/%E5%87%BD%E6%95%B0/">函数</a>
+            
+            
+              <a class="tag-chip" href="/tags/%E5%87%BD%E6%95%B0/">函数</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="strtol"><a href="#strtol" class="headerlink" title="strtol()"></a>strtol()</h1><p>格式：<em>*long int strol(const char *str,char endptr,int base)**，把</em>*参数str<strong>指向的字符串根据给定的</strong>base<strong>转换为一个长整数，base必须介于2和36之间或为0。<strong>返回值</strong>为被转换的</strong>长整型整数值**。</p>
+<h1 id="strstr"><a href="#strstr" class="headerlink" title="strstr()"></a>strstr()</h1><p>格式：<em>*char *strstr(const char *haystack,const char *needle)<strong>，在字符串haystack中查找第一次出现字符串needle的位置，不包含终止符\0。<strong>返回值</strong>为指向haystack中</strong>第一次出现</em><em>needle的位置的指针，若没找到则返回*<em>NULL</em></em>。</p>
+<h1 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy()"></a>memcpy()</h1><p>格式：<em>*void *memcpy(void *str1,const void *str2,size_t n)<strong>，从存储区</strong>str2</em><em>复制<strong>n</strong>个字节到存储区*<em>str1</em></em>。<strong>返回</strong>一个指向目标存储区<strong>str1的指针</strong>。</p>
+<h1 id="strcspn"><a href="#strcspn" class="headerlink" title="strcspn()"></a>strcspn()</h1><p>格式：<strong>size_t strcspn(const char *str1,const char *str2)**，检索字符串</strong>str1开头<strong>连续有几个字符都</strong>不含<strong>字符串</strong>str2中的字符**。<strong>返回</strong>str1开头连续都<strong>不含</strong>字符串str2中<strong>字符的字符数</strong>。</p>
+<h1 id="openat"><a href="#openat" class="headerlink" title="openat()"></a>openat()</h1><p>格式：<em>*ssize_t openat(int dfd，const char *filename，int flag，umode_t mode)**，函数第一个参数</em><em>dfd<strong>指的是当</strong>path<strong>为</strong>相对路径<strong>时，该路径在文件系统中的开始地址（即</strong>打开目录获取的文件描述符*</em>）但可以指定为AT_FDCWD(-100)，指定路径为当前路径。其余三个参数与open相同。</p>
+<h1 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile()"></a>sendfile()</h1><p>格式：<em>*ssize_t sendfile(int out_fd，int in_fd，off_t *offset，size_t count)**，允许将</em><em>文件数据<strong>从</strong>一个文件描述符<strong>直接发送到</strong>另一个文件描述符*</em>，而且不需要经过缓冲区拷贝，比read+write还要简单。</p>
+<h1 id="calloc"><a href="#calloc" class="headerlink" title="calloc()"></a>calloc()</h1><p>格式：void *calloc(size_t nitems,size_t size)，分配所需内存空间，并返回一个指向它的指针，与malloc不同的是，calloc会设置分配的内存为零，即calloc函数会将分配的内存全部初始化为零。nitems为要分配元素个数，size为元素大小。</p>
+<h1 id="strcat"><a href="#strcat" class="headerlink" title="strcat()"></a>strcat()</h1><p>格式：char *strcat(char *dest,const char *src)，把src所指向的字符串追加到dest所指向的字符串的结尾，函数返回一个指向最终的目标字符串dest的指针。</p>
+<h1 id="fread"><a href="#fread" class="headerlink" title="fread()"></a>fread()</h1><p>格式：size_t fread(void *ptr,size_t size,size_t nmemb,FILE *stream)，从stream中读取数据到ptr中。ptr为指向带有最小尺寸nmemb字节的内存块指针、size为每个元素的大小、nmemb为元素个数、stream为输入流</p>
+<h1 id="strchr"><a href="#strchr" class="headerlink" title="strchr()"></a>strchr()</h1><p>格式：char *strchr(const char *str,char c)，在参数str所指向的字符串中搜索第一次出现字符c的位置。</p>
+<h1 id="pthread-create"><a href="#pthread-create" class="headerlink" title="pthread_create"></a>pthread_create</h1><p>格式：int pthread_create(pthread_t *thread,const pthread_attr_t *attr,void *( *start_routine)(void *),void <em>arg)，thread为线程标识符，attr为线程属性，</em>( *start_routine)(void *)线程启动函数，arg为传递给启动函数的参数，如果创建成功，则返回0，反之返回错误码如：EAGAIN，EINVAL，EPERM。</p>
+<h1 id="pthread-join"><a href="#pthread-join" class="headerlink" title="pthread_join"></a>pthread_join</h1><p>格式：int pthread_join(pthread_t thread,void **retval)，thread为要等待的线程，retval为接收到的返回值，该函数允许一个线程等待另一个线程的结束。</p>
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/XYCTF2024/">
+            <span>上一篇</span>
+            <strong>XYCTF2024</strong>
+          </a>
+        
+        
+          <a href="/nss_pwn%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+            <span>下一篇</span>
+            <strong>nss刷题记录</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

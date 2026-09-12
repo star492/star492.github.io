@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - PolarIoTs_2026</title>
+<meta name="description" content="提取flag给了一个.rar压缩包，经过解压缩后得到了encrypted_payload.bin、firmware.bin和一个xin.txt文件，在xin.txt文件里面的内容如下： flag存在于firmware.bin中，并且通过异或加密（密钥0x9A），请提取flag&amp;#123;&amp;#125;。payload和f">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>11807 字</span>
+        </div>
+        <h1>PolarIoTs_2026</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/IoT/">IoT</a>
+            
+            
+              <a class="tag-chip" href="/tags/IoT/">IoT</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="提取flag"><a href="#提取flag" class="headerlink" title="提取flag"></a>提取flag</h1><p>给了一个.rar压缩包，经过解压缩后得到了encrypted_payload.bin、firmware.bin和一个xin.txt文件，在xin.txt文件里面的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">flag存在于firmware.bin中，并且通过异或加密（密钥0x9A），请提取flag&#123;&#125;。<br>payload和flag形影不离。<br></code></pre></td></tr></table></figure>
+
+<p>通过这个知道flag是和payload紧密相邻的，一个在前，一个在后。这道题的话，flag是在payload之后的，给了encrypted_payload.bin，思路就是找到payload在firmware.bin文件中的偏移以及payload的字符数量，跳过payload，获取到加密后的flag，最后使用脚本解密flag，得到最后的flag。</p>
+<p>首先使用下述指令找到偏移</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">└─$ grep -obUaFf encrypted_payload.bin firmware.bin       <br>1000:�������������������������颭����������<br>grep：文本搜索工具<br>-F：固定字符串匹配，关闭正则表达式，按原始字节逐个对比<br>-f xxx.bin：从.bin文件中读取一整块二进制数据作为搜索模式<br>-a：把二进制文件当作文本文件处理<br>-U：不处理Windows风格的回车换行，保持原始二进制字节流<br>-b：输出匹配位置相对于文件开头的字节偏移量（十进制）<br>-o：只输出实际匹配到的部分，而不是整行<br></code></pre></td></tr></table></figure>
+
+<p>接着使用下述指令找到encrypted_payload.bin的字符数量</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">└─$ ll encrypted_payload.bin                                        <br>-rwxrw-rw- 1 kali kali 38 Dec 22 07:56 encrypted_payload.bin<br>ll：相当于执行了ls -l，列出文件的详细信息<br></code></pre></td></tr></table></figure>
+
+<p>然后使用下述指令从firmware.bin文件中提取出加密后的flag</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">dd if=firmware.bin of=encrypted_flag.bin bs=1 skip=1038 count=43<br>dd：Linux下底层数据拷贝/转换工具，直接操作字节流<br>if：input file<br>of：output file<br>bs：block size，操作字节大小<br>skip：跳过源文件前多少字节<br>count：复制block的多少<br></code></pre></td></tr></table></figure>
+
+<p>得到了encrypted_flag.bin这个二进制文件后，再利用解密脚本对其进行解密即可获得最后的flag</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">key = 0x9A<br>with open(&quot;encrypted_flag.bin&quot;,&quot;rb&quot;) as f:<br>    flag = f.read()<br>flag = bytes(b ^ key for b in flag)<br>print(&quot;flag is&quot;,flag.decode())<br></code></pre></td></tr></table></figure>
+
+<h1 id="私钥解密"><a href="#私钥解密" class="headerlink" title="私钥解密"></a>私钥解密</h1><p>通过解压得到firmware.bin文件和一个xin.txt文件，xin.txt文件内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">有个被加密的bin文件，其中含有flag&#123;&#125;,你能解出来吗？<br></code></pre></td></tr></table></figure>
+
+<p>接着将firmware.bin文件放入kali中，使用binwalk命令去分离一下，看一下里面具体有什么信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">┌──(kali㉿kali)-[~/Desktop]<br>└─$ tree firmware_extracted  <br>firmware_extracted<br>├── 0.squashfs<br>└── squashfs-root<br>    ├── bin<br>    │   ├── bad_enc_10.sh<br>    │   ├── bad_enc_1.sh<br>    │   ├── bad_enc_2.sh<br>    │   ├── bad_enc_3.sh<br>    │   ├── bad_enc_4.sh<br>    │   ├── bad_enc_5.sh<br>    │   ├── bad_enc_6.sh<br>    │   ├── bad_enc_7.sh<br>    │   ├── bad_enc_8.sh<br>    │   └── bad_enc_9.sh<br>    ├── etc<br>    │   └── config<br>    ├── flag.enc<br>    └── usr<br>        ├── clue<br>        │   └── clue.txt<br>        └── secret<br>            └── private_key_encrypted.pem<br><br>7 directories, 15 files<br></code></pre></td></tr></table></figure>
+
+<p>里面有10个.sh文件、一个config文件、一个flag.enc文件（被加密后的flag）、一个clue.txt文件以及private_key_encrypted.pem。.sh文件里面都是一些错误的解密&#x2F;加密脚本，没有什么用，config文件里面的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">密码为6位。<br></code></pre></td></tr></table></figure>
+
+<p>clue.txt文件的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">私钥密码藏在25年中秋节（6），为弱口令密码。<br></code></pre></td></tr></table></figure>
+
+<p>知道是弱口令密码，确实前面那段话不知道有什么作用，难道也是告诉我们密码是6位？因为是弱口令密码，就猜测是123456吧。关键点在于.enc和.pem这两个文件，接下来解释一下这两个文件是什么东西</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.pem文件是一种常见的文本格式文件，主要用于存储加密、证书、密钥这类与安全相关的信息。简单来说就是一个用Base64编码的容器装一些东西。<br>.enc文件是一个经过加密处理的文件，通常为不可读的二进制密文。<br></code></pre></td></tr></table></figure>
+
+<p>对于上述两种文件的处理，可以使用openssl指令对其进行操作。</p>
+<p>首先得先得到.pem文件里面的东西，想要得到.pem里面的东西得输入密码，猜测弱口令密码为123456，使用下面这个指令进行操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">openssl rsa -in private_key_encrypted.pem -out private_key_decrypted.pem<br>openssl rsa：调用openssl的rsa密钥管理功能，专门处理rsa私钥<br>-in xxx.pem：输入文件，这是有密码保护的私钥<br>-out xxx.pem：输出文件，解密后生成的无密码明文私钥<br>Enter pass phrase for private_key_encrypted.pem:123456<br>writing RSA key<br>至于为什么是rsa呢？因为在点开private_key_encrypted.pem输入密码后出现：<br>private_key_encrypted.pem<br>Private RSA Key<br>Strength: 2048 bits<br>因此知道这是rsa<br></code></pre></td></tr></table></figure>
+
+<p>得到这个私钥文件后就可以拿这个去解密那个flag.enc文件了，指令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">openssl pkeyutl -decrypt -in flag.enc -out flag.txt -inkey ~/Desktop/firmware_extracted/squashfs-root/usr/secret/private_key_decrypted.pem<br>openssl pkeyutl：调用openssl的通用非对称密钥工具<br>-decrypt：指定操作为解密<br>-in xxx.enc：输入文件，加密后的数据<br>-out xxx.txt：输出文件，解密成功后的明文结果<br>-inkey xxx.pem：指定私钥文件<br></code></pre></td></tr></table></figure>
+
+<p>最后打开flag.txt文件得到flag。</p>
+<h1 id="easy壳"><a href="#easy壳" class="headerlink" title="easy壳"></a>easy壳</h1><p>给了一个.apk文件，放入jadx里面进行查看发现是加了壳的，再根据题目名称，就可以猜出这道题就是让我们进行去壳操作，从而获得flag。这道题是用雷电模拟器作为安卓模拟器，这里需要下载frida工具，具体安装流程就自行查找。</p>
+<p>准备工作做好后，首先先将这个文件拖进模拟器中进行查看</p>
+<p><img src="/images/PolarIoTs_easy%E5%A3%B3_1.png"></p>
+<p>让我们输入密码，怎么输入都不对，因此就先放入jadx里面查看，发现是加了壳的</p>
+<p><img src="/images/PolarIoTs_easy%E5%A3%B3_2.png"></p>
+<p>但是作为新手，需要知道，怎么看出加了壳的，下面进行简要的讲解一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">首先是如果这个.apk文件没有加壳的话，我们应该能看到里面真实的业务逻辑出现在反编译后的MainActivity等类中，而现在却只能看到几行代码，所以这一定是不对的，其次是在正常的安卓app里面，setContentView()传入的应该是一个布局文件ID或者View对象，而这里传入的是一个布尔值资源ID(R.bool开头的)，因此可以判断出这道题是加了壳的<br></code></pre></td></tr></table></figure>
+
+<p>既然已经知道是加了壳的，那么接下来就是要进行脱壳操作，这里使用的是frida工具。首先查找设备</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">PS D:\国内赛\PolarIoTs_2026&gt; adb devices<br>List of devices attached<br>emulator-5554   device<br></code></pre></td></tr></table></figure>
+
+<p>接着使用命令控制模拟器，并进入root模式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">PS D:\国内赛\PolarIoTs_2026&gt; adb -s emulator-5554 shell<br>star2qltechn:/ $ su<br>:/ #<br></code></pre></td></tr></table></figure>
+
+<p>将frida-server传入到雷电模拟器中并找到相应位置，并运行frida-server</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">:/ # cd mnt<br>:/mnt # cd shared/<br>:/mnt/shared # cd Pictures/<br>:/mnt/shared/Pictures # ls<br>cache data frida-server frida-server-17.9.1-android-x86_64<br>:/mnt/shared/Pictures # ./frida-server-17.9.1-android-x86_64 &amp;<br>[1] 2899<br></code></pre></td></tr></table></figure>
+
+<p>再打开一个终端进行转发端口（转发端口（Port Forwarding）的作用是将一个网络端口的流量重定向到另一个端口或地址。）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">PS D:\国内赛\PolarIoTs_2026&gt; adb forward tcp:27042 tcp:27042<br>27042<br></code></pre></td></tr></table></figure>
+
+<p>最后在这个新打开的终端中进行脱壳</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">PS D:\国内赛\PolarIoTs_2026&gt; frida-dexdump -D emulator-5554 -f com.example.iot2 -o D:\国内赛\PolarIoTs_2026 --deep-search<br><br>---------------------------------------------------------------------------------------------------------------------<br>                         __      _     _                 _              _<br>                       / _|_ __(_) __| | __ _        __| | _____  ____| |_   _ _ __ ___  _ __<br>                      | |_| &#x27;__| |/ _` |/ _` |_____ / _` |/ _ \ \/ / _` | | | | &#x27;_ ` _ \| &#x27;_ \<br>                      |  _| |  | | (_| | (_| |_____| (_| |  __/&gt;  &lt; (_| | |_| | | | | | | |_) |<br>                      |_| |_|  |_|\__,_|\__,_|      \__,_|\___/_/\_\__,_|\__,_|_| |_| |_| .__/<br>                                                                                        |_|<br>                                        https://github.com/hluwa/frida-dexdump<br>---------------------------------------------------------------------------------------------------------------------<br><br>Spawning `com.example.iot2`...<br>INFO:Agent:DexDumpAgent&lt;Connection(pid=Session(pid=2848), connected:True), attached=True&gt;: Attach.<br>INFO:frida-dexdump:Waiting 5s...<br>INFO:frida-dexdump:[+] Searching...<br>INFO:frida-dexdump:[*] Successful found 12 dex, used 11 time.<br>INFO:frida-dexdump:[+] Starting dump to &#x27;D:\国内赛\PolarIoTs_2026&#x27;...<br>INFO:frida-dexdump:[+] DexMd5=c47cc0bd5bd01ef9dd17cb21969146e0, SavePath=D:\国内赛\PolarIoTs_2026\classes.dex, DexSize=0x2dc0<br>INFO:frida-dexdump:[+] DexMd5=a71dd37b90cc4ebe302a3d7c82e7ec4d, SavePath=D:\国内赛\PolarIoTs_2026\classes02.dex, DexSize=0x847ff4<br>INFO:frida-dexdump:[+] DexMd5=b31d485cbb6dd5021f3625290e643608, SavePath=D:\国内赛\PolarIoTs_2026\classes03.dex, DexSize=0x844e34<br>INFO:frida-dexdump:[+] DexMd5=02554f973f74b16caee3b9365bf57483, SavePath=D:\国内赛\PolarIoTs_2026\classes04.dex, DexSize=0x844ff4<br>INFO:frida-dexdump:[+] DexMd5=92b29855e4ae034064cdc59ace3c11a9, SavePath=D:\国内赛\PolarIoTs_2026\classes05.dex, DexSize=0x1f4<br>INFO:frida-dexdump:[+] DexMd5=927fd995fa493447a7d33907c377a9e3, SavePath=D:\国内赛\PolarIoTs_2026\classes06.dex, DexSize=0x2a1c49<br>INFO:frida-dexdump:[+] DexMd5=21d6e5ff1a7fad396814818d416660aa, SavePath=D:\国内赛\PolarIoTs_2026\classes07.dex, DexSize=0x1f4<br>INFO:frida-dexdump:[+] DexMd5=59f2a8e66f1ccdb2ffc58746318cc23e, SavePath=D:\国内赛\PolarIoTs_2026\classes08.dex, DexSize=0x22aa71<br>INFO:frida-dexdump:[+] DexMd5=2a2a89317e000a76ae646c206407d998, SavePath=D:\国内赛\PolarIoTs_2026\classes09.dex, DexSize=0x848000<br>INFO:frida-dexdump:[+] DexMd5=9fa495ae8325e6f7a672fa53f2afa09c, SavePath=D:\国内赛\PolarIoTs_2026\classes10.dex, DexSize=0x847fd8<br>INFO:frida-dexdump:[*] All done...<br></code></pre></td></tr></table></figure>
+
+<p>再将得到的文件拖入到jadx中找到MainActivity</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">package com.example.iot2;<br><br>import android.os.Bundle;<br>import android.view.View;<br>import android.widget.EditText;<br>import android.widget.Toast;<br>import androidx.appcompat.app.AppCompatActivity;<br><br>/* loaded from: D:\国内赛\PolarIoTs_2026\classes03.dex */<br>public class MainActivity extends AppCompatActivity &#123;<br>    private final String CORRECT_PWD = &quot;adsbu32cais&quot;;<br>    private final String FLAG = &quot;flag&#123;sadbuy12368gdsabhu&#125;&quot;;<br>    private EditText et_pwd;<br><br>    /* JADX INFO: Access modifiers changed from: protected */<br>    @Override // androidx.fragment.app.FragmentActivity, androidx.activity.ComponentActivity, androidx.core.app.ComponentActivity, android.app.Activity<br>    public void onCreate(Bundle bundle) &#123;<br>        super.onCreate(bundle);<br>        setContentView(R.layout.activity_main);<br>        this.et_pwd = (EditText) findViewById(R.id.et_password);<br>    &#125;<br><br>    public void checkPassword(View view) &#123;<br>        if (this.et_pwd.getText().toString().trim().equals(&quot;adsbu32cais&quot;)) &#123;<br>            Toast.makeText(this, &quot;flag&#123;sadbuy12368gdsabhu&#125;&quot;, 1).show();<br>        &#125; else &#123;<br>            Toast.makeText(this, &quot;密码错误，请重试！&quot;, 0).show();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这就对了，找到flag</p>
+<p>至于com.example.iot2这一坨是怎么来的，将对应的app打开，在powershell里面输入下述代码就行了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">adb shell dumpsys window | findstr mCurrentFocus<br></code></pre></td></tr></table></figure>
+
+<h1 id="appreverse"><a href="#appreverse" class="headerlink" title="appreverse"></a>appreverse</h1><p>同样的道理，和上面easy壳的脱壳操作是一样的，先将其进行脱壳后放入到jadx中进行观察</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">package com.example.appreverse;<br><br>import android.os.Bundle;<br>import android.view.View;<br>import android.widget.Toast;<br>import androidx.appcompat.app.AppCompatActivity;<br>import com.example.appreverse.databinding.ActivityMainBinding;<br><br>/* loaded from: D:\国内赛\PolarIoTs_2026\appreverse\classes03.dex */<br>public class MainActivity extends AppCompatActivity &#123;<br>    private ActivityMainBinding binding;<br><br>    public native boolean nativeCheckFlag(String str);<br><br>    static &#123;<br>        System.loadLibrary(&quot;nativeflag&quot;);<br>    &#125;<br><br>    /* JADX INFO: Access modifiers changed from: protected */<br>    @Override // androidx.fragment.app.FragmentActivity, androidx.activity.ComponentActivity, androidx.core.app.ComponentActivity, android.app.Activity<br>    public void onCreate(Bundle bundle) &#123;<br>        super.onCreate(bundle);<br>        ActivityMainBinding inflate = ActivityMainBinding.inflate(getLayoutInflater());<br>        this.binding = inflate;<br>        setContentView(inflate.mo318getRoot());<br>    &#125;<br><br>    public void checkFlag(View view) &#123;<br>        if (nativeCheckFlag(this.binding.etFlag.getText().toString().trim())) &#123;<br>            Toast.makeText(this, &quot;✅ Flag正确！&quot;, 0).show();<br>        &#125; else &#123;<br>            Toast.makeText(this, &quot;❌ Flag错误！&quot;, 0).show();<br>        &#125;<br>    &#125;<br>&#125;<br>首先System.loadLibrary(&quot;nativeflag&quot;);这句代码加载了名为nativeflag的Native库，也就是(libnativeflag.so)，声明了一种方法，具体实现是在libnativeflag.so中，接着就是与输入进行对比。因此主要就是获得libnativeflag.so文件，通过这个文件来具体分析一些东西<br></code></pre></td></tr></table></figure>
+
+<p>将这个.apk文件进行解压就可以得到libnativeflag.so文件，再将这个文件放入ida中进行逆向分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">bool __fastcall Java_com_example_appreverse_MainActivity_nativeCheckFlag(__int64 a1, __int64 a2, __int64 a3)<br>&#123;<br>  const char *s; // x0<br>  const char *src; // x20<br>  int n8_1; // w0<br>  _BOOL4 n8; // w22<br>  size_t size; // x23<br>  unsigned __int8 *dest; // x0<br>  unsigned __int8 *ptr; // x21<br>  unsigned __int64 v12; // x9<br>  int8x16_t v13; // q0<br>  int8x16_t *v14; // x11<br>  unsigned __int64 v15; // x12<br>  int8x16_t v16; // q2<br>  int8x8_t *v17; // x11<br>  unsigned __int64 v18; // x12<br>  unsigned __int64 v19; // x12<br>  unsigned __int64 v20; // x8<br>  unsigned __int8 *v21; // x9<br>  char *s1_1; // x0<br>  const char *s1; // x23<br><br>  if ( a3 )<br>  &#123;<br>    s = (const char *)(*(__int64 (__fastcall **)(__int64, __int64, _QWORD))(*(_QWORD *)a1 + 1352LL))(a1, a3, 0);<br>    if ( s )<br>    &#123;<br>      src = s;<br>      n8_1 = strlen(s);<br>      n8 = n8_1;<br>      if ( n8_1 )<br>      &#123;<br>        size = n8_1 + 1;<br>        dest = (unsigned __int8 *)malloc(size);<br>        if ( dest )<br>        &#123;<br>          ptr = dest;<br>          memcpy(dest, src, size);<br>          if ( n8 &lt; 1 )<br>            goto LABEL_21;<br>          if ( (unsigned int)n8 &lt; 8uLL )<br>          &#123;<br>            v12 = 0;<br>            goto LABEL_19;<br>          &#125;<br>          if ( (unsigned int)n8 &gt;= 0x20uLL )<br>          &#123;<br>            v13.n128_u64[0] = 0x1F1F1F1F1F1F1F1FLL;<br>            v13.n128_u64[1] = 0x1F1F1F1F1F1F1F1FLL;<br>            v14 = (int8x16_t *)(ptr + 16);<br>            v12 = n8 - (unsigned __int64)(n8 &amp; 0x1F);<br>            v15 = v12;<br>            do<br>            &#123;<br>              v15 -= 32LL;<br>              v16 = veorq_s8(*v14, v13);<br>              v14[-1] = veorq_s8(v14[-1], v13);<br>              *v14 = v16;<br>              v14 += 2;<br>            &#125;<br>            while ( v15 );<br>            if ( (n8 &amp; 0x1F) == 0 )<br>              goto LABEL_21;<br>            if ( (n8 &amp; 0x1Fu) &lt; 8uLL )<br>            &#123;<br>LABEL_19:<br>              v20 = n8 - v12;<br>              v21 = &amp;ptr[v12];<br>              do<br>              &#123;<br>                --v20;<br>                *v21++ ^= 0x1Fu;<br>              &#125;<br>              while ( v20 );<br>              goto LABEL_21;<br>            &#125;<br>          &#125;<br>          else<br>          &#123;<br>            v12 = 0;<br>          &#125;<br>          v17 = (int8x8_t *)&amp;ptr[v12];<br>          v18 = v12 + (n8 &amp; 7);<br>          v12 = n8 - (unsigned __int64)(n8 &amp; 7);<br>          v19 = v18 - n8;<br>          do<br>          &#123;<br>            v19 += 8LL;<br>            v17-&gt;n64_u64[0] = veor_s8((int8x8_t)v17-&gt;n64_u64[0], (int8x8_t)0x1F1F1F1F1F1F1F1FLL).n64_u64[0];<br>            ++v17;<br>          &#125;<br>          while ( v19 );<br>          if ( (n8 &amp; 7) != 0 )<br>            goto LABEL_19;<br>LABEL_21:<br>          s1_1 = (char *)malloc((4 * ((n8 + 2) / 3)) | 2);<br>          if ( s1_1 )<br>          &#123;<br>            s1 = s1_1;<br>            base64_encode(ptr, n8, s1_1);<br>            n8 = strcmp(s1, &quot;eXN+eGRoe3ZqLSwvJyh5bHp9aissJyh5e2xi&quot;) == 0;<br>            free(ptr);<br>            ptr = (unsigned __int8 *)s1;<br>          &#125;<br>          else<br>          &#123;<br>            n8 = 0;<br>          &#125;<br>          free(ptr);<br>          goto LABEL_25;<br>        &#125;<br>        n8 = 0;<br>      &#125;<br>LABEL_25:<br>      (*(void (__fastcall **)(__int64, __int64, const char *))(*(_QWORD *)a1 + 1360LL))(a1, a3, src);<br>      return n8;<br>    &#125;<br>  &#125;<br>  return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码的大致流程就是先将我们输入的字符串中每个字符与0x1f进行异或运算，接着再将异或得到的字符串进行base64编码，最后与eXN+eGRoe3ZqLSwvJyh5bHp9aissJyh5e2xi这段字符串进行对比。那么思路就清晰了，将eXN+eGRoe3ZqLSwvJyh5bHp9aissJyh5e2xi进行base64解码，再将解码后的字符串与0x1f进行异或运算就可以得到最后的flag了，脚本如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">import base64<br>encoded = &quot;eXN+eGRoe3ZqLSwvJyh5bHp9aissJyh5e2xi&quot;<br>decoded = base64.b64decode(encoded)<br>flag = bytes([b ^ 0x1F for b in decoded])<br>print(flag.decode())<br></code></pre></td></tr></table></figure>
+
+<h1 id="AES密钥"><a href="#AES密钥" class="headerlink" title="AES密钥"></a>AES密钥</h1><p>这道题目给了一个实例与一个压缩包，</p>
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+            <span>上一篇</span>
+            <strong>CTFshow pwn靶场练习</strong>
+          </a>
+        
+        
+          <a href="/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
+            <span>下一篇</span>
+            <strong>系统调用号</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

