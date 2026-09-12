@@ -85,21 +85,7 @@
             <article class="post-card">
               <div class="post-card__body">
                 <h3><a href="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/">第八届玄武杯pwn方向_are_you_lucky_wp</a></h3>
-                <p>Open the post to read the full writeup.</p>
-              </div>
-            </article>
-          
-            <article class="post-card">
-              <div class="post-card__body">
-                <h3><a href="/SekaiCTF2024/">SekaiCTF2024</a></h3>
-                <p>PwnLife Simulator 2nolibcspeedpwn</p>
-              </div>
-            </article>
-          
-            <article class="post-card">
-              <div class="post-card__body">
-                <h3><a href="/LilCTF2025/">LilCTF2025</a></h3>
-                <p>Pwn签到heap_PivotingThe Truman Showret2allI like C ++[WARM UP]电击！白井黑子白井黑子.风纪委Reverse1’M no7 A rO6oTARM ASMOh_My_UbootQt_Creator[WARM UP]纸老虎！真实世界的Pyarmor Miniobfusheader.h</p>
+                <p>由于是第一次作为出题人，有许多不足的地方，比如这题忘记关相应输出了，导致 fmt 可以 leak，从而绕过随机数（QWQ）。 开启了 PIE 保护，关闭了 NX 保护，大概率能打 shellcode，拖入 IDA 里面看。 login先是一个登录，输入 user_name 与 114514 编码后的结果。熟悉的师傅应该能看出是 Base64 编码，不熟悉的师傅可以通过 gdb ...</p>
               </div>
             </article>
           
@@ -152,6 +138,20 @@
               </div>
             </article>
           
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/0xGame2024-%E5%A4%8D%E7%8E%B0/">0xGame2024-复现</a></h3>
+                <p>where_is_my_binsh 一道简单的题目，存在栈溢出以及system函数，没有&amp;#x2F;bin&amp;#x2F;sh\x00字符串，给了变量something的地址，那么就先输入&amp;#x2F;bin&amp;#x2F;sh\x00字符串再打ret2text。 from pwn import*io=remote(&amp;#x27;gz.imxbt.cn&amp;#x27;,20884)elf=EL...</p>
+              </div>
+            </article>
+          
+            <article class="post-card">
+              <div class="post-card__body">
+                <h3><a href="/SQCTF_2025/">2025SQCTF</a></h3>
+                <p>很荣幸参加了第四届SQCTF，作为新生赛，难度还可以，因为本人能力还不够，并没能够akpwn，还得再努力努力（毕竟是想打XCTF的，这点实力是肯定不行的。 浅红欺醉粉，肯信有江梅一道简单到不能再简单的nc签到题。 领取你的小猫娘这是一道64位的题，基本没开什么保护。 这里可以看到有一个后门函数，其判断条件为v5的值为真，因为我们能输入的是v4，而且观察栈上结构可以知道地址相差0...</p>
+              </div>
+            </article>
+          
         </div>
       </section>
 
@@ -180,16 +180,16 @@
               <span>硬件协议与常见IoT协议</span>
             </a>
           
-            <a href="/QEMU-study/">
-              <span>QEMU_study</span>
-            </a>
-          
-            <a href="/crackmes-one-%E7%BB%83%E4%B9%A0/">
-              <span>crackmes_one_练习</span>
-            </a>
-          
             <a href="/BUUCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
               <span>BUUCTF re靶场练习</span>
+            </a>
+          
+            <a href="/PolarCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+              <span>PolarCTF re靶场练习</span>
+            </a>
+          
+            <a href="/NSSCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+              <span>NSSCTF re靶场练习</span>
             </a>
           
         </div>
@@ -203,7 +203,7 @@
           
             <a href="/categories/pwn/">
               <span>pwn</span>
-              <b>7</b>
+              <b>6</b>
             </a>
           
             <a href="/categories/%E6%AF%94%E8%B5%9B/">
@@ -213,12 +213,12 @@
           
             <a href="/categories/re/">
               <span>re</span>
-              <b>5</b>
+              <b>4</b>
             </a>
           
             <a href="/categories/ctf/">
               <span>ctf</span>
-              <b>5</b>
+              <b>3</b>
             </a>
           
             <a href="/categories/docker/">
@@ -226,8 +226,8 @@
               <b>1</b>
             </a>
           
-            <a href="/categories/IoT/">
-              <span>IoT</span>
+            <a href="/categories/IOT/">
+              <span>IOT</span>
               <b>1</b>
             </a>
           
@@ -240,27 +240,25 @@
         <h2 class="side-panel__title">标签</h2>
         <div class="tag-list">
           
-            <a class="tag-chip" href="/tags/ctf/">ctf<small>12</small></a>
+            <a class="tag-chip" href="/tags/ctf/">ctf<small>10</small></a>
           
-            <a class="tag-chip" href="/tags/pwn/">pwn<small>6</small></a>
+            <a class="tag-chip" href="/tags/pwn/">pwn<small>5</small></a>
           
-            <a class="tag-chip" href="/tags/re/">re<small>5</small></a>
+            <a class="tag-chip" href="/tags/re/">re<small>4</small></a>
           
             <a class="tag-chip" href="/tags/docker/">docker<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/IoT/">IoT<small>1</small></a>
-          
             <a class="tag-chip" href="/tags/IOT/">IOT<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/qemu/">qemu<small>1</small></a>
+            <a class="tag-chip" href="/tags/IoT/">IoT<small>1</small></a>
           
             <a class="tag-chip" href="/tags/%E5%87%BD%E6%95%B0/">函数<small>1</small></a>
+          
+            <a class="tag-chip" href="/tags/%E5%8D%8F%E8%AE%AE/">协议<small>1</small></a>
           
             <a class="tag-chip" href="/tags/%E5%B7%A5%E5%85%B7/">工具<small>1</small></a>
           
             <a class="tag-chip" href="/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">系统调用号<small>1</small></a>
-          
-            <a class="tag-chip" href="/tags/%E5%8D%8F%E8%AE%AE/">协议<small>1</small></a>
           
         </div>
       </section>
@@ -297,7 +295,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>31 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>
