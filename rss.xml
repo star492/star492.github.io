@@ -216,24 +216,6 @@
     <author>
       <name>haoo</name>
     </author>
-    <category term="ctf" scheme="https://star492.github.io/categories/ctf/"/>
-    <category term="ctf" scheme="https://star492.github.io/tags/ctf/"/>
-    <content>
-      <![CDATA[<h1 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h1><h2 id="2048"><a href="#2048" class="headerlink" title="2048"></a>2048</h2><h2 id="bad-box"><a href="#bad-box" class="headerlink" title="bad_box"></a>bad_box</h2><h2 id="ez-fmt"><a href="#ez-fmt" class="headerlink" title="ez_fmt"></a>ez_fmt</h2><h2 id="ez-stack"><a href="#ez-stack" class="headerlink" title="ez_stack"></a>ez_stack</h2><h2 id="ez-tcache"><a href="#ez-tcache" class="headerlink" title="ez_tcache"></a>ez_tcache</h2><h2 id="heap"><a href="#heap" class="headerlink" title="heap?"></a>heap?</h2><h2 id="myvm"><a href="#myvm" class="headerlink" title="myvm"></a>myvm</h2><h2 id="ret2rop"><a href="#ret2rop" class="headerlink" title="ret2rop"></a>ret2rop</h2><h2 id="来个签到吧"><a href="#来个签到吧" class="headerlink" title="来个签到吧"></a>来个签到吧</h2><h2 id="金丝雀的诱惑"><a href="#金丝雀的诱惑" class="headerlink" title="金丝雀的诱惑"></a>金丝雀的诱惑</h2><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="ELF"><a href="#ELF" class="headerlink" title="ELF"></a>ELF</h2><h2 id="MysteriousStream"><a href="#MysteriousStream" class="headerlink" title="MysteriousStream"></a>MysteriousStream</h2><h2 id="ReCall"><a href="#ReCall" class="headerlink" title="ReCall"></a>ReCall</h2><h2 id="VM-cool"><a href="#VM-cool" class="headerlink" title="VM_cool"></a>VM_cool</h2><h2 id="ez-xtea"><a href="#ez-xtea" class="headerlink" title="ez_xtea"></a>ez_xtea</h2><h2 id="ezpy"><a href="#ezpy" class="headerlink" title="ezpy"></a>ezpy</h2><h2 id="ezzz-math"><a href="#ezzz-math" class="headerlink" title="ezzz_math"></a>ezzz_math</h2><h2 id="小蓝鲨的RC4系统"><a href="#小蓝鲨的RC4系统" class="headerlink" title="小蓝鲨的RC4系统"></a>小蓝鲨的RC4系统</h2><h2 id="小蓝鲨的单片机-1"><a href="#小蓝鲨的单片机-1" class="headerlink" title="小蓝鲨的单片机_1"></a>小蓝鲨的单片机_1</h2><h2 id="小蓝鲨的单片机-2"><a href="#小蓝鲨的单片机-2" class="headerlink" title="小蓝鲨的单片机_2"></a>小蓝鲨的单片机_2</h2><h2 id="我的明天叫做昨天"><a href="#我的明天叫做昨天" class="headerlink" title="我的明天叫做昨天"></a>我的明天叫做昨天</h2><h2 id="病毒分析-题目1"><a href="#病毒分析-题目1" class="headerlink" title="病毒分析-题目1"></a>病毒分析-题目1</h2><h2 id="病毒分析-题目2"><a href="#病毒分析-题目2" class="headerlink" title="病毒分析-题目2"></a>病毒分析-题目2</h2><h2 id="病毒分析-题目3"><a href="#病毒分析-题目3" class="headerlink" title="病毒分析-题目3"></a>病毒分析-题目3</h2><h2 id="病毒分析-题目4"><a href="#病毒分析-题目4" class="headerlink" title="病毒分析-题目4"></a>病毒分析-题目4</h2><h2 id="病毒分析-题目5"><a href="#病毒分析-题目5" class="headerlink" title="病毒分析-题目5"></a>病毒分析-题目5</h2><h2 id="病毒分析-题目6"><a href="#病毒分析-题目6" class="headerlink" title="病毒分析-题目6"></a>病毒分析-题目6</h2><h2 id="病毒分析-题目7"><a href="#病毒分析-题目7" class="headerlink" title="病毒分析-题目7"></a>病毒分析-题目7</h2><h2 id="病毒分析-题目8"><a href="#病毒分析-题目8" class="headerlink" title="病毒分析-题目8"></a>病毒分析-题目8</h2><h2 id="病毒分析-题目9"><a href="#病毒分析-题目9" class="headerlink" title="病毒分析-题目9"></a>病毒分析-题目9</h2><h2 id="病毒分析-题目10"><a href="#病毒分析-题目10" class="headerlink" title="病毒分析-题目10"></a>病毒分析-题目10</h2><h2 id="病毒分析-题目11"><a href="#病毒分析-题目11" class="headerlink" title="病毒分析-题目11"></a>病毒分析-题目11</h2><h2 id="病毒分析-题目12"><a href="#病毒分析-题目12" class="headerlink" title="病毒分析-题目12"></a>病毒分析-题目12</h2>]]>
-    </content>
-    <id>https://star492.github.io/ISCTF2025/</id>
-    <link href="https://star492.github.io/ISCTF2025/"/>
-    <published>2026-08-14T11:23:49.426Z</published>
-    <summary>
-      <![CDATA[<h1 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h1><h2 id="2048"><a href="#2048" class="headerlink" title="2048"></a>204]]>
-    </summary>
-    <title>ISCTF2025</title>
-    <updated>2026-08-14T11:23:49.426Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>haoo</name>
-    </author>
     <category term="pwn" scheme="https://star492.github.io/categories/pwn/"/>
     <category term="pwn" scheme="https://star492.github.io/tags/pwn/"/>
     <content>
@@ -374,5 +356,23 @@
     </summary>
     <title>XYCTF2024</title>
     <updated>2025-09-27T04:01:30.614Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>haoo</name>
+    </author>
+    <category term="函数" scheme="https://star492.github.io/categories/%E5%87%BD%E6%95%B0/"/>
+    <category term="函数" scheme="https://star492.github.io/tags/%E5%87%BD%E6%95%B0/"/>
+    <content>
+      <![CDATA[<h1 id="strtol"><a href="#strtol" class="headerlink" title="strtol()"></a>strtol()</h1><p>格式：<em>*long int strol(const char *str,char endptr,int base)**，把</em>*参数str<strong>指向的字符串根据给定的</strong>base<strong>转换为一个长整数，base必须介于2和36之间或为0。<strong>返回值</strong>为被转换的</strong>长整型整数值**。</p><h1 id="strstr"><a href="#strstr" class="headerlink" title="strstr()"></a>strstr()</h1><p>格式：<em>*char *strstr(const char *haystack,const char *needle)<strong>，在字符串haystack中查找第一次出现字符串needle的位置，不包含终止符\0。<strong>返回值</strong>为指向haystack中</strong>第一次出现</em><em>needle的位置的指针，若没找到则返回*<em>NULL</em></em>。</p><h1 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy()"></a>memcpy()</h1><p>格式：<em>*void *memcpy(void *str1,const void *str2,size_t n)<strong>，从存储区</strong>str2</em><em>复制<strong>n</strong>个字节到存储区*<em>str1</em></em>。<strong>返回</strong>一个指向目标存储区<strong>str1的指针</strong>。</p><h1 id="strcspn"><a href="#strcspn" class="headerlink" title="strcspn()"></a>strcspn()</h1><p>格式：<strong>size_t strcspn(const char *str1,const char *str2)**，检索字符串</strong>str1开头<strong>连续有几个字符都</strong>不含<strong>字符串</strong>str2中的字符**。<strong>返回</strong>str1开头连续都<strong>不含</strong>字符串str2中<strong>字符的字符数</strong>。</p><h1 id="openat"><a href="#openat" class="headerlink" title="openat()"></a>openat()</h1><p>格式：<em>*ssize_t openat(int dfd，const char *filename，int flag，umode_t mode)**，函数第一个参数</em><em>dfd<strong>指的是当</strong>path<strong>为</strong>相对路径<strong>时，该路径在文件系统中的开始地址（即</strong>打开目录获取的文件描述符*</em>）但可以指定为AT_FDCWD(-100)，指定路径为当前路径。其余三个参数与open相同。</p><h1 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile()"></a>sendfile()</h1><p>格式：<em>*ssize_t sendfile(int out_fd，int in_fd，off_t *offset，size_t count)**，允许将</em><em>文件数据<strong>从</strong>一个文件描述符<strong>直接发送到</strong>另一个文件描述符*</em>，而且不需要经过缓冲区拷贝，比read+write还要简单。</p><h1 id="calloc"><a href="#calloc" class="headerlink" title="calloc()"></a>calloc()</h1><p>格式：void *calloc(size_t nitems,size_t size)，分配所需内存空间，并返回一个指向它的指针，与malloc不同的是，calloc会设置分配的内存为零，即calloc函数会将分配的内存全部初始化为零。nitems为要分配元素个数，size为元素大小。</p><h1 id="strcat"><a href="#strcat" class="headerlink" title="strcat()"></a>strcat()</h1><p>格式：char *strcat(char *dest,const char *src)，把src所指向的字符串追加到dest所指向的字符串的结尾，函数返回一个指向最终的目标字符串dest的指针。</p><h1 id="fread"><a href="#fread" class="headerlink" title="fread()"></a>fread()</h1><p>格式：size_t fread(void *ptr,size_t size,size_t nmemb,FILE *stream)，从stream中读取数据到ptr中。ptr为指向带有最小尺寸nmemb字节的内存块指针、size为每个元素的大小、nmemb为元素个数、stream为输入流</p><h1 id="strchr"><a href="#strchr" class="headerlink" title="strchr()"></a>strchr()</h1><p>格式：char *strchr(const char *str,char c)，在参数str所指向的字符串中搜索第一次出现字符c的位置。</p><h1 id="pthread-create"><a href="#pthread-create" class="headerlink" title="pthread_create"></a>pthread_create</h1><p>格式：int pthread_create(pthread_t *thread,const pthread_attr_t *attr,void *( *start_routine)(void *),void <em>arg)，thread为线程标识符，attr为线程属性，</em>( *start_routine)(void *)线程启动函数，arg为传递给启动函数的参数，如果创建成功，则返回0，反之返回错误码如：EAGAIN，EINVAL，EPERM。</p><h1 id="pthread-join"><a href="#pthread-join" class="headerlink" title="pthread_join"></a>pthread_join</h1><p>格式：int pthread_join(pthread_t thread,void **retval)，thread为要等待的线程，retval为接收到的返回值，该函数允许一个线程等待另一个线程的结束。</p>]]>
+    </content>
+    <id>https://star492.github.io/%E5%87%BD%E6%95%B0-C/</id>
+    <link href="https://star492.github.io/%E5%87%BD%E6%95%B0-C/"/>
+    <published>2025-09-15T11:32:55.586Z</published>
+    <summary>
+      <![CDATA[<h1 id="strtol"><a href="#strtol" class="headerlink" title="strtol()"></a>strtol()</h1><p>格式：<em>*long int strol(const char *str,char endptr]]>
+    </summary>
+    <title>函数_C</title>
+    <updated>2025-09-15T11:32:55.586Z</updated>
   </entry>
 </feed>
