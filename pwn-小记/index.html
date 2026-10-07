@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - pwn_小记</title>
+<meta name="description" content="本文章会持续更新，用于记录pwn过程中，本人觉得值得记录的东西0v0 pwn的exp简化模板该部分记录使用lambda表达式与自定义函数简化exp，便于未来exp的编写。 #导入所需库#-------------------------------------------------------------------">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>3674 字</span>
+        </div>
+        <h1>pwn_小记</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/pwn/">pwn</a>
+            
+            
+              <a class="tag-chip" href="/tags/%E5%B0%8F%E8%AE%B0/">小记</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <p>本文章会持续更新，用于记录pwn过程中，本人觉得值得记录的东西0v0</p>
+<h1 id="pwn的exp简化模板"><a href="#pwn的exp简化模板" class="headerlink" title="pwn的exp简化模板"></a>pwn的exp简化模板</h1><p>该部分记录使用lambda表达式与自定义函数简化exp，便于未来exp的编写。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#导入所需库<br>#--------------------------------------------------------------------------------<br>from pwn import*<br>from LibcSearcher import*<br>from ctypes import*<br>from struct import*<br>import time<br><br>#设置context<br>#--------------------------------------------------------------------------------<br>context(arch=&#x27;&#x27;, os=&#x27;linux&#x27;, log_level=&#x27;debug&#x27;, terminal=[&#x27;tmux&#x27;, &#x27;splitw&#x27;, &#x27;-h&#x27;])<br><br>#设置是否本地还是远程,并操作、解析相应文件<br>#--------------------------------------------------------------------------------<br>pwn_file=&#x27;&#x27;<br>libc_file=&#x27;&#x27;<br>elf=ELF(pwn_file)<br>libc=ELF(libc_file)<br>rop=ROP(libc)<br><br>flag=1<br>if flag:<br>    io=process(pwn_file)<br>else:<br>    ip=&#x27;&#x27;<br>    port=<br>    io=remote(ip,port)<br><br>#设置自定义函数<br>#--------------------------------------------------------------------------------<br>#gdb调试<br>def debug():<br>    #gdb.attach(io)<br>    #gdb.attach(io,&#x27;b *$rebase(0x1234)&#x27;)<br>    #gdb.attach(io,&#x27;b main&#x27;)<br>    pause()<br>#lambda表达式<br>s 		= 	lambda data 				: io.send(data)<br>sa 		= 	lambda delim,data 			: io.sendafter(str(delim), data)<br>sl 		= 	lambda data 				: io.sendline(data)<br>sla 	= 	lambda delim,data 			: io.sendlineafter(str(delim), data)<br>r 		= 	lambda num 					: io.recv(num)<br>rl		=	lambda 						: io.recvline()<br>ru 		= 	lambda delims, drop = True 	: io.recvuntil(delims, drop)<br>leak 	= 	lambda name,addr 			: log.success(&#x27;&#123;&#125; = &#123;:#x&#125;&#x27;.format(name, addr))<br>ur32 	= 	lambda data					: u32(io.recv(data).rjust(4,b&#x27;\x00&#x27;))<br>ur64 	= 	lambda data 				: u64(io.recv(data).rjust(8,b&#x27;\x00&#x27;))<br>uul32 	= 	lambda 						: u32(io.recvuntil(b&#x27;\xf7&#x27;)[-4:].ljust(4,b&#x27;\x00&#x27;))<br>uul64 	= 	lambda 						: u64(io.recvuntil(b&#x27;\x7f&#x27;)[-6:].ljust(8,b&#x27;\x00&#x27;))<br>uu64    =   lambda data                 : u64(data.ljust(8,b&#x27;\x00&#x27;))<br>i32		=	lambda data					: int(io.recv(data), 16)<br>i64		=	lambda data					: int(io.recv(data), 16)<br>ioi     =   lambda                      : io.interactive()<br>#获取libc函数地址<br>def libc_func_addr(base,func):<br>    return base+libc.sym[&#x27;func&#x27;]<br>#简单的shellcode+orw<br>def shell():<br>    return asm(shellcraft.sh())<br>def orw(flag_file_name,addr,count):<br>    return asm(shellcraft.open(str(flag_file_name)) + shellcraft.read(3,addr,count) + shellcraft.write(1,addr,count))<br><br>#连接<br>#--------------------------------------------------------------------------------<br>ioi()<br></code></pre></td></tr></table></figure>
+
+<p>其中需要注意的是，如果设置terminal为tmux时gdb，需要在tmux下运行exp，且tmux的操作一般先是先输入CTRL+b，再接着输入命令。</p>
+<h1 id="patchelf"><a href="#patchelf" class="headerlink" title="patchelf"></a>patchelf</h1><p>在做pwn题的过程中，有时候本地调试的环境会和远程不一样，从而导致本地通了而远程没通的情况，此时可以使用patchelf或者docker解决相应问题。因为patchelf比较简单，在这里先记录该方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">└─$ cd ~/glibc-all-in-one/debs<br>└─$ wget http://launchpadlibrarian.net/293727477/libc6_2.23-0ubuntu5_i386.deb<br>└─$ mkdir ~/glibc-all-in-one/libs/2.23-0ubuntu5_i386<br>└─$ cd ~/glibc-all-in-one/ <br>└─$ ./extract debs/libc6_2.23-0ubuntu5_i386.deb libs/2.23-0ubuntu5_i386<br>└─$ cd ~/glibc-all-in-one/libs/2.23-0ubuntu5_i386<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">strings ./libc-x.xx | grep ubuntu    //查看版本<br>./download xxxx    //在glibc-all-in-one中下载相应版本<br>patchelf --set-interpreter 文件夹名/ld.so ./pwn    //换掉ld<br>patchelf --set-rpath 文件夹名 ./pwn    //换掉path<br></code></pre></td></tr></table></figure>
+
+<p>这样一来就patch好了。当然这种方法不是万能的，glibc-all-in-one有些版本没有，有些难题对环境的要求很高，因此后续会记录docker的方法，只要知道了远程的环境，我们就能使用docker部署一个一样的环境在本地调试。</p>
+<h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>在这里只是简单介绍了docker的一些基础命令，便于在做pwn题时，与远程的环境一致，便于调试之类的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">#启动docker服务<br>sudo service docker start<br>#查看docker状态<br>docker ps<br>#拉取基础镜像<br>docker pull ____<br>#构建镜像<br>docker build -t ____ .<br>#运行镜像<br>docker run -d --rm \<br>  -p 8889:8889 \<br>  --name onlyfgets \<br>  onlyfgets<br>#进入docker容器<br>docker exec -it only_fgets /bin/bash<br>#关闭容器<br>docker stop only_fgets<br></code></pre></td></tr></table></figure>
+
+<h1 id="大端序和小端序"><a href="#大端序和小端序" class="headerlink" title="大端序和小端序"></a>大端序和小端序</h1><p>在大端序中，高位字节存储在低地址，低位字节存储在高地址。这种排列方式与数据用字节表示时的书写顺序一致，符合人类的阅读习惯。例如，32位整数0x12345678在大端序下的存储顺序如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">低地址（低位） → 高地址（高位）<br><br>0x12 → 0x34 → 0x56 → 0x78<br></code></pre></td></tr></table></figure>
+
+<p>在小端序中，低位字节存储在低地址，高位字节存储在高地址。小端序与人类的阅读习惯相反，但更符合计算机读取内存的方式，因为CPU读取内存中的数据时，是从低地址向高地址方向进行读取的。例如，32位整数0x12345678在小端序下的存储顺序如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">低地址（低位） → 高地址（高位）<br><br>0x78 → 0x56 → 0x34 → 0x12<br></code></pre></td></tr></table></figure>
+
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">python -m http.server 8000<br></code></pre></td></tr></table></figure>
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
+            <span>上一篇</span>
+            <strong>系统调用号</strong>
+          </a>
+        
+        
+          <a href="/pwnable-tw/">
+            <span>下一篇</span>
+            <strong>pwnable_tw</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>

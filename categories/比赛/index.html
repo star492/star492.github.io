@@ -84,6 +84,13 @@
           
             <article class="post-card">
               <div class="post-card__body">
+                <h3><a href="/0xGame-2026/">0xGame_2026</a></h3>
+                <p>Week1Pwn奇妙杂货铺没有给出附件，就直接nc连接看一下 模拟了一个商铺，玩家作为买家，如果身上有99999个金币就可以获得flag，现在唯一能交互的就是选项1，花10金币买血瓶。 稍微试了一下，发现该程序并没有进行正数检测，如果输入负数，反而会增加玩家的金币，利用这一漏洞点，就可以让玩家获得无限的金币从而获取flag了。 亦步亦趋haoo@LAPTOP-QH6DKIQF:...</p>
+              </div>
+            </article>
+          
+            <article class="post-card">
+              <div class="post-card__body">
                 <h3><a href="/MoeCTF-2025/">MoeCTF_2025</a></h3>
                 <p>PWN前面的几道题是基础的题目，就不再赘述了 boom&amp;#x2F;boom_revengefrom pwn import*io=remote(&amp;#x27;61.139.2.1&amp;#x27;,56079)#io=process(&amp;#x27;./boom&amp;#x27;)recv_data=os.popen(&amp;#x27;./random&amp;#x27;).read()list=recv_da...</p>
               </div>
@@ -107,13 +114,6 @@
               <div class="post-card__body">
                 <h3><a href="/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/">XYNU2024信安杯</a></h3>
                 <p>全是简单题目，直接上exp NC直接nc连接，然后ls+cat flag即可。 shellcodefrom pwn import*context.arch=&amp;#x27;amd64&amp;#x27;io=remote(&amp;#x27;gz.imxbt.cn&amp;#x27;,20029)shellcode=asm(shellcraft.sh())io.sendline(shellcode)io....</p>
-              </div>
-            </article>
-          
-            <article class="post-card">
-              <div class="post-card__body">
-                <h3><a href="/0xGame2024-%E5%A4%8D%E7%8E%B0/">0xGame2024-复现</a></h3>
-                <p>where_is_my_binsh 一道简单的题目，存在栈溢出以及system函数，没有&amp;#x2F;bin&amp;#x2F;sh\x00字符串，给了变量something的地址，那么就先输入&amp;#x2F;bin&amp;#x2F;sh\x00字符串再打ret2text。 from pwn import*io=remote(&amp;#x27;gz.imxbt.cn&amp;#x27;,20884)elf=EL...</p>
               </div>
             </article>
           
@@ -144,6 +144,14 @@
         <h2 class="side-panel__title">最近更新</h2>
         <div class="compact-list">
           
+            <a href="/0xGame-2026/">
+              <span>0xGame_2026</span>
+            </a>
+          
+            <a href="/DIR-815%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+              <span>DIR-815栈溢出漏洞复现</span>
+            </a>
+          
             <a href="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/">
               <span>第八届玄武杯pwn方向_are_you_lucky_wp</span>
             </a>
@@ -156,14 +164,6 @@
               <span>BUUCTF re靶场练习</span>
             </a>
           
-            <a href="/NSSCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-              <span>NSSCTF re靶场练习</span>
-            </a>
-          
-            <a href="/CTFshow%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-              <span>CTFshow re靶场练习</span>
-            </a>
-          
         </div>
       </section>
     
@@ -173,13 +173,13 @@
         <h2 class="side-panel__title">分类</h2>
         <div class="compact-list compact-list--counts">
           
-            <a href="/categories/%E6%AF%94%E8%B5%9B/">
-              <span>比赛</span>
-              <b>6</b>
-            </a>
-          
             <a href="/categories/pwn/">
               <span>pwn</span>
+              <b>7</b>
+            </a>
+          
+            <a href="/categories/%E6%AF%94%E8%B5%9B/">
+              <span>比赛</span>
               <b>6</b>
             </a>
           
@@ -188,14 +188,14 @@
               <b>3</b>
             </a>
           
-            <a href="/categories/ctf/">
-              <span>ctf</span>
+            <a href="/categories/IOT/">
+              <span>IOT</span>
               <b>2</b>
             </a>
           
-            <a href="/categories/IoT/">
-              <span>IoT</span>
-              <b>1</b>
+            <a href="/categories/ctf/">
+              <span>ctf</span>
+              <b>2</b>
             </a>
           
             <a href="/categories/docker/">
@@ -218,17 +218,19 @@
           
             <a class="tag-chip" href="/tags/re/">re<small>3</small></a>
           
-            <a class="tag-chip" href="/tags/IoT/">IoT<small>1</small></a>
+            <a class="tag-chip" href="/tags/IOT/">IOT<small>2</small></a>
           
             <a class="tag-chip" href="/tags/docker/">docker<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/IOT/">IOT<small>1</small></a>
+            <a class="tag-chip" href="/tags/IoT/">IoT<small>1</small></a>
           
-            <a class="tag-chip" href="/tags/%E5%8D%8F%E8%AE%AE/">协议<small>1</small></a>
+            <a class="tag-chip" href="/tags/%E5%B0%8F%E8%AE%B0/">小记<small>1</small></a>
           
             <a class="tag-chip" href="/tags/%E5%B7%A5%E5%85%B7/">工具<small>1</small></a>
           
             <a class="tag-chip" href="/tags/%E5%87%BD%E6%95%B0/">函数<small>1</small></a>
+          
+            <a class="tag-chip" href="/tags/%E5%8D%8F%E8%AE%AE/">协议<small>1</small></a>
           
             <a class="tag-chip" href="/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">系统调用号<small>1</small></a>
           
@@ -267,7 +269,7 @@
 
   <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>24 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
     <p>&copy; haoo · powered by Hexo</p>
   </div>
 </footer>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>haoo&#39;s tech blog - DIR-815栈溢出漏洞复现</title>
+<meta name="description" content="记录一下DIR-815栈溢出漏洞的复现过程。 从官方漏洞报告：国家信息安全漏洞共享平台可以知道在D-Link DIR-645型号的hedwig.cgi中存在缓冲区溢出漏洞，但是实际上多个型号都存在这个漏洞，这里就以D-Link DIR-815为例进行分析。 基础环境与工具配置haoo@cxh:~/Desktop$ ls">
+<meta name="theme-color" content="#090c0b">
+<meta name="color-scheme" content="dark">
+<script>
+  (function () {
+    try {
+      var palette = localStorage.getItem('startrace-palette');
+      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+    } catch (error) {}
+  })();
+</script>
+<link rel="stylesheet" href="/css/main.css">
+
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="site-body">
+  
+  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+      <span class="site-brand__mark" aria-hidden="true">0x</span>
+      <span class="site-brand__text">
+        <strong>haoo&#39;s tech blog</strong>
+      </span>
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="主导航">
+      
+      
+        <a class="site-nav__link" href="/">首页</a>
+      
+        <a class="site-nav__link" href="/categories">知识库</a>
+      
+        <a class="site-nav__link" href="/tags">标签</a>
+      
+        <a class="site-nav__link" href="/about">关于</a>
+      
+        <a class="site-nav__link" href="/links">链接</a>
+      
+        <a class="site-nav__link" href="/rss.xml">RSS</a>
+      
+    </nav>
+
+    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
+      <span aria-hidden="true">&gt;_</span>
+      <span>Console</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+
+    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
+      <span class="palette-toggle__swatch" aria-hidden="true"></span>
+      <span data-palette-label>绿色</span>
+    </button>
+
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+</header>
+
+
+  <main id="main-content" class="site-main article-main">
+    <article class="article-wrap">
+      <header class="article-header">
+        <div class="post-meta">
+          <span>7624 字</span>
+        </div>
+        <h1>DIR-815栈溢出漏洞复现</h1>
+        
+          <div class="tag-list">
+            
+              <a class="tag-chip tag-chip--solid" href="/categories/IOT/">IOT</a>
+            
+            
+              <a class="tag-chip" href="/tags/IOT/">IOT</a>
+            
+          </div>
+        
+      </header>
+
+      <div class="article-grid">
+        <div class="article-body article-prose" id="article-content">
+          <p>记录一下DIR-815栈溢出漏洞的复现过程。</p>
+<p>从官方漏洞报告：<a target="_blank" rel="noopener" href="https://www.cnvd.org.cn/flaw/show/CNVD-2013-11625">国家信息安全漏洞共享平台</a>可以知道在D-Link DIR-645型号的hedwig.cgi中存在缓冲区溢出漏洞，但是实际上多个型号都存在这个漏洞，这里就以D-Link DIR-815为例进行分析。</p>
+<p><img src="/images/5.png"></p>
+<p><img src="/images/6.png"></p>
+<h1 id="基础环境与工具配置"><a href="#基础环境与工具配置" class="headerlink" title="基础环境与工具配置"></a>基础环境与工具配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@cxh:~/Desktop$ lsb_release -a<br>No LSB modules are available.<br>Distributor ID:	Ubuntu<br>Description:	Ubuntu 24.04.4 LTS<br>Release:	24.04<br>Codename:	noble<br></code></pre></td></tr></table></figure>
+
+<p>这是我Ubuntu的版本号，lsb_release -a是用来查看当前Linux系统的发行版信息。</p>
+<p>基础的pwn环境搭建可以借鉴<a target="_blank" rel="noopener" href="https://blog.csdn.net/j284886202/article/details/139352067?spm=1001.2014.3001.5502">★pwn 24.04环境搭建保姆级教程★_ubuntu24 pwn-CSDN博客</a>这个师傅的博客，跟着一步一步搭建就行了。</p>
+<p><strong>binwalk工具安装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">sudo apt install binwalk<br></code></pre></td></tr></table></figure>
+
+<p><strong>sasquatch安装配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">sudo apt-get install build-essential zlib1g-dev liblzma-dev liblzo2-dev <br>git clone https://github.com/devttys0/sasquatch.git<br>cd sasquatch <br>./build.sh<br></code></pre></td></tr></table></figure>
+
+<p>如果出现了下面这个问题，可以借鉴<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_50883855/article/details/132496258?ops_request_misc=%7B%22request_id%22:%22dba4ca36aeb250d8e0b75418bf396d5f%22,%22scm%22:%2220140713.130102334.pc_all.%22%7D&request_id=dba4ca36aeb250d8e0b75418bf396d5f&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-2-132496258-null-null.142%5Ev102%5Epc_search_result_base4&utm_term=binwalk%E5%AE%89%E8%A3%85sasquatch&spm=1018.2226.3001.4187">binwalk缺少sasquatch报错_unsquashfs.c:1835:5: error: this ‘if’ clause does -CSDN博客</a>这个博客解决</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">unsquashfs.c:1835:5: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]<br> 1835 |     if(swap)<br>      |     ^~<br>unsquashfs.c:1841:9: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’<br> 1841 |         read_fs_bytes(fd, SQUASHFS_START, sizeof(struct squashfs_super_block),<br>      |         ^~~~~~~~~~~~~<br>cc1: all warnings being treated as errors<br>make: *** [&lt;builtin&gt;: unsquashfs.o] Error 1<br></code></pre></td></tr></table></figure>
+
+<p>当然还有可能出现下面这种问题</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">LZMA/lzma465/C/LzmaEnc.c:2161:19: error: storing the address of local variable ‘outStream’ in ‘*(CLzmaEnc *)pp.rc.outStream’ [-Werror=dangling-pointer=]<br> 2161 |   p-&gt;rc.outStream = &amp;outStream.funcTable;<br>      |   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~<br>LZMA/lzma465/C/LzmaEnc.c:2145:20: note: ‘outStream’ declared here<br> 2145 |   CSeqOutStreamBuf outStream;<br>      |                    ^~~~~~~~~<br>LZMA/lzma465/C/LzmaEnc.c:2139:45: note: ‘pp’ declared here<br> 2139 | SRes LzmaEnc_CodeOneMemBlock(CLzmaEncHandle pp, Bool reInit,<br>      |                              ~~~~~~~~~~~~~~~^~<br>cc1: all warnings being treated as errors<br>make: *** [&lt;builtin&gt;: LZMA/lzma465/C/LzmaEnc.o] Error 1<br></code></pre></td></tr></table></figure>
+
+<p>一个有效的方法就是应用PR #56的补丁</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">git pull origin pull/56/head<br></code></pre></td></tr></table></figure>
+
+<p>现在就可以使用binwalk对文件进行分解。<a target="_blank" rel="noopener" href="https://legacyfiles.us.dlink.com/DIR-815/REVA/FIRMWARE/">legacyfiles.us.dlink.com - &#x2F;DIR-815&#x2F;REVA&#x2F;FIRMWARE&#x2F;</a>在这个网站上进行附件下载，一般下载v1.01版本固件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@cxh:~/Desktop$ binwalk -Me ./DIR-815.bin<br>Traceback (most recent call last):<br>  File &quot;/usr/bin/binwalk&quot;, line 2, in &lt;module&gt;<br>    from binwalk.__main__ import main<br>  File &quot;/usr/lib/python3/dist-packages/binwalk/__main__.py&quot;, line 24, in &lt;module&gt;<br>    import binwalk.modules<br>  File &quot;/usr/lib/python3/dist-packages/binwalk/modules/__init__.py&quot;, line 3, in &lt;module&gt;<br>    from binwalk.modules.disasm import Disasm<br>  File &quot;/usr/lib/python3/dist-packages/binwalk/modules/disasm.py&quot;, line 21, in &lt;module&gt;<br>    class Disasm(Module):<br>  File &quot;/usr/lib/python3/dist-packages/binwalk/modules/disasm.py&quot;, line 60, in Disasm<br>    Architecture(type=capstone.CS_ARCH_ARM64,<br>                      ^^^^^^^^^^^^^^^^^^^^^^<br>AttributeError: module &#x27;capstone&#x27; has no attribute &#x27;CS_ARCH_ARM64&#x27;. Did you mean: &#x27;CS_ARCH_ARM&#x27;?<br></code></pre></td></tr></table></figure>
+
+<p>在binwalk使用过程中可能会出现上面这个问题，意思是binwalk尝试访问capstone库中一个不存在的架构定义，出现这个问题的原因一般有：版本兼容性问题、依赖关系变化（因为最新版binwalk已经用rust重写了，移除了对capstone的依赖）、环境冲突。这里我就直接下载binwalk最新版本了，下载完成后，记得全局替换旧版的，否则不在指定文件夹下使用binwalk还是会报这个错误。这里借鉴<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ffff5/p/18810670">Binwalk V3 安装 - ffff5 - 博客园</a>这篇文章进行下载</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y<br>. $HOME/.cargo/env<br>sudo apt install git<br>git clone https://github.com/ReFirmLabs/binwalk<br>sudo apt install build-essential libfontconfig1-dev liblzma-dev<br>cd binwalk<br>cargo build --release<br></code></pre></td></tr></table></figure>
+
+<p>验证一下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@cxh:~/Desktop/binwalk$ ./target/release/binwalk -V<br>binwalk 3.1.1<br></code></pre></td></tr></table></figure>
+
+<p>进行全局替换</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">确定位置与PATH优先级<br>which -a binwalk<br>echo $PATH<br>把新版复制到/usr/local/bin/<br>sudo cp ~/Desktop/binwalk/target/release/binwalk /usr/local/bin/binwalk<br>sudo chmod +x /usr/local/bin/binwalk<br>刷新命令缓存<br>hash -r<br>验证<br>which -a binwalk<br>binwalk -V<br></code></pre></td></tr></table></figure>
+
+<p>弄好之后，使用binwalk将固件进行分解，这下就不会报错了，解释一下这个命令参数：-M表示递归提取，意思是提取出来的文件如果里面还有可提取内容，就继续提取；-e表示自动提取，根据扫描到的文件签名，调用相应的工具把内容解包提取出来。</p>
+<p><img src="/images/7.png"></p>
+<p>大致的工具与基础的pwn环境就配置好了，qemu配置复现环境等漏洞分析完毕后复现时再进一步介绍。</p>
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>因为复现对象的架构不是x86，而是MIPS，有一些基础知识可能不知道，在这里简单的介绍一下。</p>
+<h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><p>在MIPS32架构下，32个寄存器均为32位宽，有两种命名方式：数字编号（$0-$31）、助记符命名（$zero、$at、$v0……），除了$zero外，硬件上寄存器无强制功能限制，但是在软件层面约定必须遵守。</p>
+<ul>
+<li>首先是$0（$zero，零寄存器），硬件层面永久固定为0，是MIPS中唯一只读寄存器，用于生成0、忽略返回值、简化指令。无论向其写入任何值，读取结果永远是0。</li>
+<li>接着是$2-$3（$v0-$v1，函数返回值寄存器），存放函数执行后的返回值，是函数调用的核心寄存器。$v0为主返回值寄存器，存放整数、布尔值、系统调用等核心返回值；$v1为辅助返回值寄存器，仅当函数有两个返回值时，存放第二个返回值。</li>
+<li>$4-$7（$a0-$a3，函数参数寄存器），向被调用函数传递参数，若传递参数个数超过4个，则剩余参数通过栈传递。</li>
+<li>$29（$sp，栈指针寄存器），指向程序栈的栈顶，MIPS的栈地址从高到低，向下增长，有压栈和弹栈两种操作。</li>
+<li>$31（$ra，返回地址寄存器），存放函数调用后的返回地址，执行jal（跳转并链接）指令时，硬件会自动将下一条指令的地址写入$ra中，函数结束时，执行jr $ra指令，跳回$ra存放的地址继续执行。</li>
+<li>$8-$15（$t0-$t7）、$24-$25（$t8-$t9）为临时寄存器，存放函数内部的临时变量，若函数调用其他函数时，这些寄存器的值可能会被覆盖，若需要保留$t系列寄存器的值，调用者需自行将其保存到栈上。</li>
+<li>$16-$23（$s0-$s7）为保存寄存器，主要存放需要跨函数调用保留的变量（如全局变量、函数中需复用的值），若被调用函数需要使用$s系列寄存器，必须先将其值压入栈中保存，用完后弹出栈恢复。</li>
+<li>$1（$at，汇编器临时寄存器），用于汇编器内部专用，用于处理伪指令，在编写汇编程序时禁止直接使用</li>
+<li>$30（$fp，帧指针寄存器），用于指向当前函数栈帧的基址，方便访问栈中的局部变量和参数</li>
+<li>$26-$27（$k0-$k1，内核&#x2F;异常处理寄存器），用于操作系统内核、异常&#x2F;中断处理程序专用，用户态禁止使用</li>
+<li>$28（$gp，全局指针寄存器），用于指向全局数据区的中间位置，可通过短偏移量快速访问全局变量，减少地址计算开销</li>
+</ul>
+<h2 id="基础汇编"><a href="#基础汇编" class="headerlink" title="基础汇编"></a>基础汇编</h2><p>有了存储的东西，就得对其进行相应的操作，下面简单介绍一些汇编，方便逆向时认得到某一条汇编语言干了什么</p>
+<ul>
+<li>加：add $s1,$s2,$s3意思是$s1&#x3D;$s2+$s3</li>
+<li>减：sub $s1,$s2,$s3意思是$s1&#x3D;$s2-$s3</li>
+<li>加立即数：addi $s1,$s2,100意思是$s1&#x3D;$s2+100</li>
+<li>无符号加：addu $s1,$s2,$s3意思是$s1&#x3D;$s2+$s3</li>
+<li>无符号减：subu $s1,$s2,$s3意思是$s1&#x3D;$s2-$s3</li>
+<li>无符号加立即数：addiu $s1,$s2,100意思是$s1&#x3D;$s2+100</li>
+<li>从协处理器寄存器中获得：mfc0 $s1,$epc意思是$s1&#x3D;$epc</li>
+<li>乘：mult $s2,$s3意思是Hi,Lo&#x3D;$s2*$s3</li>
+<li>无符号乘：multu $s2,$s3意思是Hi,Lo&#x3D;$s2*$s3</li>
+<li>除：div $s2,$s3意思是Lo&#x3D;$s2&#x2F;$s3，Hi&#x3D;$s2 mod $s3</li>
+<li>无符号除：divu $s2,$s3意思是Lo&#x3D;$s2&#x2F;$s3，Hi&#x3D;$s2 mod $s3</li>
+<li>从Hi中获得：mfhi $s1意思是$s1&#x3D;Hi</li>
+<li>从Lo中获得：mflo $s1意思是$s1&#x3D;Lo</li>
+<li>取字：lw $s1,20($s2)意思是$s1&#x3D;Memory[$s2+20]</li>
+<li>存字：sw $s1,20($s2)意思是Memory[$s2+20]&#x3D;$s1</li>
+<li>取无符号半字：lhu $s1,20($s2)意思是$s1&#x3D;Memory[$s2+20]</li>
+<li>存半字：sh $s1,20($s2)意思是Memory[$s2+20]&#x3D;$s1</li>
+<li>取无符号字节：lbu $s1,20($s2)意思是$s1&#x3D;Memory[$s2+20]</li>
+<li>存字节：sb $s1,20($s2)意思是Memory[$s2+20]&#x3D;$s1</li>
+<li>取链接字：ll $s1,20($s2)意思是$s1&#x3D;Memory[$s2+20]</li>
+<li>存条件字：sc $s1,20($s2)意思是Memory[$s2+20] &#x3D; $s1,$s1&#x3D;0或1</li>
+<li>立即数读入高16位：lui $s1,100，$s1&#x3D;100*2^16</li>
+<li>与：AND $s1,$s2,$s3意思是$s1&#x3D;$s2&amp;$s3</li>
+<li>或：OR $s1,$s2,$s3意思是$s1&#x3D;$s2|$s3</li>
+<li>或非：NOR $s1,$s2,$s3意思是$s1&#x3D;~($s2|$s3)</li>
+<li>与立即数：ANDi $s1,$s2,100意思是$s1&#x3D;$s2&amp;100</li>
+<li>或立即数：ORi $s1,$s2,100意思是$s1&#x3D;$s2|100</li>
+<li>逻辑左移：sll $s1,$s2,10意思是$s1&#x3D;$s2&lt;&lt;10</li>
+<li>逻辑右移：srl $s1,$s2,10意思是$s1&#x3D;$s2&gt;&gt;10</li>
+<li>相等时跳转：beq $s1,$s2,25意思是if($s1&#x3D;&#x3D;$s2)跳转至PC+4+100</li>
+<li>不相等时跳转：bne $s1,$s2,25意思是if($s1!&#x3D;$s2)跳转至PC+4+100</li>
+<li>小于时置位：slt $s1,$s2,$s3意思是if($s2&lt;$s3)$s1&#x3D;1否则$s1&#x3D;0</li>
+<li>小于立即数时置位：slti $s1,$s2,100意思是if($s2&lt;100)$s1&#x3D;1否则$s1&#x3D;0</li>
+<li>无符号数比较小于时置位：sltu $s1,$s2,$s3意思时if($s2&lt;$s3)$s1&#x3D;1否则$s1&#x3D;0</li>
+<li>无符号数比较小于立即数时置位：sltiu $s1,$s2,100意思是if($s2&lt;100)$s1&#x3D;1否则$s1&#x3D;0</li>
+<li>跳转：j 2500意思是跳转至1000</li>
+<li>跳转至寄存器所指的位置：jr $ra意思是跳转至$ra</li>
+<li>跳转并链接：jal 2500意思是$ra &#x3D; PC+4；跳转到10000</li>
+</ul>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><p>根据官方给的说明，漏洞在hedwig.cgi这里面，.cgi（通用网关接口）是web服务器用来调用外部程序的一种接口规范。因此现在先找一下这个文件并进行查看</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@cxh:~/Desktop/extractions/DIR-815.bin.extracted/F008C/squashfs-root$ find ./ -name hedwig.cgi<br>./htdocs/web/hedwig.cgi<br></code></pre></td></tr></table></figure>
+
+<p>找到文件所在目录后，定位到这里，并使用ls -la查看一下。这个指令的意思是列出当前目录下的所有文件并以详细信息显示</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">lrwxrwxrwx  1 haoo haoo   14 Sep 15 14:29 hedwig.cgi -&gt; /htdocs/cgibin<br></code></pre></td></tr></table></figure>
+
+<p>这表明hedwig.cgi是一个软连接，相当于快捷方式，指向的是cgibin，意思就是我们访问、执行或读取hedwig.cgi时，系统实际上是去操作cgibin。找到这个文件，并查看一下是什么架构以及开启了哪些保护</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">haoo@cxh:~/Desktop/extractions/DIR-815.bin.extracted/F008C/squashfs-root/htdocs$ checksec cgibin<br>Segmentation fault (core dumped)<br></code></pre></td></tr></table></figure>
+
+<p>发生了段错误，说明checksec这个程序在运行过程中崩溃了，解决方法就是更新一下pwntools版本，太旧了可能会有一些小bug，这里更新用虚拟环境进行更新，因为PEP 668规定，可能版本太高不允许用系统pip直接往系统python里装包。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">python3 -m venv ~/pwn-venv<br>source ~/pwn-venv/bin/activate<br>pip install -U pwntools<br>checksec cgibin<br>[*] &#x27;/home/haoo/Desktop/extractions/DIR-815.bin.extracted/F008C/squashfs-root/htdocs/cgibin&#x27;<br>    Arch:       mips-32-little<br>    RELRO:      No RELRO<br>    Stack:      No canary found<br>    NX:         NX unknown - GNU_STACK missing<br>    PIE:        No PIE (0x400000)<br>    Stack:      Executable<br>    RWX:        Has RWX segments<br></code></pre></td></tr></table></figure>
+
+<p>是一个misp32位程序，没有开启任何保护。放入ida中进行分析一下，首先在main函数中找到hedwig.cgi</p>
+<p><img src="/images/8.png"></p>
+<p>接着再进入hedwigcgi_main函数进行分析</p>
+
+        </div>
+
+        
+          <aside class="toc-panel" aria-label="文章目录">
+            <div class="toc-panel__head">
+              <h2>目录</h2>
+              <button class="toc-top" type="button">顶部</button>
+            </div>
+            <nav id="toc"></nav>
+          </aside>
+        
+      </div>
+
+      <nav class="article-nav" aria-label="文章导航">
+        
+          <a href="/0xGame-2026/">
+            <span>上一篇</span>
+            <strong>0xGame_2026</strong>
+          </a>
+        
+        
+          <a href="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/">
+            <span>下一篇</span>
+            <strong>第八届玄武杯pwn方向_are_you_lucky_wp</strong>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
+    <p>&copy; haoo · powered by Hexo</p>
+  </div>
+</footer>
+<dialog
+  id="command-console"
+  class="command-console"
+  aria-labelledby="command-title"
+  data-search-url="/search.json"
+  data-home-url="/"
+  data-categories-url="/categories"
+  data-tags-url="/tags"
+  data-about-url="/about"
+  data-links-url="/links"
+>
+  <div class="command-console__bar">
+    <div>
+      <span class="command-console__status" aria-hidden="true"></span>
+      <strong id="command-title">haoo@blog:~</strong>
+    </div>
+    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
+  </div>
+
+  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
+    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
+  </div>
+
+  <form id="command-form" class="command-console__form" autocomplete="off">
+    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
+    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
+    <span class="command-console__cursor" aria-hidden="true"></span>
+  </form>
+  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+</dialog>
+
+<script src="/js/theme.js" defer></script>
+
+</body>
+</html>
