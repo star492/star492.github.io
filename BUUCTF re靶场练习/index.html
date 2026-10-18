@@ -1,98 +1,720 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>haoo&#39;s tech blog - BUUCTF re靶场练习</title>
 <meta name="description" content="easyre简单的re，直接放入ida中，找到main函数，就可以发现flag。 reverse1在ida中可以得到一开始的字符串{hello_world}，接着看main函数 for ( i = 0; ; ++i ) &amp;#123; v10 = i; if ( i &amp;gt; j_strlen(Str2) ) // &amp;q">
-<meta name="theme-color" content="#090c0b">
+<meta name="theme-color" content="#080a09">
 <meta name="color-scheme" content="dark">
 <script>
   (function () {
+    var root = document.documentElement;
+    root.classList.add('has-js');
     try {
       var palette = localStorage.getItem('startrace-palette');
-      if (['green', 'cyan', 'amber'].includes(palette)) document.documentElement.dataset.palette = palette;
+      if (['green', 'cyan', 'amber'].indexOf(palette) !== -1) root.dataset.palette = palette;
     } catch (error) {}
   })();
 </script>
 <link rel="stylesheet" href="/css/main.css">
 
-  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog RSS" href="/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="haoo&#39;s tech blog" href="/rss.xml">
 
 
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="site-body">
-  
-  <header class="site-header">
+<body class="app-body">
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;overflow:hidden">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.6 12 4l8 6.6"/><path d="M6 9.6V20h12V9.6"/></symbol>
+    <symbol id="i-folders" viewBox="0 0 24 24"><path d="M3 8.5V18a1 1 0 0 0 1 1h12.5"/><path d="M3 8.5 5 5h6l1.6 2H19a1 1 0 0 1 1 1v2.5"/><path d="M6.5 10.5h15L19 19H4z"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4l2 2.5h9A1.5 1.5 0 0 1 21 10v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h7.5L19 8.5V21H6z"/><path d="M13.5 3v5.5H19"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M11 3h7a1 1 0 0 1 1 1v7L9 20l-6-6z"/><circle cx="15.5" cy="7.5" r="1.4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.5 13.5 13.5 10.5"/><path d="M8.6 15.4 6.5 17.5a3.4 3.4 0 0 1-4.8-4.8l3-3a3.4 3.4 0 0 1 4.8 0"/><path d="M15.4 8.6l2.1-2.1a3.4 3.4 0 0 1 4.8 4.8l-3 3a3.4 3.4 0 0 1-4.8 0"/></symbol>
+    <symbol id="i-rss" viewBox="0 0 24 24"><path d="M5 19h.01"/><path d="M5 13a6 6 0 0 1 6 6"/><path d="M5 7a12 12 0 0 1 12 12"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="m7 10 3 2.5L7 15"/><path d="M12.5 15H17"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="1.6"/><path d="M15 5.5V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h.5"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.9 2-1.9 0-1.5-1.3-1.6-1.3-2.9 0-1 .8-1.7 1.9-1.7H16a5 5 0 0 0 5-5c0-3.6-4-6.5-9-6.5Z"/><circle cx="8" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="16" cy="10" r="1.2"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12"/><path d="m18 6-12 12"/></symbol>
+    <symbol id="i-branch" viewBox="0 0 24 24"><circle cx="6.5" cy="6" r="2.5"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="8" r="2.5"/><path d="M6.5 8.5v7"/><path d="M17.5 10.5c0 3-3.5 3.4-8 4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-hash" viewBox="0 0 24 24"><path d="M9 4 7 20"/><path d="M17 4l-2 16"/><path d="M4.5 9h15"/><path d="M3.5 15h15"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 8.5 4.5L12 12 3.5 7.5z"/><path d="m3.5 12 8.5 4.5 8.5-4.5"/><path d="m3.5 16.5 8.5 4.5 8.5-4.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 4H4v4"/><path d="M16 4h4v4"/><path d="M8 20H4v-4"/><path d="M16 20h4v-4"/></symbol>
+    <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38l-.01-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></symbol>
+  </defs>
+</svg>
+
   <a class="skip-link" href="#main-content">跳到正文</a>
-  <div class="site-header__inner">
-    <a class="site-brand" href="/" aria-label="haoo&#39;s tech blog 首页">
-      <span class="site-brand__mark" aria-hidden="true">0x</span>
-      <span class="site-brand__text">
-        <strong>haoo&#39;s tech blog</strong>
-      </span>
+
+  <div class="app">
+    
+<header class="titlebar">
+  <button class="icon-btn titlebar__drawer" type="button" data-drawer-toggle aria-label="打开工作区" aria-controls="workspace-rail" aria-expanded="false">
+    <svg class="icon icon-16" aria-hidden="true"><use href="#i-menu"/></svg>
+  </button>
+
+  <a class="brand" href="/" aria-label="haoo&#39;s tech blog 首页">
+    <span class="brand__mark" aria-hidden="true">
+      <svg class="icon icon-14"><use href="#i-terminal"/></svg>
+    </span>
+    <span class="brand__name">haoo&#39;s tech blog</span>
+  </a>
+
+  <span class="titlebar__sep" aria-hidden="true">/</span>
+  <span class="titlebar__path" title="当前工作区">~/star-blog</span>
+
+  <div class="titlebar__spacer"></div>
+
+  <button class="cmd-trigger" type="button" data-command-open aria-label="打开命令面板" aria-keyshortcuts="Control+K">
+    <svg class="icon icon-14" aria-hidden="true"><use href="#i-search"/></svg>
+    <span class="cmd-trigger__text">搜索或跳转</span>
+    <kbd class="kbd">Ctrl K</kbd>
+  </button>
+
+  <button class="icon-btn" type="button" data-palette-toggle aria-label="切换配色" title="切换配色">
+    <svg class="icon icon-15" aria-hidden="true"><use href="#i-palette"/></svg>
+    <span class="visually-hidden" data-palette-label>绿色</span>
+  </button>
+
+  
+    <a class="icon-btn" href="https://github.com/star492" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+      <svg class="icon icon-15" aria-hidden="true"><use href="#i-github"/></svg>
     </a>
-
-    <nav id="site-nav" class="site-nav" aria-label="主导航">
-      
-      
-        <a class="site-nav__link" href="/">首页</a>
-      
-        <a class="site-nav__link" href="/categories">知识库</a>
-      
-        <a class="site-nav__link" href="/tags">标签</a>
-      
-        <a class="site-nav__link" href="/about">关于</a>
-      
-        <a class="site-nav__link" href="/links">链接</a>
-      
-        <a class="site-nav__link" href="/rss.xml">RSS</a>
-      
-    </nav>
-
-    <button class="command-toggle" type="button" data-command-open aria-label="打开命令行" aria-keyshortcuts="Control+K">
-      <span aria-hidden="true">&gt;_</span>
-      <span>Console</span>
-      <kbd>Ctrl K</kbd>
-    </button>
-
-    <button class="palette-toggle" type="button" data-palette-toggle aria-label="切换主题配色" title="切换主题配色">
-      <span class="palette-toggle__swatch" aria-hidden="true"></span>
-      <span data-palette-label>绿色</span>
-    </button>
-
-    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  
 </header>
 
+    
+<aside class="rail" id="workspace-rail" aria-label="工作区">
+  <div class="rail__head">
+    <span class="rail__title">工作区</span>
+    <div class="rail__tools">
+      <button class="icon-btn icon-btn--sm" type="button" data-tree-expand aria-label="展开全部目录" title="展开 / 收起全部目录">
+        <svg class="icon icon-13" aria-hidden="true"><use href="#i-expand"/></svg>
+      </button>
+    </div>
+  </div>
 
-  <main id="main-content" class="site-main article-main">
-    <article class="article-wrap">
-      <header class="article-header">
-        <div class="post-meta">
-          <span>5112 字</span>
+  <div class="rail__search">
+    <button class="rail-search" type="button" data-command-open>
+      <svg class="icon icon-14" aria-hidden="true"><use href="#i-search"/></svg>
+      <span class="rail-search__text">搜索文章、比赛或技术点…</span>
+      <kbd class="kbd kbd--dim">/</kbd>
+    </button>
+  </div>
+
+  <div class="rail__scroll">
+    <div class="tree" role="tree" aria-label="文章目录">
+      <div class="tree__root">
+        <svg class="icon icon-13" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        <span>star-blog</span>
+        <span class="tree__root-tag">master</span>
+      </div>
+      <div class="tree__dir">
+        <svg class="icon icon-13" aria-hidden="true"><use href="#i-folder"/></svg>
+        <span>_posts</span>
+        <span class="tree__count">26</span>
+      </div>
+
+      <div class="tree__body">
+        
+          
+<ul class="tree__list">
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="pwn">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/pwn/" data-tree-link>pwn</a>
+          <span class="tree__count" title="7 篇文章">7</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/PolarCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="PolarCTF pwn靶场">PolarCTF pwn靶场</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/BUUCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="BUUCTF pwn靶场练习">BUUCTF pwn靶场练习</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/NSSCTF%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="NSSCTF pwn靶场练习">NSSCTF pwn靶场练习</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/CTFshow%20pwn%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="CTFshow pwn靶场练习">CTFshow pwn靶场练习</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/pwn-%E5%B0%8F%E8%AE%B0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="pwn_小记">pwn_小记</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/pwnable-tw/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="pwnable_tw">pwnable_tw</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/nss_pwn%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="nss刷题记录">nss刷题记录</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
         </div>
-        <h1>BUUCTF re靶场练习</h1>
-        
-          <div class="tag-list">
-            
-              <a class="tag-chip tag-chip--solid" href="/categories/re/">re</a>
-            
-            
-              <a class="tag-chip" href="/tags/re/">re</a>
-            
-          </div>
-        
-      </header>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="比赛">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/%E6%AF%94%E8%B5%9B/" data-tree-link>比赛</a>
+          <span class="tree__count" title="6 篇文章">6</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/0xGame-2026/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="0xGame_2026">0xGame_2026</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/MoeCTF-2025/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="MoeCTF_2025">MoeCTF_2025</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/XYCTF2024/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="XYCTF2024">XYCTF2024</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/GeekChallenge2024/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="GeekChallenge2024">GeekChallenge2024</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/XYNU2024%E4%BF%A1%E5%AE%89%E6%9D%AF/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="XYNU2024信安杯">XYNU2024信安杯</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/SQCTF_2025/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="2025SQCTF">2025SQCTF</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="re" data-tree-active=&#34;1&#34; open>
+        <summary class="tree__row tree__row--folder is-active">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/re/" data-tree-link>re</a>
+          <span class="tree__count" title="3 篇文章">3</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/BUUCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="BUUCTF re靶场练习">BUUCTF re靶场练习</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/NSSCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="NSSCTF re靶场练习">NSSCTF re靶场练习</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/CTFshow%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="CTFshow re靶场练习">CTFshow re靶场练习</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="ctf">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/ctf/" data-tree-link>ctf</a>
+          <span class="tree__count" title="2 篇文章">2</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/%E7%AC%AC%E5%85%AB%E5%B1%8A%E7%8E%84%E6%AD%A6%E6%9D%AFpwn%E6%96%B9%E5%90%91-are-you-lucky-wp/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="第八届玄武杯pwn方向_are_you_lucky_wp">第八届玄武杯pwn方向_are_you_lucky_wp</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/ISCTF2024/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="ISCTF2024">ISCTF2024</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="IOT">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/IOT/" data-tree-link>IOT</a>
+          <span class="tree__count" title="2 篇文章">2</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/DIR-815%E6%A0%88%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="DIR-815栈溢出漏洞复现">DIR-815栈溢出漏洞复现</span>
+                  </a>
+                </li>
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/OWASP-IoTGoat-%E7%BB%83%E4%B9%A0/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="OWASP_IoTGoat_练习">OWASP_IoTGoat_练习</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="工具">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/%E5%B7%A5%E5%85%B7/" data-tree-link>工具</a>
+          <span class="tree__count" title="1 篇文章">1</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/tools/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="tools">tools</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="函数">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/%E5%87%BD%E6%95%B0/" data-tree-link>函数</a>
+          <span class="tree__count" title="1 篇文章">1</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/%E5%87%BD%E6%95%B0-C/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="函数_C">函数_C</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="系统调用号">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/" data-tree-link>系统调用号</a>
+          <span class="tree__count" title="1 篇文章">1</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="系统调用号">系统调用号</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="协议">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/%E5%8D%8F%E8%AE%AE/" data-tree-link>协议</a>
+          <span class="tree__count" title="1 篇文章">1</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="硬件协议与常见IoT协议">硬件协议与常见IoT协议</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="docker">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/docker/" data-tree-link>docker</a>
+          <span class="tree__count" title="1 篇文章">1</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/Docker-study/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="Docker_study">Docker_study</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+    <li class="tree__item">
+      <details class="tree__folder" data-tree-key="IoT">
+        <summary class="tree__row tree__row--folder">
+          <span class="tree__twist" aria-hidden="true">
+            <svg class="icon icon-10"><use href="#i-chevron"/></svg>
+          </span>
+          <svg class="icon icon-14 tree__icon" aria-hidden="true"><use href="#i-folder"/></svg>
+          <a class="tree__label" href="/categories/IoT/" data-tree-link>IoT</a>
+          <span class="tree__count" title="1 篇文章">1</span>
+        </summary>
+        <div class="tree__kids">
+          
+          
+            <ul class="tree__list tree__list--files">
+              
+                <li class="tree__item">
+                  <a class="tree__row tree__row--file" href="/PolarIoTs-2026/">
+                    <span class="tree__twist" aria-hidden="true"></span>
+                    <svg class="icon icon-13 tree__icon" aria-hidden="true"><use href="#i-file"/></svg>
+                    <span class="tree__label" title="PolarIoTs_2026">PolarIoTs_2026</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      </details>
+    </li>
+  
+  
+</ul>
 
-      <div class="article-grid">
-        <div class="article-body article-prose" id="article-content">
-          <h1 id="easyre"><a href="#easyre" class="headerlink" title="easyre"></a>easyre</h1><p>简单的re，直接放入ida中，找到main函数，就可以发现flag。</p>
+        
+      </div>
+    </div>
+
+    <div class="rail__section">
+      <div class="rail__label">页面</div>
+      <nav class="rail-nav" aria-label="站点页面">
+        
+          <a class="rail-nav__item" href="/">
+            <svg class="icon icon-14 rail-nav__icon" aria-hidden="true"><use href="#i-home"/></svg>
+            <span class="rail-nav__name">概览</span>
+            <span class="rail-nav__file">index.md</span>
+            
+          </a>
+        
+          <a class="rail-nav__item" href="/categories">
+            <svg class="icon icon-14 rail-nav__icon" aria-hidden="true"><use href="#i-folders"/></svg>
+            <span class="rail-nav__name">知识库</span>
+            <span class="rail-nav__file">categories.md</span>
+            
+          </a>
+        
+          <a class="rail-nav__item" href="/tags">
+            <svg class="icon icon-14 rail-nav__icon" aria-hidden="true"><use href="#i-tag"/></svg>
+            <span class="rail-nav__name">标签</span>
+            <span class="rail-nav__file">tags.md</span>
+            
+          </a>
+        
+          <a class="rail-nav__item" href="/about">
+            <svg class="icon icon-14 rail-nav__icon" aria-hidden="true"><use href="#i-user"/></svg>
+            <span class="rail-nav__name">关于</span>
+            <span class="rail-nav__file">about.md</span>
+            
+          </a>
+        
+          <a class="rail-nav__item" href="/links">
+            <svg class="icon icon-14 rail-nav__icon" aria-hidden="true"><use href="#i-link"/></svg>
+            <span class="rail-nav__name">链接</span>
+            <span class="rail-nav__file">links.md</span>
+            
+          </a>
+        
+          <a class="rail-nav__item" href="/rss.xml" target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;>
+            <svg class="icon icon-14 rail-nav__icon" aria-hidden="true"><use href="#i-rss"/></svg>
+            <span class="rail-nav__name">RSS</span>
+            <span class="rail-nav__file">rss.xml</span>
+            
+              <svg class="icon icon-11 rail-nav__ext" aria-hidden="true"><use href="#i-external"/></svg>
+            
+          </a>
+        
+      </nav>
+    </div>
+  </div>
+
+  <div class="rail__foot">
+    <span><b>26</b> 篇</span>
+    <span class="rail__dot" aria-hidden="true"></span>
+    <span><b>11</b> 分类</span>
+    <span class="rail__dot" aria-hidden="true"></span>
+    <span><b>11</b> 标签</span>
+  </div>
+</aside>
+<div class="rail-backdrop" data-drawer-close hidden></div>
+
+
+    <main class="pane" id="main-content" tabindex="-1">
+      <div class="pane__bar">
+        <nav class="crumbs" aria-label="当前位置">
+          
+            
+            
+              <a class="crumbs__item" href="/">~</a>
+            
+          
+            <span class="crumbs__sep" aria-hidden="true">/</span>
+            
+              <span class="crumbs__item crumbs__item--current">_posts</span>
+            
+          
+            <span class="crumbs__sep" aria-hidden="true">/</span>
+            
+              <a class="crumbs__item" href="/categories/re/">re</a>
+            
+          
+            <span class="crumbs__sep" aria-hidden="true">/</span>
+            
+              <span class="crumbs__item crumbs__item--current">BUUCTF re靶场练习.md</span>
+            
+          
+        </nav>
+
+        <div class="pane__tools">
+          
+            
+              <a class="pane__tool" href="/categories">
+                <svg class="icon icon-13" aria-hidden="true"><use href="#i-folders"/></svg>
+                <span>知识库</span>
+              </a>
+            
+          
+          <button class="pane__tool pane__tool--icon" type="button" data-copy-link aria-label="复制本页链接" title="复制本页链接">
+            <svg class="icon icon-13" aria-hidden="true"><use href="#i-copy"/></svg>
+          </button>
+        </div>
+        <span class="pane__progress" data-progress-bar aria-hidden="true"></span>
+      </div>
+
+      <div class="pane__scroll" id="pane-scroll">
+        <noscript>
+          <div class="notice">工作区抽屉与命令面板需要 JavaScript；文章正文、分类与标签页面仍可直接浏览。</div>
+        </noscript>
+
+
+<article class="doc">
+  <header class="doc__head">
+    <p class="eyebrow">post / re</p>
+    <h1 class="doc__title">BUUCTF re靶场练习</h1>
+    <div class="doc__meta">
+      <span class="doc__meta-item">
+        <svg class="icon icon-12" aria-hidden="true"><use href="#i-clock"/></svg>
+        <time datetime="2026-08-20T09:38:58.729Z">2026-08-20 17:38</time>
+      </span>
+      <span class="doc__meta-item">4481 字</span>
+      <span class="doc__meta-item">约 11 分钟</span>
+      <span class="doc__meta-item doc__meta-item--path">BUUCTF re靶场练习/</span>
+    </div>
+    
+      <div class="chip-row chip-row--tight">
+        
+          <a class="chip" href="/tags/re/">#re</a>
+        
+      </div>
+    
+  </header>
+
+  <div class="prose" id="article-content">
+    <h1 id="easyre"><a href="#easyre" class="headerlink" title="easyre"></a>easyre</h1><p>简单的re，直接放入ida中，找到main函数，就可以发现flag。</p>
 <h1 id="reverse1"><a href="#reverse1" class="headerlink" title="reverse1"></a>reverse1</h1><p>在ida中可以得到一开始的字符串{hello_world}，接着看main函数</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs plaintext">for ( i = 0; ; ++i )<br>  &#123;<br>    v10 = i;<br>    if ( i &gt; j_strlen(Str2) )                   // &quot;&#123;hello_world&#125;&quot;<br>      break;<br>    if ( Str2[i] == &#x27;o&#x27; )                       // &quot;&#123;hello_world&#125;&quot;<br>      Str2[i] = &#x27;0&#x27;;                            // &quot;&#123;hello_world&#125;&quot;<br>  &#125;<br></code></pre></td></tr></table></figure>
 
@@ -123,75 +745,205 @@
 
 <p>由此就可以知道flag就是flag{222441144222}</p>
 
-        </div>
+  </div>
 
-        
-          <aside class="toc-panel" aria-label="文章目录">
-            <div class="toc-panel__head">
-              <h2>目录</h2>
-              <button class="toc-top" type="button">顶部</button>
-            </div>
-            <nav id="toc"></nav>
-          </aside>
-        
+  <footer class="doc__foot">
+    <div class="doc__end" aria-hidden="true">
+      <span class="doc__end-line"></span>
+      <span class="doc__end-text">EOF</span>
+      <span class="doc__end-line"></span>
+    </div>
+
+    <nav class="sibling" aria-label="文章导航">
+      
+        <a class="sibling__item sibling__item--prev" href="/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/">
+          <span class="sibling__dir">
+            <svg class="icon icon-12" aria-hidden="true"><use href="#i-arrow-left"/></svg>
+            上一篇
+          </span>
+          <strong>硬件协议与常见IoT协议</strong>
+        </a>
+      
+      
+        <a class="sibling__item sibling__item--next" href="/NSSCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+          <span class="sibling__dir">
+            下一篇
+            <svg class="icon icon-12" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </span>
+          <strong>NSSCTF re靶场练习</strong>
+        </a>
+      
+    </nav>
+  </footer>
+</article>
+
       </div>
+    </main>
 
-      <nav class="article-nav" aria-label="文章导航">
-        
-          <a href="/%E7%A1%AC%E4%BB%B6%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%B8%B8%E8%A7%81IoT%E5%8D%8F%E8%AE%AE/">
-            <span>上一篇</span>
-            <strong>硬件协议与常见IoT协议</strong>
-          </a>
-        
-        
-          <a href="/NSSCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
-            <span>下一篇</span>
-            <strong>NSSCTF re靶场练习</strong>
-          </a>
-        
-      </nav>
-    </article>
-  </main>
+    
+<aside class="context" aria-label="上下文">
+  <div class="context__head">
+    <span class="context__title">上下文</span>
+    <span class="context__kind">post</span>
+  </div>
 
-  <footer class="site-footer">
-  <div class="site-footer__inner">
-    <p><strong>haoo&#39;s tech blog</strong><span aria-hidden="true"> / </span>26 篇记录<span aria-hidden="true"> / </span><a href="/rss.xml">RSS</a></p>
-    <p>&copy; haoo · powered by Hexo</p>
+  <div class="context__scroll">
+    
+      <section class="ctx-section">
+        <h2 class="ctx-label">
+          <svg class="icon icon-12" aria-hidden="true"><use href="#i-hash"/></svg>
+          大纲
+        </h2>
+        <nav class="outline" id="outline" aria-label="文章大纲">
+          
+          <ol class="outline__list"><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#easyre"><span class="outline__list-text">easyre</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#reverse1"><span class="outline__list-text">reverse1</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#reverse2"><span class="outline__list-text">reverse2</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#%E5%86%85%E6%B6%B5%E7%9A%84%E8%BD%AF%E4%BB%B6"><span class="outline__list-text">内涵的软件</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#%E6%96%B0%E5%B9%B4%E5%BF%AB%E4%B9%90"><span class="outline__list-text">新年快乐</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#xor"><span class="outline__list-text">xor</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#reverse3"><span class="outline__list-text">reverse3</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#helloword"><span class="outline__list-text">helloword</span></a></li><li class="outline__list-item outline__list-level-1"><a class="outline__list-link" href="#%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84flag"><span class="outline__list-text">不一样的flag</span></a></li></ol>
+        </nav>
+      </section>
+    
+
+    
+      
+      <section class="ctx-section">
+        <h2 class="ctx-label">
+          <svg class="icon icon-12" aria-hidden="true"><use href="#i-file"/></svg>
+          属性
+        </h2>
+        <dl class="props">
+          <div class="props__row"><dt>路径</dt><dd class="props__mono">BUUCTF re靶场练习/</dd></div>
+          <div class="props__row"><dt>日期</dt><dd class="props__mono">2026-08-20</dd></div>
+          <div class="props__row"><dt>字数</dt><dd class="props__mono">4.5k · 11 min</dd></div>
+          
+            <div class="props__row">
+              <dt>分类</dt>
+              <dd>
+                
+                  <a class="chip chip--accent" href="/categories/re/">re</a>
+                
+              </dd>
+            </div>
+          
+        </dl>
+      </section>
+      
+        <section class="ctx-section">
+          <h2 class="ctx-label">
+            <svg class="icon icon-12" aria-hidden="true"><use href="#i-tag"/></svg>
+            标签
+          </h2>
+          <div class="chip-row">
+            
+              <a class="chip" href="/tags/re/">re</a>
+            
+          </div>
+        </section>
+      
+      <section class="ctx-section">
+        <h2 class="ctx-label">
+          <svg class="icon icon-12" aria-hidden="true"><use href="#i-layers"/></svg>
+          同目录
+        </h2>
+        <div class="ctx-links">
+          
+          
+            
+              <a class="ctx-link" href="/NSSCTF%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                <svg class="icon icon-12" aria-hidden="true"><use href="#i-file"/></svg>
+                <span>NSSCTF re靶场练习</span>
+              </a>
+            
+              <a class="ctx-link" href="/CTFshow%20re%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+                <svg class="icon icon-12" aria-hidden="true"><use href="#i-file"/></svg>
+                <span>CTFshow re靶场练习</span>
+              </a>
+            
+          
+        </div>
+      </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </div>
+</aside>
+
+
+    
+<footer class="statusbar">
+  <div class="statusbar__side">
+    <span class="statusbar__item" title="当前分支">
+      <svg class="icon icon-12" aria-hidden="true"><use href="#i-branch"/></svg>
+      master
+    </span>
+    <span class="statusbar__item statusbar__item--ok" title="构建状态">
+      <svg class="icon icon-12" aria-hidden="true"><use href="#i-check"/></svg>
+      build ok
+    </span>
+    <span class="statusbar__item statusbar__item--muted">
+      26 posts · 11 dirs · 11 tags
+    </span>
+  </div>
+  <div class="statusbar__side statusbar__side--right">
+    <span class="statusbar__item" data-reading-progress>阅读 0%</span>
+    <span class="statusbar__item statusbar__item--muted">UTF-8</span>
+    <span class="statusbar__item statusbar__item--muted">hexo</span>
+    <button class="statusbar__item statusbar__item--btn" type="button" data-command-open title="命令面板">
+      <svg class="icon icon-12" aria-hidden="true"><use href="#i-terminal"/></svg>
+      console
+    </button>
   </div>
 </footer>
-<dialog
-  id="command-console"
-  class="command-console"
-  aria-labelledby="command-title"
+
+  </div>
+
+  <dialog
+  id="command-palette"
+  class="cmd"
+  aria-labelledby="cmd-label"
   data-search-url="/search.json"
   data-home-url="/"
   data-categories-url="/categories"
   data-tags-url="/tags"
   data-about-url="/about"
   data-links-url="/links"
+  data-rss-url="/rss.xml"
 >
-  <div class="command-console__bar">
-    <div>
-      <span class="command-console__status" aria-hidden="true"></span>
-      <strong id="command-title">haoo@blog:~</strong>
-    </div>
-    <button class="command-console__close" type="button" data-command-close aria-label="关闭命令行">ESC</button>
-  </div>
-
-  <div id="command-output" class="command-console__output" role="log" aria-live="polite" aria-relevant="additions">
-    <div class="command-message command-message--accent">Startrace interactive shell v1.0</div>
-    <div class="command-message">输入 <code>help</code> 查看命令，按 <kbd>Ctrl K</kbd> 随时打开。</div>
-  </div>
-
-  <form id="command-form" class="command-console__form" autocomplete="off">
-    <label for="command-input"><span aria-hidden="true">visitor@blog:~$</span><span class="visually-hidden">输入命令</span></label>
-    <input id="command-input" name="command" type="text" inputmode="text" autocapitalize="off" spellcheck="false" aria-describedby="command-hint">
-    <span class="command-console__cursor" aria-hidden="true"></span>
+  <form id="cmd-form" class="cmd__form" autocomplete="off" role="search">
+    <span class="cmd__prompt" aria-hidden="true">&gt;</span>
+    <label class="visually-hidden" id="cmd-label" for="cmd-input">搜索文章或执行命令</label>
+    <input
+      id="cmd-input"
+      class="cmd__input"
+      name="q"
+      type="text"
+      spellcheck="false"
+      autocapitalize="off"
+      aria-autocomplete="list"
+      aria-controls="cmd-results"
+      placeholder="搜索文章标题或正文…"
+    >
+    <button class="cmd__esc" type="button" data-command-close aria-label="关闭命令面板">Esc</button>
   </form>
-  <p id="command-hint" class="command-console__hint">help · ls · cd · open · search · clear</p>
+
+  <div id="cmd-results" class="cmd__results" role="listbox" aria-label="搜索结果"></div>
+
+  <div class="cmd__foot">
+    <span class="cmd__keys"><kbd class="kbd">&uarr;</kbd><kbd class="kbd">&darr;</kbd> 选择</span>
+    <span class="cmd__keys"><kbd class="kbd">&crarr;</kbd> 打开</span>
+    <span class="cmd__keys"><kbd class="kbd">Esc</kbd> 关闭</span>
+    <span class="cmd__hint" id="cmd-hint">输入关键词检索全文，或直接选择页面</span>
+  </div>
 </dialog>
 
-<script src="/js/theme.js" defer></script>
-
+  <script src="/js/theme.js" defer></script>
 </body>
 </html>
+
